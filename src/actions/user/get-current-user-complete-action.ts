@@ -1,10 +1,10 @@
 "use server";
-import { Users, UsersSchema } from "@/schemas/users.schema";
 import { ActionResponse } from "@/types/action-response";
 import { getCurrentUserComplete } from "./get-current-user-complete";
+import { users, users_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getCurrentUserCompleteAction(): Promise<
-  ActionResponse<Users>
+  ActionResponse<users>
 > {
   const user = await getCurrentUserComplete();
   if (!user) {
@@ -16,6 +16,6 @@ export async function getCurrentUserCompleteAction(): Promise<
 
   return {
     success: true,
-    data: UsersSchema.parse(user),
+    data: users_schema.parse(user),
   };
 }

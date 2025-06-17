@@ -20,7 +20,7 @@ export async function updateUserPaymentStatus({
 
     const payment = await prisma.user_payments.count({
       where: {
-        id: data.paymentId
+        id: data.paymentId,
       },
     });
 

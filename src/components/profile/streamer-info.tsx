@@ -1,12 +1,10 @@
 import { Form, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Streamer, StreamerSchema } from "@/schemas/streamer.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExternalLink, TvMinimalPlayIcon } from "lucide-react";
 import { FaTwitch, FaYoutube } from "react-icons/fa";
 import { IoCopyOutline } from "react-icons/io5";
-import { Users } from "@/schemas/users.schema";
 import { Skeleton } from "../ui/skeleton";
 import { useEffect, useState } from "react";
 import { getStreamerByUserIdAction } from "@/actions/streamer/get-streamer-by-user-id-action";
@@ -14,19 +12,35 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import CS2BitsIcon from "../icons/CS2Bits-icon";
-export function StreamerInfo({ userData }: { userData: Users }) {
+import {
+  stream_urls,
+  stream_urls_schema,
+  users,
+} from "@prisma-zod/generated/zod.schema";
+import { z } from "zod";
+
+type StreamerWithUrls = {
+  username_id: string;
+  stream_urls: stream_urls[];
+};
+
+export function StreamerInfo({ userData }: { userData: users }) {
+  const [streamerData, setStreamerData] = useState<StreamerWithUrls | null>(
+    null
+  );
   const { t } = useTranslation();
-  const [streamerData, setStreamerData] = useState<Streamer | null>(null);
   useEffect(() => {
     getStreamerByUserIdAction(userData.id).then((streamer) =>
-      setStreamerData(StreamerSchema.parse(streamer)),
+      setStreamerData(streamer)
     );
   }, [userData.id]);
+  const formSchema = z.object({
+    username_id: z.string(),
+    stream_urls: z.array(stream_urls_schema),
+  });
 
-  const form = useForm<Pick<Streamer, "username_id" | "stream_urls">>({
-    resolver: zodResolver(
-      StreamerSchema.pick({ username_id: true, stream_urls: true }),
-    ),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       username_id: "",
       stream_urls: [],
@@ -68,7 +82,7 @@ export function StreamerInfo({ userData }: { userData: Users }) {
                   navigator.clipboard.writeText(
                     process.env.NEXT_PUBLIC_BASE_URL +
                       "/" +
-                      streamerData.username_id,
+                      streamerData.username_id
                   );
                   toast.success(t("profile.streamer.copied"), {
                     position: "bottom-left",

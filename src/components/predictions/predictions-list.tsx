@@ -3,12 +3,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { Flame } from "lucide-react";
-import { Prediction } from "@/schemas/prediction.schema";
 import { PredictionCard } from "./prediction-card";
-import { Streamer } from "@/schemas/streamer.schema";
+import {
+  prediction_templates,
+  predictions,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
+
+type Prediction = predictions & {
+  prediction_templates: prediction_templates;
+};
 
 interface PredictionsListProps {
-  streamer: Streamer;
+  streamer: streamers;
   predictions: Prediction[];
   currentRound: number;
 }

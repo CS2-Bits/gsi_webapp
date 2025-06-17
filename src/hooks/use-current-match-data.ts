@@ -1,21 +1,22 @@
 "use client";
 // src/hooks/use-match-websocket.ts
 import { useEffect, useState } from "react";
-import { Match, MatchSchema } from "@/schemas/match.schema";
-import {
-  MatchPlayerStats,
-  MatchPlayerStatsSchema,
-} from "@/schemas/match-player-stats.schema";
 import { useMatchWebSocket } from "./use-match-websocket";
 import { getCurrentMatchByStreamerId } from "@/actions/match/get-current-match";
 import { getMatchStatsByMatchId } from "@/actions/match/get-match-stats";
-import { MatchPlayerRounds } from "@/schemas/match-player-rounds.schema";
 import { getMatchRounds } from "@/actions/match/get-match-rounds";
+import {
+  match_player_rounds,
+  match_player_stats,
+  match_player_stats_schema,
+  matches,
+  matches_schema,
+} from "@prisma-zod/generated/zod.schema";
 
 export function useCurrentMatchData(streamerUserId: string) {
-  const [matchData, setMatchData] = useState<Match | null>(null);
-  const [statsData, setStatsData] = useState<MatchPlayerStats | null>(null);
-  const [roundsData, setRoundsData] = useState<MatchPlayerRounds[] | null>(
+  const [matchData, setMatchData] = useState<matches | null>(null);
+  const [statsData, setStatsData] = useState<match_player_stats | null>(null);
+  const [roundsData, setRoundsData] = useState<match_player_rounds[] | null>(
     null
   );
   const [hasLoadedMatch, setHasLoadedMatch] = useState(false);
@@ -29,7 +30,7 @@ export function useCurrentMatchData(streamerUserId: string) {
       setMatchData(matchWebSocketData);
     } else if (!hasLoadedMatch) {
       getCurrentMatchByStreamerId(streamerUserId).then((match) => {
-        const result = MatchSchema.safeParse(match);
+        const result = matches_schema.safeParse(match);
         if (result.success) {
           setMatchData(result.data);
         }
@@ -43,7 +44,7 @@ export function useCurrentMatchData(streamerUserId: string) {
       setStatsData(statsWebSocketData);
     } else if (!hasLoadedStats && matchData?.id) {
       getMatchStatsByMatchId(matchData.id).then((stats) => {
-        const result = MatchPlayerStatsSchema.safeParse(stats);
+        const result = match_player_stats_schema.safeParse(stats);
         if (result.success) {
           setStatsData(result.data);
         }

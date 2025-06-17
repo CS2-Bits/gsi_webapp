@@ -1,6 +1,5 @@
 import { Form, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Users } from "@/schemas/users.schema";
 import {
   AtSign,
   ExternalLink,
@@ -22,9 +21,10 @@ import { requestEmailOtpAction } from "@/actions/email/request-email-otp-action"
 import { confirmEmailOtpAction } from "@/actions/email/confirm-email-otp-action";
 import { toast } from "sonner";
 import { updateTradeLinkAction } from "@/actions/user/update-trade-link-action";
+import { users } from "@prisma-zod/generated/zod.schema";
 
 interface UserInfoProps {
-  userData: Users;
+  userData: users;
 }
 
 export function UserInfo({ userData }: UserInfoProps) {

@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSteamUser } from "@/lib/session";
-import { UsersSchema } from "@/schemas/users.schema";
 
 export async function getCurrentUser() {
   const steamUser = await getServerSteamUser();
@@ -22,5 +21,5 @@ export async function getCurrentUser() {
     return null;
   }
 
-  return UsersSchema.parse(user);
+  return user;
 }

@@ -1,5 +1,6 @@
 "use server";
 import { ActionResponse } from "@/types/action-response";
+import { WsTokenData } from "@/types/ws-token-data";
 import jwt from "jsonwebtoken";
 
 export async function getMatchWsTokenAction(

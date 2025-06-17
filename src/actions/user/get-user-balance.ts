@@ -1,10 +1,13 @@
 "use server";
 
-import { UserBalance, UserBalanceSchema } from "@/schemas/user-balance.schema";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "./get-current-user";
+import {
+  user_balances,
+  user_balances_schema,
+} from "@prisma-zod/generated/zod.schema";
 
-export async function getUserBalance(): Promise<UserBalance | null> {
+export async function getUserBalance(): Promise<user_balances | null> {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -25,5 +28,5 @@ export async function getUserBalance(): Promise<UserBalance | null> {
       },
     });
   }
-  return UserBalanceSchema.parse(userBalance);
+  return user_balances_schema.parse(userBalance);
 }

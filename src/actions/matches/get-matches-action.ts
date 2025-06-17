@@ -1,26 +1,29 @@
 "use server";
-import {
-  MatchPlayerStats,
-  MatchPlayerStatsSchema,
-} from "@/schemas/match-player-stats.schema";
-import { MatchFilters, MatchFiltersSchema } from "@/schemas/matches.schema";
-import { Streamer, StreamerSchema } from "@/schemas/streamer.schema";
 import { ActionResponse } from "@/types/action-response";
 import { prisma } from "@/lib/prisma";
 import { map_name, stream_match_status } from "@prisma/client";
 import { Pagination } from "@/schemas/pagination.schema";
 import {
-  StreamMatch,
-  StreamMatchSchema,
-} from "@/schemas/stream-matches.schema";
-import { Match, MatchSchema } from "@/schemas/match.schema";
+  match_player_stats,
+  match_player_stats_schema,
+  matches,
+  matches_schema,
+  stream_matches,
+  stream_matches_schema,
+  streamers,
+  streamers_schema,
+} from "@prisma-zod/generated/zod.schema";
+import {
+  MatchFilters,
+  MatchFiltersSchema,
+} from "@/schemas/match_filters.schema";
 
 type MatchesActionResponse = {
   matchesData: {
-    stream_match: StreamMatch;
-    match: Match;
-    match_player_stats: MatchPlayerStats;
-    streamer: Streamer;
+    stream_match: stream_matches;
+    match: matches;
+    match_player_stats: match_player_stats;
+    streamer: streamers;
   }[];
   pagination: Pagination;
 };
@@ -129,12 +132,12 @@ export async function getMatchesAction(
       .map((stream_match) => {
         try {
           return {
-            stream_match: StreamMatchSchema.parse(stream_match),
-            match: MatchSchema.parse(stream_match.matches),
-            match_player_stats: MatchPlayerStatsSchema.parse(
+            stream_match: stream_matches_schema.parse(stream_match),
+            match: matches_schema.parse(stream_match.matches),
+            match_player_stats: match_player_stats_schema.parse(
               stream_match.matches.match_player_stats
             ),
-            streamer: StreamerSchema.parse(stream_match.streamers),
+            streamer: streamers_schema.parse(stream_match.streamers),
           };
         } catch (parseError) {
           console.error("Error parsing match data:", parseError);

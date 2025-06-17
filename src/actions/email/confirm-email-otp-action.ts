@@ -13,7 +13,7 @@ const redisEmailSchema = z.object({
 });
 
 export async function confirmEmailOtpAction(
-  otp: string,
+  otp: string
 ): Promise<ActionResponse<boolean>> {
   const user = await getCurrentUser();
 

@@ -2,21 +2,22 @@
 
 import { RoundList } from "./round-list";
 import { MatchHeader } from "./match-header";
-import { Streamer } from "@/schemas/streamer.schema";
 import { useQuery } from "@tanstack/react-query";
-import { PredictionSchema } from "@/schemas/prediction.schema";
 import { getPredictionsAction } from "@/actions/predictions/get-predictions-action";
-import { Match } from "@/schemas/match.schema";
-import { MatchPlayerStats } from "@/schemas/match-player-stats.schema";
-import { MatchPlayerRounds } from "@/schemas/match-player-rounds.schema";
 import { useTranslation } from "react-i18next";
 import { PredictionsList } from "@/components/predictions/predictions-list";
+import {
+  match_player_rounds,
+  match_player_stats,
+  matches,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
 
 interface MatchDetailsPageProps {
-  streamer: Streamer | null;
-  matchData: Match | null;
-  statsData: MatchPlayerStats | null;
-  roundsData: MatchPlayerRounds[] | null;
+  streamer: streamers | null;
+  matchData: matches | null;
+  statsData: match_player_stats | null;
+  roundsData: match_player_rounds[] | null;
 }
 
 export default function MatchDetailsPage({
@@ -30,8 +31,7 @@ export default function MatchDetailsPage({
     queryKey: ["prediction", matchData?.id],
     queryFn: async () => {
       if (!matchData) return [];
-      const pred = await getPredictionsAction(matchData.id);
-      return pred.map((p) => PredictionSchema.parse(p));
+      return await getPredictionsAction(matchData.id);
     },
     enabled: matchData != null,
     refetchOnWindowFocus: false,

@@ -10,7 +10,7 @@ import { getUserBalance } from "../user/get-user-balance";
 import { ActionError } from "@/types/action-error";
 
 export async function placeBetAction(
-  data: PlaceBetInput,
+  data: PlaceBetInput
 ): Promise<ActionResponse<boolean>> {
   try {
     const validatedFields = PlaceBetSchema.parse(data);
@@ -130,7 +130,7 @@ export async function placeBetAction(
 
     await redis.publish(
       "match_events:" + prediction.stream_matches.streamer_id + ":bet",
-      prediction.id,
+      prediction.id
     );
 
     // Revalidate paths to update UI

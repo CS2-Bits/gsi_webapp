@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     console.error("Missing COINBASE_WEBHOOK_SECRET");
     return NextResponse.json(
       { error: "Server misconfiguration" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       " ⚠️ [CoinbaseWebhook] Invalid signature:",
       signature,
       "expected:",
-      expected,
+      expected
     );
     console.warn(" ⚠️ [CoinbaseWebhook] Raw Body: ", rawBody);
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
         console.log(
           "[CoinbaseWebhook] Process Payload",
           result.data,
-          result.data.event.data,
+          result.data.event.data
         );
         const response = await processCoinbaseWebhookPayment(
-          result.data.event.data,
+          result.data.event.data
         );
         console.log("[CoinbaseWebhook] Response: ", response);
       } else {
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     } finally {
       return NextResponse.json(
         `Received event id=${result.data?.id}, type=${result.data?.event.type}`,
-        { status: 200 },
+        { status: 200 }
       );
     }
   } catch (err) {

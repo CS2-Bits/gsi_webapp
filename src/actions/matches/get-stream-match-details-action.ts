@@ -1,31 +1,31 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import {
-  MatchPlayerRounds,
-  MatchPlayerRoundsSchema,
-} from "@/schemas/match-player-rounds.schema";
-import {
-  MatchPlayerStats,
-  MatchPlayerStatsSchema,
-} from "@/schemas/match-player-stats.schema";
-import { Match, MatchSchema } from "@/schemas/match.schema";
-import { Streamer, StreamerSchema } from "@/schemas/streamer.schema";
 import { ActionResponse } from "@/types/action-response";
+import {
+  match_player_rounds,
+  match_player_rounds_schema,
+  match_player_stats,
+  match_player_stats_schema,
+  matches,
+  matches_schema,
+  streamers,
+  streamers_schema,
+} from "@prisma-zod/generated/zod.schema";
 import { z } from "zod";
 
 // Input validation schema
 const StreamMatchIdSchema = z.string().min(1, "Stream match ID is required");
 
 type StreamMatchDetailsResponse = {
-  streamer: Streamer;
-  matchData: Match;
-  statsData: MatchPlayerStats;
-  roundsData: MatchPlayerRounds[];
+  streamer: streamers;
+  matchData: matches;
+  statsData: match_player_stats;
+  roundsData: match_player_rounds[];
 };
 
 export async function getStreamMatchDetailsAction(
-  streamMatchId: string,
+  streamMatchId: string
 ): Promise<ActionResponse<StreamMatchDetailsResponse>> {
   try {
     // Validate input
@@ -60,14 +60,14 @@ export async function getStreamMatchDetailsAction(
     return {
       success: true,
       data: {
-        streamer: StreamerSchema.parse(streamMatchData.streamers),
-        matchData: MatchSchema.parse(streamMatchData.matches),
-        statsData: MatchPlayerStatsSchema.parse(
-          streamMatchData.matches.match_player_stats,
+        streamer: streamers_schema.parse(streamMatchData.streamers),
+        matchData: matches_schema.parse(streamMatchData.matches),
+        statsData: match_player_stats_schema.parse(
+          streamMatchData.matches.match_player_stats
         ),
         roundsData:
           streamMatchData.matches.match_player_stats.match_player_rounds
-            .map((round) => MatchPlayerRoundsSchema.parse(round))
+            .map((round) => match_player_rounds_schema.parse(round))
             .sort((a, b) => b.round_number - a.round_number),
       },
     };

@@ -7,19 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Clock, MapPin, Target } from "lucide-react";
 import { stream_match_status } from "@prisma/client";
-import type { StreamMatch } from "@/schemas/stream-matches.schema";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Streamer } from "@/schemas/streamer.schema";
-import { Match } from "@/schemas/match.schema";
-import { MatchPlayerStats } from "@/schemas/match-player-stats.schema";
+import {
+  match_player_stats,
+  matches,
+  stream_matches,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
 
 interface MatchCardProps {
   matchData: {
-    stream_match: StreamMatch;
-    match: Match;
-    match_player_stats: MatchPlayerStats;
-    streamer: Streamer;
+    stream_match: stream_matches;
+    match: matches;
+    match_player_stats: match_player_stats;
+    streamer: streamers;
   };
 }
 

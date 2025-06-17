@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
 import { getPointPackagesAction } from "@/actions/packages/get-point-packages-action";
-import type { PointPackage } from "@/schemas/point-package.schema";
 import { Loader2, ArrowRight, CheckCircle } from "lucide-react";
 import { formatCurrency, formatPrice } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -30,7 +29,7 @@ import { StripePaymentForm } from "./stripe-payment-form";
 import { PaymentMethodSelector } from "./payment-method-selector";
 import cancelUserPaymentAction from "@/actions/payments/cancel-user-payment-action";
 import { useQueryClient } from "@tanstack/react-query";
-import { Users } from "@/schemas/users.schema";
+import { point_packages, users } from "@prisma-zod/generated/zod.schema";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -38,15 +37,15 @@ const stripePromise = loadStripe(
 
 interface PurchaseModalProps {
   isOpen: boolean;
-  user: Users;
+  user: users;
   onClose: () => void;
 }
 
 export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
   const { t } = useTranslation();
   const qc = useQueryClient();
-  const [packages, setPackages] = useState<PointPackage[]>([]);
-  const [selectedPackage, setSelectedPackage] = useState<PointPackage | null>(
+  const [packages, setPackages] = useState<point_packages[]>([]);
+  const [selectedPackage, setSelectedPackage] = useState<point_packages | null>(
     null
   );
   const [paymentMethod, setPaymentMethod] = useState<"Stripe" | "Coinbase">(
@@ -81,7 +80,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
     }
   }, [selectedPackage]);
 
-  const calculateBonusPercentage = (pkg: PointPackage) => {
+  const calculateBonusPercentage = (pkg: point_packages) => {
     if (pkg.bonus_points === 0) return 0;
     return Math.round((pkg.bonus_points / pkg.points_amount) * 100);
   };

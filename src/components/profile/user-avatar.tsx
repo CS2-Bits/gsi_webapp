@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users } from "@/schemas/users.schema";
+import { users } from "@prisma-zod/generated/zod.schema";
 
 interface UserAvatarProps {
-  userData: Users;
+  userData: users;
 }
 
 export function UserAvatar({ userData }: UserAvatarProps) {

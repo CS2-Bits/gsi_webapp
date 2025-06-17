@@ -1,19 +1,24 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Raffle, RaffleSchema } from "@/schemas/raffle.schema";
-import { Skin, SkinSchema } from "@/schemas/skin.schema";
-import { Users, UsersSchema } from "@/schemas/users.schema";
 import type { ActionResponse } from "@/types/action-response";
 import { raffle_status } from "@prisma/client";
+import {
+  raffles,
+  raffles_schema,
+  steam_items,
+  steam_items_schema,
+  users,
+  users_schema,
+} from "@prisma-zod/generated/zod.schema";
 
-export type RaffleWithSkin = Raffle & {
-  skin: Skin;
-  winner: Users | null;
+export type RaffleWithSteamItem = raffles & {
+  steam_item: steam_items;
+  winner: users | null;
 };
 
 export async function getAllRafflesAction(): Promise<
-  ActionResponse<RaffleWithSkin[]>
+  ActionResponse<RaffleWithSteamItem[]>
 > {
   try {
     const response = await prisma.raffles.findMany({
@@ -23,19 +28,16 @@ export async function getAllRafflesAction(): Promise<
         },
       },
       include: {
-        skins: true,
+        steam_items: true,
         users: true,
       },
     });
-    const raffles: RaffleWithSkin[] = response.map((raffle) => ({
-      ...RaffleSchema.parse(raffle),
-      skin: SkinSchema.parse({
-        ...raffle.skins,
-        fiat_value: raffle.skins.estimated_fiat_value.mul(
-          raffle.skins.fee_pct.add(1)
-        ),
+    const raffles: RaffleWithSteamItem[] = response.map((raffle) => ({
+      ...raffles_schema.parse(raffle),
+      steam_item: steam_items_schema.parse({
+        ...raffle.steam_items,
       }),
-      winner: raffle.users ? UsersSchema.parse(raffle.users) : null,
+      winner: raffle.users ? users_schema.parse(raffle.users) : null,
     }));
 
     return {

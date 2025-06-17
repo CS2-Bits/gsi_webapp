@@ -1,11 +1,9 @@
 import { z } from "zod";
+import { option_label } from "@prisma/client";
 import {
-  bet_state,
-  option_label,
-  prediction_kind,
-  template_status,
-} from "@prisma/client";
-import { decimalToNumber, stringToDate } from "./helper.schema";
+  predictions_schema,
+  user_predictions_schema,
+} from "@prisma-zod/generated/zod.schema";
 
 // Base schemas for database entities
 export const PredictionOptionSchema = z.object({
@@ -13,50 +11,9 @@ export const PredictionOptionSchema = z.object({
   template_id: z.number(),
   created_at: z.preprocess(
     (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date(),
+    z.date()
   ),
 });
-
-export const UserPredictionSchema = z.object({
-  id: z.string(),
-  user_id: z.string(),
-  prediction_id: z.string(),
-  option_label: z.nativeEnum(option_label),
-  amount: decimalToNumber,
-  created_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date(),
-  ),
-});
-
-export const PredictionTemplateSchema = z.object({
-  id: z.number(),
-  total_fee_pct: decimalToNumber,
-  min_bet_amount: decimalToNumber,
-  max_bet_amount: decimalToNumber,
-  kind: z.nativeEnum(prediction_kind),
-  template_status: z.nativeEnum(template_status).default("Active"),
-  threshold_round: z.number(),
-  created_at: stringToDate,
-  updated_at: stringToDate,
-  prediction_options: z.array(PredictionOptionSchema).optional(),
-});
-
-export const PredictionSchema = z.object({
-  id: z.string(),
-  template_id: z.number(),
-  stream_match_id: z.string(),
-  fees_total_collected: decimalToNumber.nullable(),
-  affiliate_fees_collected: decimalToNumber.nullable(),
-  site_fees_collected: decimalToNumber.nullable(),
-  winning_option_label: z.string().nullable(),
-  state: z.nativeEnum(bet_state).default("Open"),
-  created_at: stringToDate,
-  updated_at: stringToDate,
-  user_predictions: z.array(UserPredictionSchema).optional(),
-  prediction_templates: PredictionTemplateSchema,
-});
-
 // Enhanced schemas with calculated fields
 export const EnhancedPredictionOptionSchema = PredictionOptionSchema.extend({
   betCount: z.number(),
@@ -66,12 +23,12 @@ export const EnhancedPredictionOptionSchema = PredictionOptionSchema.extend({
   userAmount: z.number(),
 });
 
-export const EnhancedPredictionSchema = PredictionSchema.extend({
+export const EnhancedPredictionSchema = predictions_schema.extend({
   totalBets: z.number(),
   totalAmount: z.number(),
   options: z.array(EnhancedPredictionOptionSchema),
   userTotalBets: z.number(),
-  user_bets: z.array(UserPredictionSchema).optional(),
+  user_bets: z.array(user_predictions_schema).optional(),
 });
 
 export const PredictionDetailSchema = z.object({
@@ -79,14 +36,11 @@ export const PredictionDetailSchema = z.object({
   totalAmount: z.number(),
   options: z.array(EnhancedPredictionOptionSchema),
   userTotalBets: z.number(),
-  user_bets: z.array(UserPredictionSchema).optional(),
+  user_bets: z.array(user_predictions_schema).optional(),
 });
 
 // Type exports
-export type Prediction = z.infer<typeof PredictionSchema>;
 export type PredictionOption = z.infer<typeof PredictionOptionSchema>;
-export type UserPrediction = z.infer<typeof UserPredictionSchema>;
-export type PredictionTemplate = z.infer<typeof PredictionTemplateSchema>;
 export type EnhancedPrediction = z.infer<typeof EnhancedPredictionSchema>;
 export type EnhancedPredictionOption = z.infer<
   typeof EnhancedPredictionOptionSchema

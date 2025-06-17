@@ -23,7 +23,7 @@ import {
   GetUserPaymentsActionResponse,
 } from "@/actions/user/get-user-payments";
 import { formatCurrency } from "@/lib/utils";
-import { PaymentStatus } from "@/schemas/user-payment.schema";
+import { payment_status } from "@prisma-zod/generated/zod.schema";
 
 export function PaymentHistory() {
   // Estados apenas para filtro e página
@@ -51,7 +51,7 @@ export function PaymentHistory() {
     return <TransactionHistorySkeleton />;
   }
 
-  const getTextColror = (type: PaymentStatus) => {
+  const getTextColror = (type: payment_status) => {
     switch (type) {
       case "Pending":
         return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300";
@@ -68,7 +68,7 @@ export function PaymentHistory() {
     }
   };
 
-  const getTransactionIcon = (type: PaymentStatus) => {
+  const getTransactionIcon = (type: payment_status) => {
     switch (type) {
       case "Pending":
         return <RefreshCcw className="h-4 w-4 text-orange-500" />;
@@ -156,8 +156,10 @@ export function PaymentHistory() {
                       className={`font-medium $text-green-600 dark:text-green-400`}
                     >
                       {formatCurrency(
-                        data.point_packages.points_amount +
-                          data.point_packages.bonus_points
+                        Number(
+                          data.point_packages.points_amount +
+                            data.point_packages.bonus_points
+                        )
                       )}
                     </p>
                   </div>

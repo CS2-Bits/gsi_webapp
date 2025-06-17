@@ -15,7 +15,6 @@ import { Skeleton } from "../../ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { getUserBalanceAction } from "@/actions/user/get-user-balance-action";
-import { UserBalanceSchema } from "@/schemas/user-balance.schema";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PurchaseModal } from "@/components/purchase/purchase-modal";
@@ -33,14 +32,14 @@ export default function HomeUserHeader() {
     queryFn: getCurrentUserAction,
     refetchOnWindowFocus: false,
   });
-  const userData = userResponse?.data;
+  const userData = userResponse?.data?.user;
 
   const { data: balanceResponse, isLoading } = useQuery({
     queryKey: ["userBalance", userData?.id],
     queryFn: getUserBalanceAction,
     enabled: !!userData,
     refetchOnWindowFocus: false,
-    select: (data) => (data?.data ? UserBalanceSchema.parse(data.data) : null),
+    select: (data) => (data?.data ? data.data : null),
   });
   const handleOpenPurchaseModal = () => {
     setIsPurchaseModalOpen(true);

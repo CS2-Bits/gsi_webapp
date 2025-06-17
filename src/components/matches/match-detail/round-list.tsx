@@ -18,16 +18,18 @@ import {
   Heart,
   Bomb,
 } from "lucide-react";
-import type { MatchPlayerRounds } from "@/schemas/match-player-rounds.schema";
-import type { Streamer } from "@/schemas/streamer.schema";
 import { TFunction } from "i18next";
 import { formatDuration, intervalToDuration } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LucideIcon } from "lucide-react";
+import {
+  match_player_rounds,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
 
 interface RoundListProps {
-  rounds: MatchPlayerRounds[];
-  streamer: Streamer;
+  rounds: match_player_rounds[];
+  streamer: streamers;
   t: TFunction<"translation", undefined>;
 }
 

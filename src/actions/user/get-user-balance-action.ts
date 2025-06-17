@@ -1,12 +1,15 @@
 "use server";
 
-import { UserBalance, UserBalanceSchema } from "@/schemas/user-balance.schema";
 import { ActionResponse } from "@/types/action-response";
 import { getUserBalance } from "./get-user-balance";
 import { ActionError } from "@/types/action-error";
+import {
+  user_balances,
+  user_balances_schema,
+} from "@prisma-zod/generated/zod.schema";
 
 export async function getUserBalanceAction(): Promise<
-  ActionResponse<UserBalance>
+  ActionResponse<user_balances>
 > {
   try {
     const userBalance = await getUserBalance();
@@ -15,7 +18,7 @@ export async function getUserBalanceAction(): Promise<
       return { success: false, error_message: "error.user_not_authenticated" };
     }
 
-    return { success: true, data: UserBalanceSchema.parse(userBalance) };
+    return { success: true, data: user_balances_schema.parse(userBalance) };
   } catch (error) {
     if (error instanceof ActionError) {
       return { success: false, error_message: error.message };

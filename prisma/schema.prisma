@@ -8,13 +8,15 @@ datasource db {
 }
 
 model inventory_stocks {
-  skin_id   BigInt
-  steam_id  String   @unique
-  quantity  Int      @default(0)
-  last_sync DateTime @default(now()) @db.Timestamptz(6)
-  skins     skins    @relation(fields: [skin_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  steam_item_id String
+  steam_bot_id  String
+  tradable      Boolean     @default(false)
+  available     Boolean     @default(false)
+  last_sync     DateTime    @default(now()) @db.Timestamptz(6)
+  steam_bots    steam_bots  @relation(fields: [steam_bot_id], references: [steam_id], onDelete: Cascade, onUpdate: NoAction)
+  steam_items   steam_items @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([skin_id, steam_id])
+  @@id([steam_item_id, steam_bot_id])
 }
 
 model match_player_deaths {
@@ -158,7 +160,7 @@ model raffle_tickets {
 
 model raffles {
   id                       String                     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  skin_id                  BigInt
+  steam_item_id            String
   ticket_price             Decimal                    @db.Decimal(20, 4)
   status                   raffle_status              @default(created)
   winner_user_id           String?                    @db.Uuid
@@ -167,26 +169,32 @@ model raffles {
   created_at               DateTime                   @default(now()) @db.Timestamptz(6)
   updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
   raffle_tickets           raffle_tickets[]
-  skins                    skins                      @relation(fields: [skin_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  steam_items              steam_items                @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
   users                    users?                     @relation(fields: [winner_user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user_raffle_trade_offers user_raffle_trade_offers[]
 }
 
-model skins {
-  id                   BigInt              @id @default(autoincrement())
-  market_hash_name     String              @unique
-  type                 String
+model steam_bots {
+  steam_id         String             @id
+  session_cookies  Json?
+  polldata         Json?
+  inventory_stocks inventory_stocks[]
+}
+
+model steam_items {
+  asset_id             String                 @id
+  market_hash_name     String
+  item_type            String
   image_url            String?
-  tradable             Boolean             @default(true)
-  exterior             exterior
-  currency             currency            @default(USD)
-  estimated_fiat_value Decimal             @db.Decimal(20, 4)
-  fee_pct              Decimal             @db.Decimal(5, 4)
-  created_at           DateTime            @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime            @default(now()) @db.Timestamptz(6)
+  currency             currency               @default(USD)
+  estimated_fiat_value Decimal                @db.Decimal(20, 4)
+  fee_pct              Decimal                @db.Decimal(5, 4)
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime               @default(now()) @db.Timestamptz(6)
   inventory_stocks     inventory_stocks[]
   raffles              raffles[]
   trade_offer_items    trade_offer_items[]
+  user_inventory_items user_inventory_items[]
 }
 
 model stream_matches {
@@ -238,21 +246,24 @@ model streamers {
 }
 
 model trade_offer_items {
-  id             String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   trade_offer_id String       @db.Uuid
-  skin_id        BigInt
-  asset_id       String
-  skins          skins        @relation(fields: [skin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  steam_item_id  String
+  steam_items    steam_items  @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
   trade_offers   trade_offers @relation(fields: [trade_offer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([trade_offer_id, steam_item_id])
 }
 
 model trade_offers {
   id                            String                          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  trade_offer_id                String                          @unique
+  user_id                       String                          @db.Uuid
+  trade_offer_id                String?
   status                        trade_offer_status
+  expires_in                    DateTime                        @db.Timestamptz(6)
   created_at                    DateTime                        @default(now()) @db.Timestamptz(6)
   updated_at                    DateTime                        @default(now()) @db.Timestamptz(6)
   trade_offer_items             trade_offer_items[]
+  users                         users                           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user_raffle_trade_offers      user_raffle_trade_offers[]
   user_trade_offer_transactions user_trade_offer_transactions[]
 }
@@ -283,6 +294,17 @@ model user_balances {
   updated_at                DateTime                    @default(now()) @db.Timestamptz(6)
   user_balance_transactions user_balance_transactions[]
   users                     users                       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model user_inventory_items {
+  user_id       String      @db.Uuid
+  steam_item_id String
+  expires_in    DateTime    @default(dbgenerated("(now() + '1 day'::interval)")) @db.Timestamptz(6)
+  in_trade      Boolean     @default(false)
+  steam_items   steam_items @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
+  users         users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, steam_item_id])
 }
 
 model user_payment_transactions {
@@ -345,12 +367,30 @@ model user_raffle_ticket_transactions {
   @@id([raffle_ticket_id, user_transaction_id])
 }
 
+model user_raffle_trade_offers {
+  raffle_id      String       @db.Uuid
+  trade_offer_id String       @db.Uuid
+  raffles        raffles      @relation(fields: [raffle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  trade_offers   trade_offers @relation(fields: [trade_offer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([raffle_id, trade_offer_id])
+}
+
 model user_roles {
   user_id   String    @db.Uuid
   role_name role_type
   users     users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([user_id, role_name])
+}
+
+model user_trade_offer_transactions {
+  trade_offer_id      String            @db.Uuid
+  user_transaction_id String            @db.Uuid
+  trade_offers        trade_offers      @relation(fields: [trade_offer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_transactions   user_transactions @relation(fields: [user_transaction_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([trade_offer_id, user_transaction_id])
 }
 
 model user_transactions {
@@ -369,42 +409,26 @@ model user_transactions {
 }
 
 model users {
-  id                String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  steam_id          String              @unique @db.VarChar(50)
-  username          String              @db.VarChar(100)
-  email             String?             @db.VarChar(100)
-  avatar_url        String?
-  trade_link        String?
-  steam_token       String?
-  user_status_name  user_status         @default(Active)
-  created_at        DateTime            @default(now()) @db.Timestamptz(6)
-  raffle_tickets    raffle_tickets[]
-  raffles           raffles[]
-  streamers         streamers?
-  user_balances     user_balances?
-  user_payments     user_payments[]
-  user_predictions  user_predictions[]
-  user_preferences  user_preferences?
-  user_roles        user_roles[]
-  user_transactions user_transactions[]
-}
-
-model user_raffle_trade_offers {
-  raffle_id      String       @db.Uuid
-  trade_offer_id String       @db.Uuid
-  raffles        raffles      @relation(fields: [raffle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  trade_offers   trade_offers @relation(fields: [trade_offer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([raffle_id, trade_offer_id])
-}
-
-model user_trade_offer_transactions {
-  trade_offer_id      String            @db.Uuid
-  user_transaction_id String            @db.Uuid
-  trade_offers        trade_offers      @relation(fields: [trade_offer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  user_transactions   user_transactions @relation(fields: [user_transaction_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([trade_offer_id, user_transaction_id])
+  id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  steam_id             String                 @unique @db.VarChar(50)
+  username             String                 @db.VarChar(100)
+  email                String?                @db.VarChar(100)
+  avatar_url           String?
+  trade_link           String?
+  steam_token          String?
+  user_status_name     user_status            @default(Active)
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  raffle_tickets       raffle_tickets[]
+  raffles              raffles[]
+  streamers            streamers?
+  trade_offers         trade_offers[]
+  user_balances        user_balances?
+  user_inventory_items user_inventory_items[]
+  user_payments        user_payments[]
+  user_predictions     user_predictions[]
+  user_preferences     user_preferences?
+  user_roles           user_roles[]
+  user_transactions    user_transactions[]
 }
 
 enum audit_event_type {
@@ -423,14 +447,6 @@ enum currency {
   BRL
   USD
   USDC
-}
-
-enum exterior {
-  FactoryNew
-  MinimalWear
-  FieldTested
-  WellWorn
-  BattleScarred
 }
 
 enum map_mode {

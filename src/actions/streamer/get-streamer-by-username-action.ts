@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { StreamerSchema } from "@/schemas/streamer.schema";
+import { streamers_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getStreamerByUsernameAction(streamerID: string) {
   const streamer = await prisma.streamers.findFirst({
@@ -19,5 +19,5 @@ export async function getStreamerByUsernameAction(streamerID: string) {
     return null;
   }
 
-  return StreamerSchema.parse(streamer);
+  return streamers_schema.parse(streamer);
 }

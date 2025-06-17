@@ -10,7 +10,7 @@ import { StreamMatchFilters } from "@/components/matches/components/match-filter
 import { MatchCardList } from "@/components/matches/components/match-card-list";
 import { getMatchesAction } from "@/actions/matches/get-matches-action";
 import { getMatchesStreamersAction } from "@/actions/matches/get-matches-streamers-action";
-import { MatchFilters } from "@/schemas/matches.schema";
+import { MatchFilters } from "@/schemas/match_filters.schema";
 
 export default function MatchesPage() {
   const { t } = useTranslation();

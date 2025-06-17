@@ -13,13 +13,12 @@ import { useTranslation } from "react-i18next";
 import { processUserPaymentSuccessAction } from "@/actions/payments/process-user-payment-success-action";
 import cancelUserPaymentAction from "@/actions/payments/cancel-user-payment-action";
 import { formatPrice } from "@/lib/utils";
-import { PointPackage } from "@/schemas/point-package.schema";
-import { Users } from "@/schemas/users.schema";
+import { point_packages, users } from "@prisma-zod/generated/zod.schema";
 
 interface StripePaymentFormProps {
   paymentId: string;
-  Pointpackage: PointPackage;
-  user: Users;
+  Pointpackage: point_packages;
+  user: users;
   onSuccess: () => void;
   onCancel: () => void;
 }

@@ -1,11 +1,20 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Prediction, PredictionSchema } from "@/schemas/prediction.schema";
+import {
+  prediction_templates,
+  prediction_templates_schema,
+  predictions,
+  predictions_schema,
+} from "@prisma-zod/generated/zod.schema";
+
+type predictionsWithTemplates = predictions & {
+  prediction_templates: prediction_templates;
+};
 
 export async function getPredictionsAction(
-  matchId: string,
-): Promise<Prediction[]> {
+  matchId: string
+): Promise<predictionsWithTemplates[]> {
   try {
     const match_stream = await prisma.stream_matches.findUnique({
       where: {
@@ -32,7 +41,12 @@ export async function getPredictionsAction(
     }
 
     return predictions.map((prediction) => {
-      return PredictionSchema.parse(prediction);
+      return {
+        ...predictions_schema.parse(prediction),
+        prediction_templates: prediction_templates_schema.parse(
+          prediction.prediction_templates
+        ),
+      };
     });
   } catch (error) {
     console.error("Error fetching predictions:", error);

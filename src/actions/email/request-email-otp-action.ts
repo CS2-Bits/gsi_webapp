@@ -10,7 +10,7 @@ const requestEmailOtpSchema = z.object({
 });
 
 export async function requestEmailOtpAction(
-  email: string,
+  email: string
 ): Promise<ActionResponse<boolean>> {
   const user = await getCurrentUser();
 
@@ -39,14 +39,14 @@ export async function requestEmailOtpAction(
     `email:otp:${user.id}`,
     JSON.stringify({ email, otp }),
     "EX",
-    60 * 60,
+    60 * 60
   );
 
   await redis.set(
     `email:last_otp:${user.id}`,
     new Date().toISOString(),
     "EX",
-    60 * 5,
+    60 * 2
   );
 
   await transporter.sendMail({

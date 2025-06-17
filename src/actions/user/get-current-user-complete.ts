@@ -1,8 +1,9 @@
 "use server";
-import { userCompleteSchema, Users } from "@/schemas/users.schema";
+import { userCompleteSchema } from "@/schemas/users.schema";
 import { getCurrentUser } from "./get-current-user";
+import { users } from "@prisma-zod/generated/zod.schema";
 
-export async function getCurrentUserComplete(): Promise<Users | null> {
+export async function getCurrentUserComplete(): Promise<users | null> {
   const user = await getCurrentUser();
   if (!user) {
     return null;

@@ -2,12 +2,12 @@
 
 import { transporter } from "@/lib/nodemailer";
 import { redis } from "@/lib/redis";
-import { ContactFormData, contactFormSchema } from "@/schemas/contact.schema";
 import { ActionResponse } from "@/types/action-response";
 import { getCurrentUser } from "../user/get-current-user";
+import { ContactFormData, contactFormSchema } from "@/schemas/contact.schema";
 
 export async function submitContactFormAction(
-  data: ContactFormData,
+  data: ContactFormData
 ): Promise<ActionResponse<boolean>> {
   try {
     const user = await getCurrentUser();
@@ -28,31 +28,30 @@ export async function submitContactFormAction(
 
     if (lastSent) {
       const timeDiff = Date.now() - Number.parseInt(lastSent);
-      const oneHour = 60 * 60 * 1000;
+      const fiveMinutes = 60 * 5 * 1000;
 
-      if (timeDiff < oneHour) {
+      if (timeDiff < fiveMinutes) {
         return {
           success: false,
-          error_message:
-            "Você já enviou uma solicitação recentemente. Tente novamente em 1 hora.",
+          error_message: "error.rate_limit_exceeded",
         };
       }
     }
 
     const emailContent = `
-      Nova solicitação de contato:
+      Nova solicitação de contato: \n
+       
+      Nome: ${validatedData.name} \n
+      Plataforma: ${validatedData.platform} \n
+      User ID: ${user.id} \n
+      Steam ID: ${user.steam_id} \n
+      Email: ${user.email} \n
       
-      Nome: ${validatedData.name}
-      Plataforma: ${validatedData.platform}
-      User ID: ${user.id}
-      Steam ID: ${user.steam_id}
-      Email: ${user.email}
-      
-      Data: ${new Date().toLocaleString("pt-BR")}
+      Data: ${new Date().toLocaleString("pt-BR")} \n
     `;
 
     await transporter.sendMail({
-      from: "no-reply@cs2bits.com",
+      from: process.env.EMAIL_FROM,
       to: "felipe@cs2bits.com",
       subject: "Nova solicitação de demostração CS2Bits",
       text: emailContent,
@@ -87,7 +86,7 @@ export async function submitContactFormAction(
     `;
 
     await transporter.sendMail({
-      from: "no-reply@cs2bits.com",
+      from: process.env.EMAIL_FROM,
       to: user.email.toLowerCase(),
       subject: "CS2 Bits solicitação recebida com sucesso",
       text: confirmationText,

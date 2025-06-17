@@ -27,15 +27,15 @@ import { Badge } from "@/components/ui/badge";
 import { stream_match_status } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { formatMapName } from "@/types/map-name";
-import { Streamer } from "@/schemas/streamer.schema";
-import { MatchFilters } from "@/schemas/matches.schema";
+import { MatchFilters } from "@/schemas/match_filters.schema";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { streamers } from "@prisma-zod/generated/zod.schema";
 
 interface MatchFiltersProps {
   filters: MatchFilters;
   onFiltersChange: (filters: MatchFilters) => void;
-  streamers: Streamer[];
+  streamers: streamers[];
   maps: string[];
   isLoading?: boolean;
 }

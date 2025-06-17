@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { UserPayment, UserPaymentSchema } from "@/schemas/user-payment.schema";
 import {
   Pagination,
   PaginationParams,
@@ -12,14 +11,16 @@ import { ActionResponse } from "@/types/action-response";
 import { ActionError } from "@/types/action-error";
 import { getCurrentUser } from "./get-current-user";
 import {
-  PointPackage,
-  PointPackageSchema,
-} from "@/schemas/point-package.schema";
+  point_packages,
+  point_packages_schema,
+  user_payments,
+  user_payments_schema,
+} from "@prisma-zod/generated/zod.schema";
 
 export type GetUserPaymentsActionResponse = {
   paymentsData: {
-    user_payment: UserPayment;
-    point_packages: PointPackage;
+    user_payment: user_payments;
+    point_packages: point_packages;
   }[];
   pagination: Pagination;
 };
@@ -62,8 +63,8 @@ export async function getUserPaymentsAction(
     });
 
     const paymentsData = payments.map((payments) => ({
-      user_payment: UserPaymentSchema.parse(payments),
-      point_packages: PointPackageSchema.parse(payments.point_packages),
+      user_payment: user_payments_schema.parse(payments),
+      point_packages: point_packages_schema.parse(payments.point_packages),
     }));
 
     const totalPages = Math.ceil(total / limit);

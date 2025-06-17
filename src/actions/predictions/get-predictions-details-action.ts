@@ -4,14 +4,14 @@ import { prisma } from "@/lib/prisma";
 import {
   PredictionDetail,
   PredictionDetailSchema,
-  UserPrediction,
 } from "@/schemas/prediction.schema";
 import { ActionResponse } from "@/types/action-response";
 import { getCurrentUser } from "../user/get-current-user";
 import { ActionError } from "@/types/action-error";
+import { user_predictions } from "@prisma/client";
 
 export async function getPredictionsDetailsAction(
-  predictionId: string,
+  predictionId: string
 ): Promise<ActionResponse<PredictionDetail>> {
   try {
     // Get predictions for the match with their templates and options
@@ -40,21 +40,14 @@ export async function getPredictionsDetailsAction(
     const currentUser = await getCurrentUser();
 
     // Process predictions with or without user data
-    let userPredictions: UserPrediction[] = [];
+    let userPredictions: user_predictions[] = [];
     if (currentUser) {
-      userPredictions = await prisma.user_predictions
-        .findMany({
-          where: {
-            prediction_id: prediction.id,
-            user_id: currentUser.id,
-          },
-        })
-        .then((userBets) =>
-          userBets.map((bet) => ({
-            ...bet,
-            amount: Number(bet.amount),
-          })),
-        );
+      userPredictions = await prisma.user_predictions.findMany({
+        where: {
+          prediction_id: prediction.id,
+          user_id: currentUser.id,
+        },
+      });
     }
 
     // Get options from the template
@@ -65,17 +58,17 @@ export async function getPredictionsDetailsAction(
     const totalBets = allBets.length;
     const totalAmount = allBets.reduce(
       (sum, bet) => sum + Number(bet.amount),
-      0,
+      0
     );
 
     // Calculate per option
     const optionsWithStats = options.map((option) => {
       const optionBets = allBets.filter(
-        (bet) => bet.option_label === option.label,
+        (bet) => bet.option_label === option.label
       );
       const optionAmount = optionBets.reduce(
         (sum, bet) => sum + Number(bet.amount),
-        0,
+        0
       );
       const optionBetCount = optionBets.length;
       const percentage =
@@ -105,7 +98,7 @@ export async function getPredictionsDetailsAction(
     // User's total bets on this prediction
     const userTotalBets = userPredictions.reduce(
       (sum, bet) => sum + Number(bet.amount),
-      0,
+      0
     );
     const predictionDetail = {
       totalBets,

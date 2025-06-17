@@ -31,13 +31,15 @@ import {
   getUserTransactionsAction,
   GetUserTransactionsActionResponse,
 } from "@/actions/user/get-user-transactions-action";
-import { TransactionType } from "@/schemas/user-transaction.schema";
-import { UserPayment } from "@/schemas/user-payment.schema";
-import { UserPrediction } from "@/schemas/prediction.schema";
 import { useQuery } from "@tanstack/react-query";
-import { PointPackage } from "@/schemas/point-package.schema";
+import {
+  point_packages,
+  transaction_type,
+  user_payments,
+  user_predictions,
+} from "@prisma-zod/generated/zod.schema";
 
-const getTransactionIcon = (type: TransactionType) => {
+const getTransactionIcon = (type: transaction_type) => {
   switch (type) {
     case "Deposit":
       return <ArrowUpCircle className="h-4 w-4 text-green-500" />;
@@ -56,7 +58,7 @@ const getTransactionIcon = (type: TransactionType) => {
   }
 };
 
-const getTransactionColor = (type: TransactionType) => {
+const getTransactionColor = (type: transaction_type) => {
   switch (type) {
     case "Deposit":
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
@@ -78,7 +80,7 @@ const getTransactionColor = (type: TransactionType) => {
 export function TransactionHistory() {
   // Estados apenas para filtro e página
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState<TransactionType | undefined>(undefined);
+  const [filter, setFilter] = useState<transaction_type | undefined>(undefined);
   const { t } = useTranslation();
 
   // React Query para buscar transações
@@ -91,7 +93,7 @@ export function TransactionHistory() {
             page: currentPage,
             limit: 20,
           },
-          filter ? [filter] : [],
+          filter ? [filter] : []
         );
         return result.data ?? null;
       },
@@ -102,23 +104,23 @@ export function TransactionHistory() {
   };
 
   const handleFilterChange = (value: string) => {
-    const newFilter = value === "all" ? undefined : (value as TransactionType);
+    const newFilter = value === "all" ? undefined : (value as transaction_type);
     setFilter(newFilter);
     setCurrentPage(1);
   };
 
-  const formatAmount = (amount: number, type: TransactionType) => {
+  const formatAmount = (amount: number, type: transaction_type) => {
     const sign = type === "Predict" || type === "RaffleTicket" ? "" : "+";
     return `${sign}${amount.toLocaleString("pt-BR")} ${t("common.points")}`;
   };
 
   const getTransactionDescription = (
-    type: TransactionType,
+    type: transaction_type,
     user_payments_data?: {
-      user_payment: UserPayment;
-      point_package: PointPackage;
+      user_payment: user_payments;
+      point_package: point_packages;
     }[],
-    user_predictions?: UserPrediction[],
+    user_predictions?: user_predictions[]
   ) => {
     // Gerar descrição baseada no tipo
     switch (type) {
@@ -130,7 +132,7 @@ export function TransactionHistory() {
             point_package.points_amount + point_package.bonus_points;
           return t("transactions.descriptions.deposit", {
             provider: user_payment.provider,
-            amount: totalAmount.toLocaleString("pt-BR", {
+            amount: Number(totalAmount).toLocaleString("pt-BR", {
               style: "currency",
               currency: point_package.currency,
             }),
@@ -247,20 +249,20 @@ export function TransactionHistory() {
                           className={getTransactionColor(data.transaction.type)}
                         >
                           {t(
-                            `transactions.types.${data.transaction.type.toLowerCase()}`,
+                            `transactions.types.${data.transaction.type.toLowerCase()}`
                           )}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         {getTransactionDescription(
                           data.transaction.type,
-                          data.user_payments_data,
+                          data.user_payments_data
                         )}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {format(
                           data.transaction.created_at,
-                          "dd/MM/yyyy HH:mm",
+                          "dd/MM/yyyy HH:mm"
                         )}
                       </p>
                     </div>
@@ -275,8 +277,8 @@ export function TransactionHistory() {
                       }`}
                     >
                       {formatAmount(
-                        data.transaction.amount,
-                        data.transaction.type,
+                        Number(data.transaction.amount),
+                        data.transaction.type
                       )}
                     </p>
                   </div>
@@ -294,7 +296,7 @@ export function TransactionHistory() {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(
                 pagination.page * pagination.limit,
-                pagination.total,
+                pagination.total
               ),
               total: pagination.total,
             })}
@@ -339,7 +341,7 @@ export function TransactionHistory() {
                       {pageNumber}
                     </Button>
                   );
-                },
+                }
               )}
             </div>
 

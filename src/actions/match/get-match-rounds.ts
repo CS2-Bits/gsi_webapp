@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { MatchPlayerRoundsSchema } from "@/schemas/match-player-rounds.schema";
+import { match_player_rounds_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getMatchRounds(statsId: string | null) {
   if (!statsId) {
@@ -19,5 +19,5 @@ export async function getMatchRounds(statsId: string | null) {
     return [];
   }
 
-  return rounds.map((round) => MatchPlayerRoundsSchema.parse(round));
+  return rounds.map((round) => match_player_rounds_schema.parse(round));
 }

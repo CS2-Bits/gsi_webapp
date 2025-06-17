@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { MatchPlayerStatsSchema } from "@/schemas/match-player-stats.schema";
+import { match_player_stats_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getMatchStatsByMatchId(match_id: string | null) {
   if (!match_id) {
@@ -17,5 +17,5 @@ export async function getMatchStatsByMatchId(match_id: string | null) {
     return null;
   }
 
-  return MatchPlayerStatsSchema.parse(stats);
+  return match_player_stats_schema.parse(stats);
 }

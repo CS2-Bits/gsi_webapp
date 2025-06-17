@@ -1,16 +1,19 @@
 "use server";
-import { Streamer, StreamerSchema } from "@/schemas/streamer.schema";
 import { ActionResponse } from "@/types/action-response";
 import { prisma } from "@/lib/prisma";
-import { MatchFilters, MatchFiltersSchema } from "@/schemas/matches.schema";
+import {
+  MatchFilters,
+  MatchFiltersSchema,
+} from "@/schemas/match_filters.schema";
 import { user_status } from "@prisma/client";
+import { streamers, streamers_schema } from "@prisma-zod/generated/zod.schema";
 
 type MatchesStreamersResponse = {
-  streamers: Streamer[];
+  streamers: streamers[];
 };
 
 export async function getMatchesStreamersAction(
-  filters: MatchFilters,
+  filters: MatchFilters
 ): Promise<ActionResponse<MatchesStreamersResponse>> {
   try {
     const validatedFilters = MatchFiltersSchema.parse(filters);
@@ -41,7 +44,7 @@ export async function getMatchesStreamersAction(
       },
     });
     const streamerParsed = streamers.map((streamer) =>
-      StreamerSchema.parse(streamer),
+      streamers_schema.parse(streamer)
     );
     return {
       success: true,

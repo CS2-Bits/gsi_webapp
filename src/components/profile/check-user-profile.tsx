@@ -38,7 +38,7 @@ export function CheckUserProfile() {
       description={t("profile.incompleteProfileDescription")}
     >
       <div className=" px-4">
-        <UserInfo userData={userResponse.data} />
+        <UserInfo userData={userResponse.data.user} />
       </div>
     </ResponsiveDialog>
   );

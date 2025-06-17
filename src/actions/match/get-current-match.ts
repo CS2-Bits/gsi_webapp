@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { MatchSchema } from "@/schemas/match.schema";
+import { matches_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getCurrentMatchByStreamerId(streamerUserId: string) {
   const match = await prisma.matches.findFirst({
@@ -17,5 +17,5 @@ export async function getCurrentMatchByStreamerId(streamerUserId: string) {
   if (!match) {
     return null;
   }
-  return MatchSchema.parse(match);
+  return matches_schema.parse(match);
 }

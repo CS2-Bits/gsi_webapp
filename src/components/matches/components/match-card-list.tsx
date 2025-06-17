@@ -5,17 +5,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Gamepad2 } from "lucide-react";
 import { MatchCard } from "./match-card";
-import type { StreamMatch } from "@/schemas/stream-matches.schema";
-import type { MatchPlayerStats } from "@/schemas/match-player-stats.schema";
-import { Match } from "@/schemas/match.schema";
-import { Streamer } from "@/schemas/streamer.schema";
+import {
+  match_player_stats,
+  matches,
+  stream_matches,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
 
 interface MatchCardListProps {
   matchesData: Array<{
-    stream_match: StreamMatch;
-    match: Match;
-    match_player_stats: MatchPlayerStats;
-    streamer: Streamer;
+    stream_match: stream_matches;
+    match: matches;
+    match_player_stats: match_player_stats;
+    streamer: streamers;
   }>;
   isLoading: boolean;
 }

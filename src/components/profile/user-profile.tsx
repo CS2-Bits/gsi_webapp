@@ -11,22 +11,25 @@ import { Shield, User } from "lucide-react";
 import { UserAvatar } from "./user-avatar";
 import { UserInfo } from "./user-info";
 import { StreamerInfo } from "./streamer-info";
-import { UserRoleSchema, Users, UsersSchema } from "@/schemas/users.schema";
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "../ui/skeleton";
 import { useEffect, useState } from "react";
 import { getCurrentUserAction } from "@/actions/user/get-current-user-action";
 import { TransactionHistory } from "./transaction-history";
 import { PaymentHistory } from "./payment-history";
+import { user_roles, users } from "@prisma-zod/generated/zod.schema";
 
 export function UserProfile() {
-  const [userData, setUser] = useState<Users | null>(null);
+  const [userData, setUserData] = useState<{
+    user: users;
+    user_roles: user_roles[];
+  } | null>(null);
   useEffect(() => {
     getCurrentUserAction().then((response) => {
       if (response.success && response.data) {
-        setUser(UsersSchema.parse(response.data));
+        setUserData(response.data);
       } else {
-        setUser(null);
+        setUserData(null);
       }
     });
   }, []);
@@ -41,13 +44,11 @@ export function UserProfile() {
     <div className="container py-8">
       <div className="grid gap-8">
         <div className="flex items-center gap-4">
-          <UserAvatar userData={userData} />
+          <UserAvatar userData={userData.user} />
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">{userData.username}</h2>
+            <h2 className="text-2xl font-bold">{userData.user.username}</h2>
             <p className="text-muted-foreground flex items-center gap-1">
-              {user_roles?.includes(
-                UserRoleSchema.shape.role_name.enum.Streamer
-              ) ? (
+              {user_roles?.includes("Streamer") ? (
                 <>
                   <Shield className="h-4 w-4" /> {t("userProfile.streamer")}
                 </>
@@ -84,11 +85,9 @@ export function UserProfile() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <UserInfo userData={userData} />
-                    {user_roles?.includes(
-                      UserRoleSchema.shape.role_name.enum.Streamer
-                    ) ? (
-                      <StreamerInfo userData={userData} />
+                    <UserInfo userData={userData.user} />
+                    {user_roles?.includes("Streamer") ? (
+                      <StreamerInfo userData={userData.user} />
                     ) : null}
                   </div>
                 </CardContent>

@@ -9,11 +9,11 @@ import {
 } from "@/schemas/handle-payment.schema";
 import { ActionError } from "@/types/action-error";
 import { updateUserPaymentStatus } from "./update-user-payment-status";
-import { Users } from "@/schemas/users.schema";
 import { payment_provider } from "@prisma/client";
+import { users } from "@prisma-zod/generated/zod.schema";
 
 export async function createCoinbasePayment(
-  user: Users,
+  user: users,
   data: CreatePayment
 ): Promise<CreatePaymentResponse> {
   try {

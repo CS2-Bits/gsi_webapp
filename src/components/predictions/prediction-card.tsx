@@ -22,7 +22,6 @@ import { getUserBalanceAction } from "@/actions/user/get-user-balance-action";
 import {
   PredictionDetailSchema,
   type OptionLabel,
-  type Prediction,
   type PredictionDetail,
 } from "@/schemas/prediction.schema";
 
@@ -37,16 +36,23 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { UserBalanceSchema } from "@/schemas/user-balance.schema";
-import { Streamer } from "@/schemas/streamer.schema";
 import { Skeleton } from "../ui/skeleton";
 import { getPredictionsDetailsAction } from "@/actions/predictions/get-predictions-details-action";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  prediction_templates,
+  predictions,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
+
+type Prediction = predictions & {
+  prediction_templates: prediction_templates;
+};
 
 interface PredictionCardProps {
-  streamer: Streamer;
+  streamer: streamers;
   prediction: Prediction;
   currentRound: number;
 }
@@ -72,7 +78,7 @@ export function PredictionCard({
     queryFn: async () => {
       const response = await getUserBalanceAction();
       if (response.success && response.data) {
-        return UserBalanceSchema.parse(response.data);
+        return response.data;
       }
       return null;
     },
@@ -118,15 +124,8 @@ export function PredictionCard({
         { message: t("predictions.enter_valid_amount") }
       )
       .refine(
-        (val) => Number(val) <= prediction.prediction_templates.max_bet_amount,
-        {
-          message: t("predictions.minimum_bet_description", {
-            amount: prediction.prediction_templates.min_bet_amount,
-          }),
-        }
-      )
-      .refine(
-        (val) => Number(val) >= prediction.prediction_templates.min_bet_amount,
+        (val) =>
+          Number(val) <= Number(prediction.prediction_templates.max_bet_amount),
         {
           message: t("predictions.minimum_bet_description", {
             amount: prediction.prediction_templates.min_bet_amount,
@@ -135,7 +134,18 @@ export function PredictionCard({
       )
       .refine(
         (val) =>
-          userBalance != null ? Number(val) <= userBalance.balance : false,
+          Number(val) >= Number(prediction.prediction_templates.min_bet_amount),
+        {
+          message: t("predictions.minimum_bet_description", {
+            amount: prediction.prediction_templates.min_bet_amount,
+          }),
+        }
+      )
+      .refine(
+        (val) =>
+          userBalance != null
+            ? Number(val) <= Number(userBalance.balance)
+            : false,
         {
           message: t("predictions.insufficient_balance"),
         }
@@ -312,7 +322,9 @@ export function PredictionCard({
                             {...field}
                             className={`flex-1`}
                             disabled={!selectedOptionLabel || isSubmitting}
-                            min={prediction.prediction_templates.min_bet_amount}
+                            min={Number(
+                              prediction.prediction_templates.min_bet_amount
+                            )}
                           />
                         </FormControl>
                         <Button
@@ -332,7 +344,7 @@ export function PredictionCard({
                 <div className="flex gap-2 mt-2">
                   {quickBetAmounts.map((amount) => (
                     <Button
-                      key={amount}
+                      key={amount.toString()}
                       variant="outline"
                       size="sm"
                       type="button"
@@ -344,7 +356,7 @@ export function PredictionCard({
                       }
                       className="flex-1"
                     >
-                      {amount}
+                      {Number(amount)}
                     </Button>
                   ))}
                   <Button
@@ -366,7 +378,7 @@ export function PredictionCard({
                 <div className="flex flex-col gap-1">
                   <p className="text-xs text-muted-foreground">
                     {t("predictions.min_bet")}:{" "}
-                    {prediction.prediction_templates.min_bet_amount}
+                    {Number(prediction.prediction_templates.min_bet_amount)}
                   </p>
                 </div>
               </form>

@@ -6,16 +6,17 @@ import { processUserPaymentSuccessAction } from "@/actions/payments/process-user
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, CircleX, Loader2 } from "lucide-react";
-import { PaymentStatus } from "@/schemas/user-payment.schema";
 import { useTranslation } from "react-i18next";
 import { getUserPaymentDataAction } from "@/actions/payments/get-user-payment-data-action";
 import { ProcessPaymentResponse } from "@/schemas/handle-payment.schema";
+import { payment_status as payment_statusType } from "@prisma-zod/generated/zod.schema";
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(true);
-  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("Pending");
+  const [paymentStatus, setPaymentStatus] =
+    useState<payment_statusType>("Pending");
   const [message, setMessage] = useState("");
   const { t } = useTranslation();
 
@@ -26,7 +27,7 @@ export default function PaymentSuccessPage() {
       status,
       message,
     }: {
-      status: PaymentStatus;
+      status: payment_statusType;
       message: string;
     }) => {
       setMessage(

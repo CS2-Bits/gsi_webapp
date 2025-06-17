@@ -6,12 +6,12 @@ import Image from "next/image";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { RaffleWithSkin } from "@/actions/raffles/get-all-raffles-action";
 import { formatRelative } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { RaffleWithSteamItem } from "@/actions/raffles/get-all-raffles-action";
 
 interface ClosedRaffleItemProps {
-  raffle: RaffleWithSkin;
+  raffle: RaffleWithSteamItem;
 }
 
 export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
@@ -19,19 +19,20 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
 
   // Determine the exterior color class based on the skin's exterior
   const getExteriorColorClass = () => {
-    if (raffle.skin.type.includes("Contraband")) {
+    const item_type = raffle.steam_item.item_type;
+    if (item_type.includes("Contraband")) {
       return "from-yellow-500/25 via-yellow-400/20 to-yellow-600/30";
     }
-    if (raffle.skin.type.includes("Covert")) {
+    if (item_type.includes("Covert")) {
       return "from-red-500/25 via-red-400/20 to-red-600/30";
     }
-    if (raffle.skin.type.includes("Classified")) {
+    if (item_type.includes("Classified")) {
       return "from-purple-500/25 via-purple-400/20 to-purple-600/30";
     }
-    if (raffle.skin.type.includes("Restricted")) {
+    if (item_type.includes("Restricted")) {
       return "from-green-500/25 via-green-400/20 to-green-600/30";
     }
-    if (raffle.skin.type.includes("Mil-Spec")) {
+    if (item_type.includes("Mil-Spec")) {
       return "from-blue-500/25 via-blue-400/20 to-blue-600/30";
     }
     return "from-gray-500/25 via-gray-400/20 to-gray-600/30";
@@ -48,10 +49,10 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
             <div className="absolute inset-0 flex items-center justify-center z-10">
               <Image
                 src={
-                  raffle.skin.image_url ||
+                  raffle.steam_item.image_url ||
                   "/CS2Bits-icon.png?height=64&width=64"
                 }
-                alt={raffle.skin.market_hash_name}
+                alt={raffle.steam_item.market_hash_name}
                 width={48}
                 height={48}
                 className="object-contain drop-shadow-sm"
@@ -62,7 +63,7 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
 
           <div className="flex-1 min-w-0">
             <h4 className="font-medium text-sm truncate">
-              {raffle.skin.market_hash_name}
+              {raffle.steam_item.market_hash_name}
             </h4>
             <div className="flex items-center gap-1.5 mt-0.5">
               <Trophy className="h-3 w-3 text-yellow-500" />

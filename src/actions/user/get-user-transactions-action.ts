@@ -1,16 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { UserPayment, UserPaymentSchema } from "@/schemas/user-payment.schema";
-import {
-  TransactionType,
-  UserTransaction,
-  UserTransactionSchema,
-} from "@/schemas/user-transaction.schema";
-import {
-  UserPrediction,
-  UserPredictionSchema,
-} from "@/schemas/prediction.schema";
 import {
   Pagination,
   PaginationParams,
@@ -21,25 +11,32 @@ import { ActionResponse } from "@/types/action-response";
 import { ActionError } from "@/types/action-error";
 import { getCurrentUser } from "./get-current-user";
 import {
-  PointPackage,
-  PointPackageSchema,
-} from "@/schemas/point-package.schema";
+  point_packages,
+  point_packages_schema,
+  transaction_type,
+  user_payments,
+  user_payments_schema,
+  user_predictions,
+  user_predictions_schema,
+  user_transactions,
+  user_transactions_schema,
+} from "@prisma-zod/generated/zod.schema";
 
 export type GetUserTransactionsActionResponse = {
   transactionsData: {
-    transaction: UserTransaction;
+    transaction: user_transactions;
     user_payments_data: {
-      user_payment: UserPayment;
-      point_package: PointPackage;
+      user_payment: user_payments;
+      point_package: point_packages;
     }[];
-    user_predictions: UserPrediction[];
+    user_predictions: user_predictions[];
   }[];
   pagination: Pagination;
 };
 
 export async function getUserTransactionsAction(
   paginationParams?: PaginationParams,
-  transactionsTypes?: TransactionType[]
+  transactionsTypes?: transaction_type[]
 ): Promise<ActionResponse<GetUserTransactionsActionResponse>> {
   try {
     const user = await getCurrentUser();
@@ -94,17 +91,17 @@ export async function getUserTransactionsAction(
     });
 
     const transactionsData = transactions.map((transaction) => ({
-      transaction: UserTransactionSchema.parse(transaction),
+      transaction: user_transactions_schema.parse(transaction),
       user_payments_data: transaction.user_payment_transactions.map((pt) => {
         return {
-          user_payment: UserPaymentSchema.parse(pt.user_payments),
-          point_package: PointPackageSchema.parse(
+          user_payment: user_payments_schema.parse(pt.user_payments),
+          point_package: point_packages_schema.parse(
             pt.user_payments.point_packages
           ),
         };
       }),
       user_predictions: transaction.user_prediction_transactions.map((pt) =>
-        UserPredictionSchema.parse(pt.user_predictions)
+        user_predictions_schema.parse(pt.user_predictions)
       ),
     }));
 

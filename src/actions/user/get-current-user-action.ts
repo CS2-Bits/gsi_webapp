@@ -1,9 +1,20 @@
 "use server";
-import { Users, UsersSchema } from "@/schemas/users.schema";
 import { ActionResponse } from "@/types/action-response";
 import { getCurrentUser } from "./get-current-user";
+import {
+  user_roles,
+  user_roles_schema,
+  users,
+  users_schema,
+} from "@prisma-zod/generated/zod.schema";
 
-export async function getCurrentUserAction(): Promise<ActionResponse<Users>> {
+export async function getCurrentUserAction(): Promise<
+  ActionResponse<{
+    user: users;
+    user_roles: user_roles[];
+  }>
+> {
+  // Fetch the current user from the session
   const user = await getCurrentUser();
   if (!user) {
     return {
@@ -13,6 +24,9 @@ export async function getCurrentUserAction(): Promise<ActionResponse<Users>> {
   }
   return {
     success: true,
-    data: UsersSchema.parse(user),
+    data: {
+      user: users_schema.parse(user),
+      user_roles: user.user_roles.map((role) => user_roles_schema.parse(role)),
+    },
   };
 }

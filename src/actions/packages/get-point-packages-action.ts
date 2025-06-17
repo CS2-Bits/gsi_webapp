@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { PointPackageSchema } from "@/schemas/point-package.schema";
+import { point_packages_schema } from "@prisma-zod/generated/zod.schema";
 
 export async function getPointPackagesAction() {
   try {
@@ -18,7 +18,7 @@ export async function getPointPackagesAction() {
       return [];
     }
 
-    return packages.map((pkg) => PointPackageSchema.parse(pkg));
+    return packages.map((pkg) => point_packages_schema.parse(pkg));
   } catch (error) {
     console.error("Error fetching point packages:", error);
     return [];

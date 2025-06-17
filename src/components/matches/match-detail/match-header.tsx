@@ -12,18 +12,20 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Streamer } from "@/schemas/streamer.schema";
 import { formatMapName } from "@/types/map-name";
 import { useTranslation } from "react-i18next";
-import { Match } from "@/schemas/match.schema";
-import { MatchPlayerStats } from "@/schemas/match-player-stats.schema";
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { match_status } from "@prisma/client";
+import {
+  match_player_stats,
+  matches,
+  streamers,
+} from "@prisma-zod/generated/zod.schema";
 interface MatchHeaderProps {
-  streamer: Streamer;
-  matchData: Match | null;
-  statsData: MatchPlayerStats | null;
+  streamer: streamers;
+  matchData: matches | null;
+  statsData: match_player_stats | null;
 }
 
 export function MatchHeader({

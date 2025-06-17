@@ -8,12 +8,12 @@ import {
   CreatePaymentResponse,
 } from "@/schemas/handle-payment.schema";
 import { ActionError } from "@/types/action-error";
-import { Users } from "@/schemas/users.schema";
 import { updateUserPaymentStatus } from "./update-user-payment-status";
 import { payment_provider } from "@prisma/client";
+import { users } from "@prisma-zod/generated/zod.schema";
 
 export async function createStripePayment(
-  user: Users,
+  user: users,
   data: CreatePayment
 ): Promise<CreatePaymentResponse> {
   try {

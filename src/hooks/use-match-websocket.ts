@@ -1,14 +1,4 @@
 import { getMatchWsTokenAction } from "@/actions/ws/get-ws-token-action";
-import { EventPayloadSchema } from "@/schemas/event-payload.schema";
-import {
-  MatchPlayerRounds,
-  MatchPlayerRoundsSchema,
-} from "@/schemas/match-player-rounds.schema";
-import {
-  MatchPlayerStats,
-  MatchPlayerStatsSchema,
-} from "@/schemas/match-player-stats.schema";
-import { Match, MatchSchema } from "@/schemas/match.schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
@@ -20,24 +10,33 @@ import {
   WebsocketBuilder,
   WebsocketEvent,
 } from "websocket-ts";
+import {
+  match_player_rounds,
+  match_player_rounds_schema,
+  match_player_stats,
+  match_player_stats_schema,
+  matches,
+  matches_schema,
+} from "@prisma-zod/generated/zod.schema";
+import { EventPayloadSchema } from "@/schemas/event-payload.schema";
 
 export function useMatchWebSocket(streamerUserId: string) {
   const ws = useRef<Websocket | null>(null);
   const { t } = useTranslation();
   const [wssToken, setWssToken] = useState<string | null>(null);
-  const [matchWebSocketData, setMatchWebSocketData] = useState<Match | null>(
+  const [matchWebSocketData, setMatchWebSocketData] = useState<matches | null>(
     null
   );
   const qc = useQueryClient();
   const [statsWebSocketData, setStatsWebSocketData] =
-    useState<MatchPlayerStats | null>(null);
+    useState<match_player_stats | null>(null);
   const [roundsWebSocketData, setRoundsWebSocketData] =
-    useState<MatchPlayerRounds | null>(null);
+    useState<match_player_rounds | null>(null);
   useEffect(() => {
     getMatchWsTokenAction(streamerUserId).then((response) => {
       setWssToken(response.data ?? null);
     });
-  }, []);
+  }, [streamerUserId]);
   useEffect(() => {
     if (!wssToken) return;
     const url = `${process.env.NEXT_PUBLIC_WS_URL!}/?token=${wssToken}`;
@@ -63,7 +62,7 @@ export function useMatchWebSocket(streamerUserId: string) {
       const eventPayload = eventPayloadParsed.data;
       if (eventPayload.match_event === "match") {
         const json = JSON.parse(eventPayload.data);
-        const result = MatchSchema.safeParse(json);
+        const result = matches_schema.safeParse(json);
         if (result.success) {
           setMatchWebSocketData(result.data);
         } else {
@@ -72,7 +71,7 @@ export function useMatchWebSocket(streamerUserId: string) {
         }
       } else if (eventPayload.match_event === "stats") {
         const json = JSON.parse(eventPayload.data);
-        const result = MatchPlayerStatsSchema.safeParse(json);
+        const result = match_player_stats_schema.safeParse(json);
         if (result.success) {
           setStatsWebSocketData(result.data);
         } else {
@@ -81,7 +80,7 @@ export function useMatchWebSocket(streamerUserId: string) {
         }
       } else if (eventPayload.match_event === "round") {
         const json = JSON.parse(eventPayload.data);
-        const result = MatchPlayerRoundsSchema.safeParse(json);
+        const result = match_player_rounds_schema.safeParse(json);
         if (result.success) {
           setRoundsWebSocketData(result.data);
         } else {

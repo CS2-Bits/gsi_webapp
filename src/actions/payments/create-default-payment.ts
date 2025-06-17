@@ -4,9 +4,9 @@ import {
   CreatePaymentSchema,
 } from "@/schemas/handle-payment.schema";
 import { ActionError } from "@/types/action-error";
-import { Users } from "@/schemas/users.schema";
+import { users } from "@prisma-zod/generated/zod.schema";
 
-export async function createDefaultPayment(user: Users, data: CreatePayment) {
+export async function createDefaultPayment(user: users, data: CreatePayment) {
   const validatedData = CreatePaymentSchema.parse(data);
 
   // Get the package

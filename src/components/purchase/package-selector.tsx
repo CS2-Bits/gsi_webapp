@@ -1,17 +1,17 @@
 "use client";
 
-import type { PointPackage } from "@/schemas/point-package.schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatPrice } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { point_packages } from "@prisma-zod/generated/zod.schema";
 
 interface PackageSelectorProps {
-  packages: PointPackage[];
-  selectedPackage: PointPackage | null;
-  onSelect: (pkg: PointPackage) => void;
+  packages: point_packages[];
+  selectedPackage: point_packages | null;
+  onSelect: (pkg: point_packages) => void;
 }
 
 export function PackageSelector({
@@ -27,7 +27,7 @@ export function PackageSelector({
     );
   }
 
-  const calculateBonusPercentage = (pkg: PointPackage) => {
+  const calculateBonusPercentage = (pkg: point_packages) => {
     if (pkg.bonus_points === 0) return 0;
     return Math.round((pkg.bonus_points / pkg.points_amount) * 100);
   };

@@ -12,14 +12,14 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { purchaseTicketsAction } from "@/actions/raffles/purchase-tickets-action";
-import type { RaffleWithSkin } from "@/actions/raffles/get-all-raffles-action";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { UserBalance } from "@/schemas/user-balance.schema";
+import { RaffleWithSteamItem } from "@/actions/raffles/get-all-raffles-action";
+import { user_balances } from "@prisma-zod/generated/zod.schema";
 
 interface RaffleCardProps {
-  raffle: RaffleWithSkin;
-  userBalance?: UserBalance; // Optional prop for user balance
+  raffle: RaffleWithSteamItem;
+  userBalance?: user_balances; // Optional prop for user balance
   isExpanded: boolean;
   onToggleExpansion: (raffleId: string) => void;
 }
@@ -95,19 +95,20 @@ export function RaffleCard({
 
   // Determine the exterior color class based on the skin's exterior/rarity
   const getRarityGradient = () => {
-    if (raffle.skin.type.includes("Contraband")) {
+    const item_type = raffle.steam_item.item_type;
+    if (item_type.includes("Contraband")) {
       return "from-yellow-500/25 via-yellow-400/20 to-yellow-600/30";
     }
-    if (raffle.skin.type.includes("Covert")) {
+    if (item_type.includes("Covert")) {
       return "from-red-500/25 via-red-400/20 to-red-600/30";
     }
-    if (raffle.skin.type.includes("Classified")) {
+    if (item_type.includes("Classified")) {
       return "from-purple-500/25 via-purple-400/20 to-purple-600/30";
     }
-    if (raffle.skin.type.includes("Restricted")) {
+    if (item_type.includes("Restricted")) {
       return "from-green-500/25 via-green-400/20 to-green-600/30";
     }
-    if (raffle.skin.type.includes("Mil-Spec")) {
+    if (item_type.includes("Mil-Spec")) {
       return "from-blue-500/25 via-blue-400/20 to-blue-600/30";
     }
     return "from-gray-500/25 via-gray-400/20 to-gray-600/30";
@@ -119,17 +120,17 @@ export function RaffleCard({
         isExpanded ? "shadow-lg" : "hover:shadow-md"
       }`}
       style={{
-        borderColor: raffle.skin.type.includes("Contraband")
+        borderColor: raffle.steam_item.item_type.includes("Contraband")
           ? "#ef9e1f"
-          : raffle.skin.type.includes("Covert")
+          : raffle.steam_item.item_type.includes("Covert")
             ? "#eb4b4b"
-            : raffle.skin.type.includes("Classified")
+            : raffle.steam_item.item_type.includes("Classified")
               ? "#d32be3"
-              : raffle.skin.type.includes("Restricted")
+              : raffle.steam_item.item_type.includes("Restricted")
                 ? "#8a43fa"
-                : raffle.skin.type.includes("Mil-Spec")
+                : raffle.steam_item.item_type.includes("Mil-Spec")
                   ? "#4a6afa"
-                  : raffle.skin.type.includes("Industrial")
+                  : raffle.steam_item.item_type.includes("Industrial")
                     ? "#5a9ada"
                     : "#b0c2da",
       }}
@@ -154,10 +155,10 @@ export function RaffleCard({
             <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
               <Image
                 src={
-                  raffle.skin.image_url ||
+                  raffle.steam_item.image_url ||
                   "/CS2Bits-icon.png?height=200&width=200"
                 }
-                alt={raffle.skin.market_hash_name}
+                alt={raffle.steam_item.market_hash_name}
                 width={160}
                 height={120}
                 className="object-contain max-h-28 drop-shadow-lg filter brightness-105"
@@ -167,18 +168,18 @@ export function RaffleCard({
 
             {/* Type badge with better visibility */}
             <Badge className="absolute top-2 right-2 z-20 bg-black/80 text-white border-white/20 backdrop-blur-sm hover:bg-black/90">
-              {raffle.skin.type}
+              {raffle.steam_item.item_type}
             </Badge>
           </div>
 
           {/* Info Section - Fixed content that doesn't expand */}
           <div className="p-3 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
             <h3 className="font-medium text-sm mb-1 line-clamp-1">
-              {raffle.skin.market_hash_name}
+              {raffle.steam_item.market_hash_name}
             </h3>
-            <p className="text-xs text-muted-foreground mb-2 font-medium">
-              {t("skin." + raffle.skin.exterior)}
-            </p>
+            {/* <p className="text-xs text-muted-foreground mb-2 font-medium">
+              {t("skin." + raffle.steam_item.exterior)}
+            </p> */}
 
             <div className="mt-auto space-y-1.5">
               <div className="flex items-center justify-between text-xs">
@@ -249,7 +250,7 @@ export function RaffleCard({
                   {t("purchase.balance")}
                 </span>
                 <span className="font-medium text-green-600">
-                  {currentBalance} {t("common.points")}
+                  {Number(currentBalance)} {t("common.points")}
                 </span>
               </div>
             </div>
