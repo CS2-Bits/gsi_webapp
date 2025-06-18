@@ -151,7 +151,7 @@ export default function UserInventory() {
           urgency: "critical",
           bgColor: "bg-red-500/10",
           textColor: "text-red-600",
-          pulseAnimation: true,
+          pulseAnimation: false,
         };
       }
 
@@ -170,7 +170,7 @@ export default function UserInventory() {
           urgency: "high",
           bgColor: "bg-orange-500/10",
           textColor: "text-orange-600",
-          pulseAnimation: true,
+          pulseAnimation: false,
         };
       }
 
@@ -258,18 +258,47 @@ export default function UserInventory() {
     () => (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
-          <Card key={index} className="overflow-hidden border-2 min-h-[280px]">
-            <CardContent className="p-0">
-              <Skeleton className="h-32 w-full animate-pulse" />
-              <div className="p-3 space-y-3">
-                <Skeleton className="h-4 w-3/4 animate-pulse" />
-                <Skeleton className="h-3 w-1/2 animate-pulse" />
-                <div className="space-y-2">
-                  <Skeleton className="h-6 w-full animate-pulse" />
-                  <Skeleton className="h-8 w-full animate-pulse" />
+          <Card
+            key={index}
+            className="pt-0 pb-1 overflow-hidden border-2 min-h-[280px]"
+          >
+            <div className="flex flex-col h-full">
+              {/* Image Section Skeleton */}
+              <CardContent className="p-0 flex-1">
+                <div className="relative w-full h-28 overflow-hidden">
+                  <Skeleton className="absolute inset-0 animate-pulse" />
+                  {/* Item name skeleton at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
+                    <Skeleton className="h-4 w-3/4 bg-white/30" />
+                    <Skeleton className="h-3 w-1/2 bg-white/20 mt-1" />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
+
+                {/* Info Section Skeleton */}
+                <div className="p-2 flex-1 flex flex-col">
+                  <div className="space-y-2">
+                    {/* Status section skeleton */}
+                    <div className="flex items-start gap-2 p-2 rounded-lg bg-muted/50">
+                      <Skeleton className="h-4 w-4 rounded-full flex-shrink-0 mt-0.5" />
+                      <div className="flex-1 space-y-1">
+                        <Skeleton className="h-3 w-16" />
+                        <Skeleton className="h-3 w-20" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+
+              {/* Action Section Skeleton */}
+              <CardFooter className="p-2 pt-0">
+                <div className="flex flex-col gap-2 w-full">
+                  {/* Withdraw button skeleton */}
+                  <Skeleton className="h-10 w-full rounded-md" />
+                  {/* Exchange button skeleton */}
+                  <Skeleton className="h-12 w-full rounded-md" />
+                </div>
+              </CardFooter>
+            </div>
           </Card>
         ))}
       </div>
@@ -324,7 +353,10 @@ export default function UserInventory() {
                 <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
                   {steamItem.image_url ? (
                     <Image
-                      src={steamItem.image_url || "/placeholder.svg"}
+                      src={
+                        steamItem.image_url ||
+                        "/CS2Bits-icon.png?height=64&width=64"
+                      }
                       alt={steamItem.market_hash_name}
                       width={100}
                       height={80}
