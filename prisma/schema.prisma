@@ -7,18 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model inventory_stocks {
-  steam_item_id String
-  steam_bot_id  String
-  tradable      Boolean     @default(false)
-  available     Boolean     @default(false)
-  last_sync     DateTime    @default(now()) @db.Timestamptz(6)
-  steam_bots    steam_bots  @relation(fields: [steam_bot_id], references: [steam_id], onDelete: Cascade, onUpdate: NoAction)
-  steam_items   steam_items @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([steam_item_id, steam_bot_id])
-}
-
 model match_player_deaths {
   id                 Int
   stats_id           String             @db.Uuid
@@ -174,27 +162,39 @@ model raffles {
   user_raffle_trade_offers user_raffle_trade_offers[]
 }
 
+model steam_bot_inventory_items {
+  steam_item_id String
+  steam_bot_id  String
+  tradable      Boolean     @default(false)
+  available     Boolean     @default(true)
+  last_sync     DateTime    @default(now()) @db.Timestamptz(6)
+  steam_bots    steam_bots  @relation(fields: [steam_bot_id], references: [steam_id], onDelete: Cascade, onUpdate: NoAction)
+  steam_items   steam_items @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([steam_item_id, steam_bot_id])
+}
+
 model steam_bots {
-  steam_id         String             @id
-  session_cookies  Json?
-  polldata         Json?
-  inventory_stocks inventory_stocks[]
+  steam_id                  String                      @id
+  session_cookies           Json?
+  polldata                  Json?
+  steam_bot_inventory_items steam_bot_inventory_items[]
 }
 
 model steam_items {
-  asset_id             String                 @id
-  market_hash_name     String
-  item_type            String
-  image_url            String?
-  currency             currency               @default(USD)
-  estimated_fiat_value Decimal                @db.Decimal(20, 4)
-  fee_pct              Decimal                @db.Decimal(5, 4)
-  created_at           DateTime               @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime               @default(now()) @db.Timestamptz(6)
-  inventory_stocks     inventory_stocks[]
-  raffles              raffles[]
-  trade_offer_items    trade_offer_items[]
-  user_inventory_items user_inventory_items[]
+  asset_id                  String                      @id
+  market_hash_name          String
+  item_type                 String
+  image_url                 String?
+  currency                  currency                    @default(USD)
+  estimated_fiat_value      Decimal                     @db.Decimal(20, 4)
+  fee_pct                   Decimal                     @db.Decimal(5, 4)
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  raffles                   raffles[]
+  steam_bot_inventory_items steam_bot_inventory_items[]
+  trade_offer_items         trade_offer_items[]
+  user_inventory_items      user_inventory_items[]
 }
 
 model stream_matches {
@@ -299,7 +299,7 @@ model user_balances {
 model user_inventory_items {
   user_id       String      @db.Uuid
   steam_item_id String
-  expires_in    DateTime    @default(dbgenerated("(now() + '1 day'::interval)")) @db.Timestamptz(6)
+  expires_in    DateTime    @default(dbgenerated("(now() + '7 days'::interval)")) @db.Timestamptz(6)
   in_trade      Boolean     @default(false)
   steam_items   steam_items @relation(fields: [steam_item_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction)
   users         users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)

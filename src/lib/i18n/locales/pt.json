@@ -798,5 +798,43 @@
     "FieldTested": "Testada em Campo",
     "WellWorn": "Bem Usada",
     "BattleScarred": "Veterana de Guerra"
+  },
+  "inventory": {
+    "title": "Meu Inventário",
+    "subtitle": "Gerencie seus itens do Counter-Strike 2",
+    "itemCount": "{{count}} itens",
+    "totalValue": "Valor Total",
+    "error": {
+      "title": "Erro ao carregar inventário",
+      "generic": "Ocorreu um erro inesperado",
+      "description": "Não foi possível carregar seus itens. Tente novamente.",
+      "retry": "Tentar novamente"
+    },
+    "empty": {
+      "title": "Inventário vazio",
+      "description": "Você não possui itens no momento. Participe de sorteios para ganhar itens!",
+      "refresh": "Atualizar"
+    },
+    "expiration": {
+      "expired": "Expirado",
+      "expiringSoon": "Expira em breve",
+      "active": "Ativo",
+      "expiredTime": "Expirou {{time}}"
+    },
+    "badges": { "inTrade": "Em negociação" },
+    "actions": {
+      "withdraw": "Sacar",
+      "exchange": "Trocar",
+      "exchangeAll": "Trocar Todos"
+    },
+    "withdraw:": {
+      "success_title": "Saque iniciado",
+      "error_title": "Erro no saque"
+    },
+    "exchange": {
+      "success_title": "Troca realizada",
+      "success_description": "Você recebeu {{amount}} CS2Bits!",
+      "error_title": "Erro na troca"
+    }
   }
 }

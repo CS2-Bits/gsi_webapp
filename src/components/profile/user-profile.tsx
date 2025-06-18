@@ -18,6 +18,7 @@ import { getCurrentUserAction } from "@/actions/user/get-current-user-action";
 import { TransactionHistory } from "./transaction-history";
 import { PaymentHistory } from "./payment-history";
 import { user_roles, users } from "@prisma-zod/generated/zod.schema";
+import UserInventory from "./user-inventory";
 
 export function UserProfile() {
   const [userData, setUserData] = useState<{
@@ -61,8 +62,11 @@ export function UserProfile() {
           </div>
         </div>
         <div>
-          <Tabs defaultValue="info">
-            <TabsList className="grid grid-cols-3 mb-4">
+          <Tabs defaultValue="inventory">
+            <TabsList className="grid grid-cols-4 mb-4">
+              <TabsTrigger value="inventory">
+                {t("userProfile.tabs.inventory")}
+              </TabsTrigger>
               <TabsTrigger value="info">
                 {t("userProfile.tabs.info")}
               </TabsTrigger>
@@ -73,6 +77,9 @@ export function UserProfile() {
                 {t("userProfile.tabs.payments")}
               </TabsTrigger>
             </TabsList>
+            <TabsContent value="inventory">
+              <UserInventory />
+            </TabsContent>
             <TabsContent value="info">
               <Card>
                 <CardHeader>
@@ -118,8 +125,11 @@ export function UserProfileSkeleton() {
           </div>
         </div>
         <div>
-          <Tabs defaultValue="info">
+          <Tabs defaultValue="inventory">
             <TabsList>
+              <TabsTrigger value="inventory">
+                <Skeleton className="h-4 w-16" />
+              </TabsTrigger>
               <TabsTrigger value="info">
                 <Skeleton className="h-4 w-16" />
               </TabsTrigger>
