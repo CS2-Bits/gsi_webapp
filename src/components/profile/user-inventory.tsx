@@ -247,30 +247,30 @@ export default function UserInventory() {
    */
   const renderSkeletonItems = useMemo(
     () => (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {Array.from({ length: 8 }).map((_, index) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+        {Array.from({ length: 6 }).map((_, index) => (
           <Card key={index} className="overflow-hidden border-2">
             <CardContent className="p-0">
-              <Skeleton className="h-32 w-full animate-pulse" />
-              <div className="p-3 space-y-3">
-                <Skeleton className="h-4 w-3/4 animate-pulse" />
-                <div className="space-y-1.5">
+              <Skeleton className="h-24 w-full animate-pulse" />
+              <div className="p-2 space-y-2">
+                <Skeleton className="h-3 w-3/4 animate-pulse" />
+                <div className="space-y-1">
                   <div className="flex justify-between">
-                    <Skeleton className="h-3 w-16 animate-pulse" />
-                    <Skeleton className="h-3 w-12 animate-pulse" />
+                    <Skeleton className="h-2 w-12 animate-pulse" />
+                    <Skeleton className="h-2 w-8 animate-pulse" />
                   </div>
-                  <Skeleton className="h-3 w-20 animate-pulse" />
+                  <Skeleton className="h-2 w-16 animate-pulse" />
                   <div className="flex gap-1">
-                    <Skeleton className="h-5 w-16 animate-pulse" />
-                    <Skeleton className="h-5 w-12 animate-pulse" />
+                    <Skeleton className="h-4 w-12 animate-pulse" />
+                    <Skeleton className="h-4 w-8 animate-pulse" />
                   </div>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="p-3 pt-0">
-              <div className="flex gap-2 w-full">
-                <Skeleton className="h-8 flex-1 animate-pulse" />
-                <Skeleton className="h-8 flex-1 animate-pulse" />
+            <CardFooter className="p-2 pt-0">
+              <div className="flex flex-col gap-1 w-full">
+                <Skeleton className="h-6 w-full animate-pulse" />
+                <Skeleton className="h-6 w-full animate-pulse" />
               </div>
             </CardFooter>
           </Card>
@@ -296,7 +296,7 @@ export default function UserInventory() {
       return (
         <Card
           key={`${item.user_id}-${item.steam_item_id}`}
-          className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
+          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
             isDisabled ? "opacity-60" : ""
           }`}
           style={{
@@ -311,7 +311,7 @@ export default function UserInventory() {
           <div className="flex flex-col h-full">
             {/* Image Section with Rarity Gradient Background - styled like raffle card */}
             <CardContent className="p-0 flex-1 flex flex-col">
-              <div className="relative w-full h-32 overflow-hidden rounded-lg">
+              <div className="relative w-full h-24 overflow-hidden rounded-lg">
                 {/* Base background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-background/50 to-muted/80"></div>
 
@@ -321,101 +321,95 @@ export default function UserInventory() {
                 ></div>
 
                 {/* Subtle pattern overlay for texture */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px] opacity-30"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:15px_15px] opacity-30"></div>
 
                 {/* Image container */}
-                <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
+                <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
                   {steamItem.image_url ? (
                     <Image
                       src={steamItem.image_url}
                       alt={steamItem.market_hash_name}
-                      width={160}
-                      height={120}
-                      className="object-contain max-h-28 drop-shadow-lg filter brightness-105"
+                      width={80}
+                      height={60}
+                      className="object-contain max-h-20 drop-shadow-lg filter brightness-105"
                       crossOrigin="anonymous"
                     />
                   ) : (
-                    <Package className="h-12 w-12 text-muted-foreground/60" />
+                    <Package className="h-8 w-8 text-muted-foreground/60" />
                   )}
                 </div>
 
                 {/* Type badge with better visibility */}
-                <Badge className="absolute top-2 right-2 z-20 bg-black/80 text-white border-white/20 backdrop-blur-sm hover:bg-black/90">
+                <Badge className="absolute top-1 right-1 z-20 bg-black/80 text-white border-white/20 backdrop-blur-sm hover:bg-black/90 text-xs px-1 py-0">
                   {steamItem.item_type}
                 </Badge>
 
                 {/* Expiration overlay for expired items */}
                 {isExpired && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-30">
-                    <AlertTriangle className="h-8 w-8 text-red-400" />
+                    <AlertTriangle className="h-6 w-6 text-red-400" />
                   </div>
                 )}
               </div>
 
               {/* Info Section - styled like raffle card */}
-              <div className="p-3 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
-                <h3 className="font-medium text-sm mb-1 line-clamp-2 leading-tight">
+              <div className="p-2 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
+                <h3 className="font-medium text-xs mb-1 line-clamp-2 leading-tight">
                   {steamItem.market_hash_name}
                 </h3>
 
-                <div className="mt-auto space-y-1.5">
-                  {/* <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">
-                      {t("inventory.item.value")}
-                    </span>
-                    <span className="font-semibold text-primary">
-                      {formatCurrency(cs2bits_value)}
-                    </span>
-                  </div> */}
-
+                <div className="mt-auto space-y-1">
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
-                      <expirationStatus.icon className="h-3 w-3" />
-                      <span>{expirationStatus.timeText}</span>
+                      <expirationStatus.icon className="h-2.5 w-2.5" />
+                      <span className="text-xs truncate">
+                        {expirationStatus.timeText}
+                      </span>
                     </div>
-                    {/* Status badges */}
-                    <div className="flex gap-1 flex-wrap">
-                      {item.in_trade && (
-                        <Badge variant="secondary" className="text-xs">
-                          {t("inventory.badges.inTrade")}
-                        </Badge>
-                      )}
-                      <Badge
-                        variant={expirationStatus.variant}
-                        className="text-xs"
-                      >
-                        {expirationStatus.text}
+                  </div>
+
+                  {/* Status badges */}
+                  <div className="flex gap-1 flex-wrap">
+                    {item.in_trade && (
+                      <Badge variant="secondary" className="text-xs px-1 py-0">
+                        {t("inventory.badges.inTrade")}
                       </Badge>
-                    </div>
+                    )}
+                    <Badge
+                      variant={expirationStatus.variant}
+                      className="text-xs px-1 py-0"
+                    >
+                      {expirationStatus.text}
+                    </Badge>
                   </div>
                 </div>
               </div>
             </CardContent>
 
             {/* Action buttons - styled like raffle card footer */}
-            <CardFooter className="p-3 pt-0 bg-gradient-to-b from-background/95 to-background">
-              <div className="flex gap-2 w-full">
+            <CardFooter className="p-2 pt-0 bg-gradient-to-b from-background/95 to-background">
+              <div className="flex flex-col gap-1 w-full">
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 text-xs transition-all duration-200"
+                  className="w-full text-xs h-6 transition-all duration-200"
                   disabled={isDisabled || withdrawMutation.isPending}
                   onClick={() => withdrawMutation.mutate(item.steam_item_id)}
                 >
-                  <Download className="h-3 w-3 mr-1" />
+                  <Download className="h-2.5 w-2.5 mr-1" />
                   {t("inventory.actions.withdraw")}
                 </Button>
 
                 <Button
                   size="sm"
                   variant="default"
-                  className="flex-1 text-xs transition-all duration-200"
+                  className="w-full text-xs h-6 transition-all duration-200"
                   disabled={isDisabled || exchangeItemMutation.isPending}
                   onClick={() =>
                     exchangeItemMutation.mutate(item.steam_item_id)
                   }
                 >
-                  <Coins className="h-3 w-3 mr-1" />
+                  <Coins className="h-2.5 w-2.5 mr-1" />
                   {t("inventory.actions.exchange")}{" "}
                   {formatCurrency(cs2bits_value)}
                 </Button>
@@ -566,7 +560,7 @@ export default function UserInventory() {
           inventoryResponse.data &&
           inventoryResponse.data.item_data.length > 0 && (
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3"
               role="grid"
               aria-label={t("inventory.grid.ariaLabel")}
             >

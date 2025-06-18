@@ -60,7 +60,7 @@
   },
   "header": {
     "matches": "Partidas",
-    "store": "Loja - EM BREVE",
+    "exchange": "Trocador - EM BREVE",
     "raffles": "Sorteios",
     "back_home": "Voltar ao Início",
     "streamer_guide": "Guia para Streamers",
@@ -445,6 +445,7 @@
     "streamer": "Streamer",
     "user": "Usuário",
     "tabs": {
+      "inventory": "Inventário",
       "info": "Informações",
       "stats": "Estatísticas",
       "history": "Histórico",
@@ -816,7 +817,7 @@
       "refresh": "Atualizar"
     },
     "expiration": {
-      "in": "Item será retirado",
+      "in": "Trocado automaticamente",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",
       "active": "Ativo",
@@ -824,8 +825,8 @@
     },
     "badges": { "inTrade": "Em negociação" },
     "actions": {
-      "withdraw": "Sacar",
-      "exchange": "Trocar",
+      "withdraw": "Retirar para Steam",
+      "exchange": "Trocar por",
       "exchangeAll": "Trocar todos por"
     },
     "withdraw:": {

@@ -65,10 +65,10 @@ export default function HomeHeader() {
               variant="ghost"
               size="sm"
               className="text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
-              aria-label={t("header.store")}
+              aria-label={t("header.exchange")}
             >
               <Store className="h-4 w-4" />
-              {t("header.store")}
+              {t("header.exchange")}
             </Button>
           </nav>
         </div>
