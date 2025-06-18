@@ -16,6 +16,7 @@ export async function getUserInventoryAction(): Promise<
   ActionResponse<{
     item_data: {
       inventoty_item: user_inventory_items;
+      cs2bits_rate: number;
       steam_item: steam_items;
     }[];
     total_cs2bits_value: number;
@@ -64,6 +65,7 @@ export async function getUserInventoryAction(): Promise<
 
     const mappedItems = available_items.map((item) => ({
       inventoty_item: user_inventory_items_schema.parse(item),
+      cs2bits_rate: cs2bits_usd_rate.toNumber(),
       steam_item: steam_items_schema.parse(item.steam_items),
     }));
 

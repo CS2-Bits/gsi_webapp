@@ -816,6 +816,7 @@
       "refresh": "Atualizar"
     },
     "expiration": {
+      "in": "Item será retirado",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",
       "active": "Ativo",
@@ -825,7 +826,7 @@
     "actions": {
       "withdraw": "Sacar",
       "exchange": "Trocar",
-      "exchangeAll": "Trocar Todos"
+      "exchangeAll": "Trocar todos por"
     },
     "withdraw:": {
       "success_title": "Saque iniciado",
