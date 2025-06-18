@@ -15,6 +15,7 @@ import {
   ArrowUpDown,
   Clock,
   AlertTriangle,
+  Zap,
 } from "lucide-react";
 import { useEffect, useCallback, useMemo } from "react";
 import {
@@ -28,7 +29,7 @@ import { toast } from "sonner";
 import { getUserInventoryAction } from "@/actions/inventory/get-user-inventory-action";
 import { withdrawItemAction } from "@/actions/inventory/withdraw-item-action";
 import { exchangeItemsAction } from "@/actions/inventory/exchange-item-action";
-import {
+import type {
   steam_items,
   user_inventory_items,
 } from "@prisma-zod/generated/zod.schema";
@@ -113,21 +114,22 @@ export default function UserInventory() {
     },
   });
 
-  // Show error toast when query fails - Fixed to prevent infinite loops
+  // Show error toast when query fails
   useEffect(() => {
     if (isError && error) {
       toast(t("inventory.error.title"));
     }
   }, [isError, error, t]);
 
-  // Show error toast when server returns error - Fixed to prevent infinite loops
+  // Show error toast when server returns error
   useEffect(() => {
     if (inventoryResponse && inventoryResponse.error_message) {
       toast(t("inventory.error.title"));
     }
   }, [inventoryResponse, t]);
+
   /**
-   * Get expiration status and styling for an item
+   * Get enhanced expiration status with more engaging messaging
    */
   const getExpirationStatus = useCallback(
     (expiresIn: Date) => {
@@ -143,12 +145,11 @@ export default function UserInventory() {
           text: t("inventory.expiration.expired"),
           variant: "destructive" as const,
           icon: AlertTriangle,
-          timeText: t("inventory.expiration.expiredTime", {
-            time: formatDistanceToNow(expiresIn, {
-              locale: ptBR,
-              addSuffix: true,
-            }),
-          }),
+          timeText: t("inventory.expiration.expiredMessage"),
+          urgency: "critical",
+          bgColor: "bg-red-500/10",
+          textColor: "text-red-600",
+          pulseAnimation: true,
         };
       }
 
@@ -156,11 +157,18 @@ export default function UserInventory() {
         return {
           text: t("inventory.expiration.expiringSoon"),
           variant: "secondary" as const,
-          icon: Clock,
-          timeText: formatDistanceToNow(expiresIn, {
-            locale: ptBR,
-            addSuffix: true,
-          }),
+          icon: Zap,
+          timeText: `${t("inventory.expiration.in")} ${formatDistanceToNow(
+            expiresIn,
+            {
+              locale: ptBR,
+              addSuffix: true,
+            }
+          )}`,
+          urgency: "high",
+          bgColor: "bg-orange-500/10",
+          textColor: "text-orange-600",
+          pulseAnimation: true,
         };
       }
 
@@ -168,51 +176,55 @@ export default function UserInventory() {
         text: t("inventory.expiration.active"),
         variant: "outline" as const,
         icon: Clock,
-        timeText:
-          t("inventory.expiration.in") +
-          " " +
-          formatDistanceToNow(expiresIn, {
+        timeText: `${t("inventory.expiration.in")} ${formatDistanceToNow(
+          expiresIn,
+          {
             locale: ptBR,
             addSuffix: true,
-          }),
+          }
+        )}`,
+        urgency: "low",
+        bgColor: "bg-green-500/10",
+        textColor: "text-green-600",
+        pulseAnimation: false,
       };
     },
     [t]
   );
 
   /**
-   * Get rarity gradient based on item type (reused from raffle card)
+   * Get enhanced rarity styling with more vibrant gradients
    */
   const getRarityGradient = useCallback((item_type: string) => {
     if (item_type.includes("Contraband")) {
-      return "from-yellow-500/25 via-yellow-400/20 to-yellow-600/30";
+      return "from-yellow-400/40 via-yellow-300/30 to-amber-500/40";
     }
     if (item_type.includes("Covert")) {
-      return "from-red-500/25 via-red-400/20 to-red-600/30";
+      return "from-red-500/40 via-red-400/30 to-rose-600/40";
     }
     if (item_type.includes("Classified")) {
-      return "from-purple-500/25 via-purple-400/20 to-purple-600/30";
+      return "from-purple-500/40 via-purple-400/30 to-violet-600/40";
     }
     if (item_type.includes("Restricted")) {
-      return "from-green-500/25 via-green-400/20 to-green-600/30";
+      return "from-green-500/40 via-green-400/30 to-emerald-600/40";
     }
     if (item_type.includes("Mil-Spec")) {
-      return "from-blue-500/25 via-blue-400/20 to-blue-600/30";
+      return "from-blue-500/40 via-blue-400/30 to-cyan-600/40";
     }
-    return "from-gray-500/25 via-gray-400/20 to-gray-600/30";
+    return "from-gray-500/30 via-gray-400/20 to-slate-600/30";
   }, []);
 
   /**
-   * Get border color based on item type (reused from raffle card)
+   * Get enhanced border styling with glow effects
    */
   const getBorderColor = useCallback((item_type: string) => {
-    if (item_type.includes("Contraband")) return "#ef9e1f";
-    if (item_type.includes("Covert")) return "#eb4b4b";
-    if (item_type.includes("Classified")) return "#d32be3";
-    if (item_type.includes("Restricted")) return "#8a43fa";
-    if (item_type.includes("Mil-Spec")) return "#4a6afa";
-    if (item_type.includes("Industrial")) return "#5a9ada";
-    return "#b0c2da";
+    if (item_type.includes("Contraband")) return "#f59e0b";
+    if (item_type.includes("Covert")) return "#ef4444";
+    if (item_type.includes("Classified")) return "#a855f7";
+    if (item_type.includes("Restricted")) return "#10b981";
+    if (item_type.includes("Mil-Spec")) return "#3b82f6";
+    if (item_type.includes("Industrial")) return "#6b7280";
+    return "#9ca3af";
   }, []);
 
   /**
@@ -238,36 +250,24 @@ export default function UserInventory() {
   }, [inventoryResponse?.data, exchangeAllMutation, t]);
 
   /**
-   * Render skeleton loader for inventory items with raffle card style
+   * Enhanced skeleton loader
    */
   const renderSkeletonItems = useMemo(
     () => (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
-          <Card key={index} className="overflow-hidden border-2">
+          <Card key={index} className="overflow-hidden border-2 min-h-[280px]">
             <CardContent className="p-0">
-              <Skeleton className="h-24 w-full animate-pulse" />
-              <div className="p-2 space-y-2">
-                <Skeleton className="h-3 w-3/4 animate-pulse" />
-                <div className="space-y-1">
-                  <div className="flex justify-between">
-                    <Skeleton className="h-2 w-12 animate-pulse" />
-                    <Skeleton className="h-2 w-8 animate-pulse" />
-                  </div>
-                  <Skeleton className="h-2 w-16 animate-pulse" />
-                  <div className="flex gap-1">
-                    <Skeleton className="h-4 w-12 animate-pulse" />
-                    <Skeleton className="h-4 w-8 animate-pulse" />
-                  </div>
+              <Skeleton className="h-32 w-full animate-pulse" />
+              <div className="p-3 space-y-3">
+                <Skeleton className="h-4 w-3/4 animate-pulse" />
+                <Skeleton className="h-3 w-1/2 animate-pulse" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-full animate-pulse" />
+                  <Skeleton className="h-8 w-full animate-pulse" />
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="p-2 pt-0">
-              <div className="flex flex-col gap-1 w-full">
-                <Skeleton className="h-6 w-full animate-pulse" />
-                <Skeleton className="h-6 w-full animate-pulse" />
-              </div>
-            </CardFooter>
           </Card>
         ))}
       </div>
@@ -276,7 +276,7 @@ export default function UserInventory() {
   );
 
   /**
-   * Render individual inventory item card with raffle card style
+   * Enhanced inventory item card with better visual hierarchy
    */
   const renderInventoryItem = useCallback(
     (
@@ -288,14 +288,16 @@ export default function UserInventory() {
       const isExpired = isPast(item.expires_in);
       const isDisabled = item.in_trade || isExpired;
       const cs2bits_value = steamItem.estimated_fiat_value * cs2bits_rate;
+
       return (
         <Card
           key={`${item.user_id}-${item.steam_item_id}`}
-          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
-            isDisabled ? "opacity-60" : ""
-          }`}
+          className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] ${
+            isDisabled ? "opacity-60 grayscale" : ""
+          } ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
             borderColor: getBorderColor(steamItem.item_type),
+            boxShadow: `0 0 20px ${getBorderColor(steamItem.item_type)}20`,
           }}
           tabIndex={0}
           role="article"
@@ -304,107 +306,113 @@ export default function UserInventory() {
           })}
         >
           <div className="flex flex-col h-full">
-            {/* Image Section with Rarity Gradient Background - styled like raffle card */}
-            <CardContent className="p-0 flex-1 flex flex-col">
-              <div className="relative w-full h-24 overflow-hidden rounded-lg">
-                {/* Base background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-background/50 to-muted/80"></div>
-
-                {/* Rarity gradient overlay */}
+            {/* Enhanced Image Section */}
+            <CardContent className="p-0 flex-1">
+              <div className="relative w-full h-28 overflow-hidden">
+                {/* Enhanced background with animated gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-background/80 to-muted/90"></div>
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${getRarityGradient(steamItem.item_type)}`}
+                  className={`absolute inset-0 bg-gradient-to-br ${getRarityGradient(steamItem.item_type)} group-hover:opacity-80 transition-opacity duration-300`}
                 ></div>
 
-                {/* Subtle pattern overlay for texture */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:15px_15px] opacity-30"></div>
+                {/* Animated pattern overlay */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[length:20px_20px] opacity-40 group-hover:animate-pulse"></div>
 
-                {/* Image container */}
-                <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
+                {/* Enhanced image container */}
+                <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
                   {steamItem.image_url ? (
                     <Image
-                      src={steamItem.image_url}
+                      src={steamItem.image_url || "/placeholder.svg"}
                       alt={steamItem.market_hash_name}
-                      width={80}
-                      height={60}
-                      className="object-contain max-h-20 drop-shadow-lg filter brightness-105"
+                      width={100}
+                      height={80}
+                      className="object-contain max-h-24 drop-shadow-2xl filter brightness-110 group-hover:scale-110 transition-transform duration-300"
                       crossOrigin="anonymous"
                     />
                   ) : (
-                    <Package className="h-8 w-8 text-muted-foreground/60" />
+                    <Package className="h-12 w-12 text-muted-foreground/60" />
                   )}
                 </div>
 
-                {/* Type badge with better visibility */}
-                <Badge className="absolute top-1 right-1 z-20 bg-black/80 text-white border-white/20 backdrop-blur-sm hover:bg-black/90 text-xs px-1 py-0">
-                  {steamItem.item_type}
-                </Badge>
-
-                {/* Expiration overlay for expired items */}
+                {/* Enhanced expiration overlay */}
                 {isExpired && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-30">
-                    <AlertTriangle className="h-6 w-6 text-red-400" />
+                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-30">
+                    <div className="text-center">
+                      <AlertTriangle className="h-8 w-8 text-red-400 mx-auto mb-1" />
+                      <span className="text-red-400 font-bold text-sm">
+                        {t("inventory.expiration.expired")}
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Info Section - styled like raffle card */}
+              {/* Enhanced Info Section */}
               <div className="p-2 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
-                <h3 className="font-medium text-xs mb-1 line-clamp-2 leading-tight">
+                {/* Item name with better typography */}
+                <h3 className="font-bold text-sm mb-2 line-clamp-2 leading-tight text-foreground group-hover:text-primary transition-colors">
                   {steamItem.market_hash_name}
                 </h3>
 
-                <div className="mt-auto space-y-1">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <expirationStatus.icon className="h-2.5 w-2.5" />
-                      <span className="text-xs truncate">
+                {/* Enhanced status section */}
+                <div className="mt-auto space-y-2">
+                  {/* Expiration status with enhanced styling */}
+                  <div
+                    className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
+                  >
+                    <expirationStatus.icon
+                      className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div
+                        className={`font-bold text-xs ${expirationStatus.textColor}`}
+                      >
+                        {expirationStatus.text}
+                      </div>
+                      <div className="text-xs text-muted-foreground break-words">
                         {expirationStatus.timeText}
-                      </span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Status badges */}
-                  <div className="flex gap-1 flex-wrap">
-                    {item.in_trade && (
-                      <Badge variant="secondary" className="text-xs px-1 py-0">
-                        {t("inventory.badges.inTrade")}
-                      </Badge>
-                    )}
+                  {/* Trade status badge */}
+                  {item.in_trade && (
                     <Badge
-                      variant={expirationStatus.variant}
-                      className="text-xs px-1 py-0"
+                      variant="secondary"
+                      className="w-full justify-center text-xs py-1"
                     >
-                      {expirationStatus.text}
+                      🔒 {t("inventory.badges.inTrade")}
                     </Badge>
-                  </div>
+                  )}
                 </div>
               </div>
             </CardContent>
 
-            {/* Action buttons - styled like raffle card footer */}
+            {/* Enhanced Action Section */}
             <CardFooter className="p-2 pt-0 bg-gradient-to-b from-background/95 to-background">
-              <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col gap-2 w-full">
+                {/* Enhanced action buttons - single column */}
                 <Button
                   size="sm"
                   variant="outline"
-                  className="w-full text-xs h-6 transition-all duration-200"
+                  className="w-full text-xs h-8 transition-all duration-200 hover:scale-105"
                   disabled={isDisabled || withdrawMutation.isPending}
                   onClick={() => withdrawMutation.mutate(item.steam_item_id)}
                 >
-                  <Download className="h-2.5 w-2.5 mr-1" />
+                  <Download className="h-3 w-3 mr-1" />
                   {t("inventory.actions.withdraw")}
                 </Button>
 
                 <Button
                   size="sm"
                   variant="default"
-                  className="w-full text-xs h-6 transition-all duration-200"
+                  className="w-full text-xs h-8 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                   disabled={isDisabled || exchangeItemMutation.isPending}
                   onClick={() =>
                     exchangeItemMutation.mutate(item.steam_item_id)
                   }
                 >
-                  <Coins className="h-2.5 w-2.5 mr-1" />
+                  <Zap className="h-3 w-3 mr-1" />
                   {t("inventory.actions.exchange")}{" "}
                   {formatCurrency(cs2bits_value)}
                 </Button>
@@ -425,54 +433,63 @@ export default function UserInventory() {
   );
 
   /**
-   * Render empty state when no items found
+   * Enhanced empty state
    */
   const renderEmptyState = useMemo(
     () => (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Package
-          className="h-16 w-16 text-muted-foreground mb-4"
-          aria-hidden="true"
-        />
-        <h3 className="text-lg font-semibold mb-2">
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="relative mb-6">
+          <Package
+            className="h-20 w-20 text-muted-foreground/50"
+            aria-hidden="true"
+          />
+          <div className="absolute -top-2 -right-2 bg-primary/20 rounded-full p-2">
+            <Coins className="h-6 w-6 text-primary" />
+          </div>
+        </div>
+        <h3 className="text-xl font-bold mb-3 text-foreground">
           {t("inventory.empty.title")}
         </h3>
-        <p className="text-muted-foreground mb-4 max-w-md">
+        <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">
           {t("inventory.empty.description")}
         </p>
-        <button
+        <Button
           onClick={() => refetch()}
-          className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+          variant="outline"
+          className="hover:scale-105 transition-transform"
         >
+          <ArrowUpDown className="h-4 w-4 mr-2" />
           {t("inventory.empty.refresh")}
-        </button>
+        </Button>
       </div>
     ),
     [t, refetch]
   );
 
   /**
-   * Render error state
+   * Enhanced error state
    */
   const renderErrorState = useMemo(
     () => (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
+      <div className="flex flex-col items-center justify-center py-16 text-center">
         <AlertCircle
-          className="h-16 w-16 text-destructive mb-4"
+          className="h-20 w-20 text-destructive mb-6"
           aria-hidden="true"
         />
-        <h3 className="text-lg font-semibold mb-2">
+        <h3 className="text-xl font-bold mb-3 text-foreground">
           {t("inventory.error.title")}
         </h3>
-        <p className="text-muted-foreground mb-4 max-w-md">
+        <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">
           {t("inventory.error.description")}
         </p>
-        <button
+        <Button
           onClick={() => refetch()}
-          className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+          variant="destructive"
+          className="hover:scale-105 transition-transform"
         >
+          <AlertCircle className="h-4 w-4 mr-2" />
           {t("inventory.error.retry")}
-        </button>
+        </Button>
       </div>
     ),
     [t, refetch]
@@ -490,58 +507,64 @@ export default function UserInventory() {
 
   return (
     <section
-      className="space-y-6"
+      className="space-y-8"
       aria-labelledby="inventory-heading"
       aria-live="polite"
       aria-busy={isLoading}
     >
-      {/* Header with Exchange All button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
+      {/* Enhanced Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="space-y-2">
           <h2
             id="inventory-heading"
-            className="text-2xl font-bold tracking-tight"
+            className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text"
           >
             {t("inventory.title")}
           </h2>
-          <p className="text-muted-foreground">{t("inventory.subtitle")}</p>
+          <p className="text-muted-foreground text-lg">
+            {t("inventory.subtitle")}
+          </p>
         </div>
 
         {inventoryResponse?.success &&
           inventoryResponse.data &&
           inventoryResponse.data?.item_data.length > 0 && (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="text-sm text-muted-foreground text-right">
-                <div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+              {/* Enhanced stats display */}
+              <div className="text-right space-y-1">
+                <div className="text-sm font-bold text-muted-foreground">
                   {t("inventory.itemCount", {
                     count: inventoryResponse.data.item_data.length,
                   })}
                 </div>
-                <div className="font-semibold text-primary">
-                  {t("inventory.totalValue")}:{" "}
+                {/* <div className="font-bold text-xl text-primary flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground font-normal">
+                    {t("inventory.totalValue")}
+                  </span>
+                  <Coins className="h-5 w-5" />
                   {formatCurrency(inventoryResponse.data.total_cs2bits_value)}
-                </div>
+                </div> */}
               </div>
 
+              {/* Enhanced exchange all button */}
               {availableItemsCount > 0 && (
                 <Button
                   onClick={handleExchangeAll}
                   disabled={exchangeAllMutation.isPending}
-                  className="flex items-center gap-2"
+                  size="lg"
+                  className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all duration-200 shadow-lg"
                 >
-                  <ArrowUpDown className="h-4 w-4" />
-                  {t("inventory.actions.exchangeAll")}
-                  <span className="ml-1 px-2 py-0.5 bg-primary-foreground text-primary rounded text-xs font-semibold">
-                    {formatCurrency(inventoryResponse.data.total_cs2bits_value)}
-                  </span>
+                  <Zap className="h-5 w-5 mr-2" />
+                  {t("inventory.actions.exchangeAll")}{" "}
+                  {formatCurrency(inventoryResponse.data.total_cs2bits_value)}
                 </Button>
               )}
             </div>
           )}
       </div>
 
-      {/* Content */}
-      <div className="min-h-[400px]">
+      {/* Enhanced Content */}
+      <div className="min-h-[500px]">
         {isLoading && renderSkeletonItems}
 
         {isError && renderErrorState}
@@ -554,7 +577,7 @@ export default function UserInventory() {
           inventoryResponse.data &&
           inventoryResponse.data.item_data.length > 0 && (
             <div
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4"
               role="grid"
               aria-label={t("inventory.grid.ariaLabel")}
             >

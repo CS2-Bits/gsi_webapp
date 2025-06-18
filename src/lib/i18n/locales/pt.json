@@ -818,10 +818,10 @@
       "refresh": "Atualizar"
     },
     "expiration": {
-      "in": "Trocado automaticamente",
+      "in": "Troca automatica",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",
-      "active": "Ativo",
+      "active": "Pronto para trocar",
       "expiredTime": "Expirou {{time}}"
     },
     "badges": { "inTrade": "Em negociação" },
