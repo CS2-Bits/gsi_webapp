@@ -3,12 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -123,14 +118,14 @@ export default function UserInventory() {
     if (isError && error) {
       toast(t("inventory.error.title"));
     }
-  }, [isError, error, t, toast]);
+  }, [isError, error, t]);
 
   // Show error toast when server returns error - Fixed to prevent infinite loops
   useEffect(() => {
     if (inventoryResponse && inventoryResponse.error_message) {
       toast(t("inventory.error.title"));
     }
-  }, [inventoryResponse?.success, inventoryResponse?.error_message, toast, t]);
+  }, [inventoryResponse, t]);
   /**
    * Get expiration status and styling for an item
    */
@@ -240,7 +235,7 @@ export default function UserInventory() {
     }
 
     exchangeAllMutation.mutate(availableItems);
-  }, [inventoryResponse?.data, exchangeAllMutation, toast, t]);
+  }, [inventoryResponse?.data, exchangeAllMutation, t]);
 
   /**
    * Render skeleton loader for inventory items with raffle card style
@@ -422,7 +417,6 @@ export default function UserInventory() {
     [
       t,
       getExpirationStatus,
-      formatCurrency,
       withdrawMutation,
       exchangeItemMutation,
       getRarityGradient,
