@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FaSteam } from "react-icons/fa";
 import {
   AlertCircle,
   Package,
@@ -89,6 +90,7 @@ export default function UserInventory() {
           })
         );
         queryClient.invalidateQueries({ queryKey: ["user-inventory"] });
+        queryClient.invalidateQueries({ queryKey: ["userBalance"] });
       } else {
         toast(t("inventory.exchange.error.title"));
       }
@@ -292,7 +294,7 @@ export default function UserInventory() {
       return (
         <Card
           key={`${item.user_id}-${item.steam_item_id}`}
-          className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] ${
+          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] ${
             isDisabled ? "opacity-60 grayscale" : ""
           } ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
@@ -334,6 +336,13 @@ export default function UserInventory() {
                   )}
                 </div>
 
+                {/* Item name positioned at bottom left of image */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 z-20">
+                  <h3 className="font-bold text-sm line-clamp-2 leading-tight text-white drop-shadow-lg">
+                    {steamItem.market_hash_name}
+                  </h3>
+                </div>
+
                 {/* Enhanced expiration overlay */}
                 {isExpired && (
                   <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-30">
@@ -349,13 +358,8 @@ export default function UserInventory() {
 
               {/* Enhanced Info Section */}
               <div className="p-2 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
-                {/* Item name with better typography */}
-                <h3 className="font-bold text-sm mb-2 line-clamp-2 leading-tight text-foreground group-hover:text-primary transition-colors">
-                  {steamItem.market_hash_name}
-                </h3>
-
                 {/* Enhanced status section */}
-                <div className="mt-auto space-y-2">
+                <div className="space-y-2">
                   {/* Expiration status with enhanced styling */}
                   <div
                     className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
@@ -393,28 +397,36 @@ export default function UserInventory() {
               <div className="flex flex-col gap-2 w-full">
                 {/* Enhanced action buttons - single column */}
                 <Button
-                  size="sm"
+                  size="lg"
                   variant="outline"
-                  className="w-full text-xs h-8 transition-all duration-200 hover:scale-105"
+                  className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
                   disabled={isDisabled || withdrawMutation.isPending}
                   onClick={() => withdrawMutation.mutate(item.steam_item_id)}
                 >
-                  <Download className="h-3 w-3 mr-1" />
+                  <FaSteam className="h-10 w-10" />
                   {t("inventory.actions.withdraw")}
                 </Button>
 
                 <Button
-                  size="sm"
+                  size="lg"
                   variant="default"
-                  className="w-full text-xs h-8 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                  className="w-full text-sm h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                   disabled={isDisabled || exchangeItemMutation.isPending}
                   onClick={() =>
                     exchangeItemMutation.mutate(item.steam_item_id)
                   }
                 >
-                  <Zap className="h-3 w-3 mr-1" />
-                  {t("inventory.actions.exchange")}{" "}
-                  {formatCurrency(cs2bits_value)}
+                  <div className="flex flex-col items-center gap-0.5 w-full">
+                    <div className="flex items-center gap-1">
+                      <Zap className="h-3 w-3" />
+                      <span className="whitespace-nowrap">
+                        {t("inventory.actions.exchange")}
+                      </span>
+                    </div>
+                    <span className="text-sm font-semibold break-words text-center leading-tight">
+                      {formatCurrency(cs2bits_value)}
+                    </span>
+                  </div>
                 </Button>
               </div>
             </CardFooter>
@@ -552,11 +564,21 @@ export default function UserInventory() {
                   onClick={handleExchangeAll}
                   disabled={exchangeAllMutation.isPending}
                   size="lg"
-                  className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all duration-200 shadow-lg"
+                  className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all duration-200 shadow-lg h-auto min-h-[2.5rem] py-2"
                 >
-                  <Zap className="h-5 w-5 mr-2" />
-                  {t("inventory.actions.exchangeAll")}{" "}
-                  {formatCurrency(inventoryResponse.data.total_cs2bits_value)}
+                  <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-5 w-5" />
+                      <span className="whitespace-nowrap">
+                        {t("inventory.actions.exchangeAll")}
+                      </span>
+                    </div>
+                    <span className="text-sm font-semibold break-words text-center">
+                      {formatCurrency(
+                        inventoryResponse.data.total_cs2bits_value
+                      )}
+                    </span>
+                  </div>
                 </Button>
               )}
             </div>

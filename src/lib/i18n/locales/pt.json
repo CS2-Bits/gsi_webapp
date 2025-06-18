@@ -814,7 +814,7 @@
     },
     "empty": {
       "title": "Inventário vazio",
-      "description": "Você não possui itens no momento. Participe de sorteios para ganhar itens!",
+      "description": "Você não possui itens no momento. Participe de sorteios ou troque pontos para ganhar itens!",
       "refresh": "Atualizar"
     },
     "expiration": {
