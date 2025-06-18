@@ -501,6 +501,7 @@
     "toggle_visibility": "Alternar visibilidade",
     "save": "Salvar",
     "trade_link": "Link de troca",
+    "email_updated": "Email atualizado com sucesso",
     "open_trade_link": "Abrir link de troca no Steam",
     "errorTitle": "Erro",
     "errorDescription": "Ocorreu um erro ao carregar os dados do perfil: {{message}}",

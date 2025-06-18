@@ -13,7 +13,7 @@ import { UserInfo } from "./user-info";
 import { StreamerInfo } from "./streamer-info";
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "../ui/skeleton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getCurrentUserAction } from "@/actions/user/get-current-user-action";
 import { TransactionHistory } from "./transaction-history";
 import { PaymentHistory } from "./payment-history";
@@ -25,15 +25,25 @@ export function UserProfile() {
     user: users;
     user_roles: user_roles[];
   } | null>(null);
-  useEffect(() => {
-    getCurrentUserAction().then((response) => {
-      if (response.success && response.data) {
-        setUserData(response.data);
-      } else {
-        setUserData(null);
-      }
-    });
+
+  const fetchUserData = useCallback(async () => {
+    const response = await getCurrentUserAction();
+    if (response.success && response.data) {
+      setUserData(response.data);
+    } else {
+      setUserData(null);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+  const handleUserDataUpdate = useCallback(() => {
+    // Refresh user data after successful form submission
+    fetchUserData();
+  }, [fetchUserData]);
+
   const { t } = useTranslation();
 
   if (!userData) {
@@ -92,9 +102,15 @@ export function UserProfile() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <UserInfo userData={userData.user} />
+                    <UserInfo
+                      userData={userData.user}
+                      onUserDataUpdate={handleUserDataUpdate}
+                    />
                     {user_roles?.includes("Streamer") ? (
-                      <StreamerInfo userData={userData.user} />
+                      <StreamerInfo
+                        userData={userData.user}
+                        onUserDataUpdate={handleUserDataUpdate}
+                      />
                     ) : null}
                   </div>
                 </CardContent>

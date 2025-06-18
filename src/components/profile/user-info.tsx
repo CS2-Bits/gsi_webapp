@@ -25,9 +25,10 @@ import { users } from "@prisma-zod/generated/zod.schema";
 
 interface UserInfoProps {
   userData: users;
+  onUserDataUpdate?: () => void; // Add callback prop
 }
 
-export function UserInfo({ userData }: UserInfoProps) {
+export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
   const [showSteamId, setShowSteamId] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
@@ -56,11 +57,15 @@ export function UserInfo({ userData }: UserInfoProps) {
       const res = await updateTradeLinkAction(values.trade_link);
       if (res.success) {
         toast.success(t("profile.trade_link_updated"));
-        window.location.reload();
+        if (onUserDataUpdate) {
+          onUserDataUpdate();
+        }
       } else {
         toast.error(t(res.error_message || "error.trade_link_incorrect"));
       }
     }
+
+    // Signal parent to update userData if trade link was updated
   }
   async function handleOtpConfirm(code: string) {
     if (!pendingEmail) return;
@@ -68,7 +73,11 @@ export function UserInfo({ userData }: UserInfoProps) {
     if (res.success) {
       setOtpOpen(false);
       setPendingEmail(null);
-      window.location.reload();
+      toast.success(t("profile.email_updated"));
+      // Signal parent to update userData after email confirmation
+      if (onUserDataUpdate) {
+        onUserDataUpdate();
+      }
     } else {
       toast.error(t(res.error_message || "error.error_confirming_otp"));
     }
@@ -103,6 +112,15 @@ export function UserInfo({ userData }: UserInfoProps) {
                   <Input
                     {...form.register("email")}
                     className="text-lg font-medium w-full"
+                    onPaste={() => {
+                      setTimeout(() => form.trigger("email"), 0);
+                    }}
+                    onChange={(e) => {
+                      form.setValue("email", e.target.value, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
                   />
                 </FormControl>
                 {form.formState.errors.email && (
@@ -153,6 +171,15 @@ export function UserInfo({ userData }: UserInfoProps) {
                   <Input
                     {...form.register("trade_link")}
                     className="text-lg font-medium w-full"
+                    onPaste={() => {
+                      setTimeout(() => form.trigger("trade_link"), 0);
+                    }}
+                    onChange={(e) => {
+                      form.setValue("trade_link", e.target.value, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
                   />
                 </FormControl>
                 {form.formState.errors.trade_link && (

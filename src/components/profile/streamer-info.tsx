@@ -24,7 +24,12 @@ type StreamerWithUrls = {
   stream_urls: stream_urls[];
 };
 
-export function StreamerInfo({ userData }: { userData: users }) {
+interface StreamerInfoProps {
+  userData: users;
+  onUserDataUpdate?: () => void; // Add callback prop
+}
+
+export function StreamerInfo({ userData }: StreamerInfoProps) {
   const [streamerData, setStreamerData] = useState<StreamerWithUrls | null>(
     null
   );
