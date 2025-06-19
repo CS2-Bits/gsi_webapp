@@ -34,7 +34,7 @@ async function attemptConcurrentFetch(
   const fallbackPromise = fetchCurrencyData(fallbackUrl);
 
   // Return the first successful response
-  return await Promise.race([primaryPromise, fallbackPromise]);
+  return await Promise.any([primaryPromise, fallbackPromise]);
 }
 
 export async function getExchangeRate(
