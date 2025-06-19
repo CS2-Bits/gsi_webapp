@@ -11,12 +11,12 @@ import { FaSteam } from "react-icons/fa";
 import {
   AlertCircle,
   Package,
-  Download,
   Coins,
   ArrowUpDown,
   Clock,
   AlertTriangle,
   Zap,
+  Loader2Icon,
 } from "lucide-react";
 import { useEffect, useCallback, useMemo } from "react";
 import {
@@ -32,6 +32,7 @@ import { withdrawItemAction } from "@/actions/inventory/withdraw-item-action";
 import { exchangeItemsAction } from "@/actions/inventory/exchange-item-action";
 import type {
   steam_items,
+  trade_offers,
   user_inventory_items,
 } from "@prisma-zod/generated/zod.schema";
 import { formatCurrency } from "@/lib/utils";
@@ -65,15 +66,15 @@ export default function UserInventory() {
     },
     onSuccess: (data) => {
       if (data.success) {
-        toast(t("inventory.withdraw.success.title"));
+        toast(t("inventory.withdraw.success"));
         queryClient.invalidateQueries({ queryKey: ["user-inventory"] });
       } else {
-        toast(t("inventory.withdraw.error.title"));
+        toast(t("inventory.withdraw.error"));
       }
     },
     onError: (error) => {
       console.error("Withdraw error:", error);
-      toast(t("inventory.withdraw.error.title"));
+      toast(t("inventory.withdraw.error"));
     },
   });
 
@@ -85,14 +86,14 @@ export default function UserInventory() {
     onSuccess: (response) => {
       if (response.success && response.data) {
         toast(
-          t("inventory.exchange.success.description", {
+          t("inventory.exchange.success", {
             amount: response.data.amount,
           })
         );
         queryClient.invalidateQueries({ queryKey: ["user-inventory"] });
         queryClient.invalidateQueries({ queryKey: ["userBalance"] });
       } else {
-        toast(t("inventory.exchange.error.title"));
+        toast(t("inventory.exchange.error"));
       }
     },
   });
@@ -238,8 +239,8 @@ export default function UserInventory() {
     const availableItems = inventoryResponse.data.item_data
       .filter(
         (item) =>
-          !item.inventoty_item.in_trade &&
-          !isPast(item.inventoty_item.expires_in)
+          !item.inventoty_item.item.in_trade &&
+          !isPast(item.inventoty_item.item.expires_in)
       )
       .map((item) => item.steam_item.asset_id);
 
@@ -260,7 +261,7 @@ export default function UserInventory() {
         {Array.from({ length: 6 }).map((_, index) => (
           <Card
             key={index}
-            className="pt-0 pb-1 overflow-hidden border-2 min-h-[280px]"
+            className="pt-0 pb-1 overflow-hidden border-2 max-h-[280px]"
           >
             <div className="flex flex-col h-full">
               {/* Image Section Skeleton */}
@@ -312,6 +313,7 @@ export default function UserInventory() {
   const renderInventoryItem = useCallback(
     (
       item: user_inventory_items,
+      trade_offer: trade_offers | null,
       steamItem: steam_items,
       cs2bits_rate: number
     ) => {
@@ -323,9 +325,7 @@ export default function UserInventory() {
       return (
         <Card
           key={`${item.user_id}-${item.steam_item_id}`}
-          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] ${
-            isDisabled ? "opacity-60 grayscale" : ""
-          } ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
+          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group max-h-[280px] ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
             borderColor: getBorderColor(steamItem.item_type),
             boxShadow: `0 0 20px ${getBorderColor(steamItem.item_type)}20`,
@@ -353,10 +353,7 @@ export default function UserInventory() {
                 <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
                   {steamItem.image_url ? (
                     <Image
-                      src={
-                        steamItem.image_url ||
-                        "/CS2Bits-icon.png?height=64&width=64"
-                      }
+                      src={steamItem.image_url}
                       alt={steamItem.market_hash_name}
                       width={100}
                       height={80}
@@ -393,31 +390,33 @@ export default function UserInventory() {
                 {/* Enhanced status section */}
                 <div className="space-y-2">
                   {/* Expiration status with enhanced styling */}
-                  <div
-                    className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
-                  >
-                    <expirationStatus.icon
-                      className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div
-                        className={`font-bold text-xs ${expirationStatus.textColor}`}
-                      >
-                        {expirationStatus.text}
-                      </div>
-                      <div className="text-xs text-muted-foreground break-words">
-                        {expirationStatus.timeText}
+                  {!isDisabled && (
+                    <div
+                      className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
+                    >
+                      <expirationStatus.icon
+                        className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div
+                          className={`font-bold text-xs ${expirationStatus.textColor}`}
+                        >
+                          {expirationStatus.text}
+                        </div>
+                        <div className="text-xs text-muted-foreground break-words">
+                          {expirationStatus.timeText}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Trade status badge */}
-                  {item.in_trade && (
+                  {item.in_trade && trade_offer && (
                     <Badge
                       variant="secondary"
                       className="w-full justify-center text-xs py-1"
                     >
-                      🔒 {t("inventory.badges.inTrade")}
+                      {t(`inventory.badges.${trade_offer.status}`)}
                     </Badge>
                   )}
                 </div>
@@ -426,41 +425,64 @@ export default function UserInventory() {
 
             {/* Enhanced Action Section */}
             <CardFooter className="p-2 pt-0 bg-gradient-to-b from-background/95 to-background">
-              <div className="flex flex-col gap-2 w-full">
-                {/* Enhanced action buttons - single column */}
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
-                  disabled={isDisabled || withdrawMutation.isPending}
-                  onClick={() => withdrawMutation.mutate(item.steam_item_id)}
-                >
-                  <FaSteam className="h-10 w-10" />
-                  {t("inventory.actions.withdraw")}
-                </Button>
+              {!isDisabled ? (
+                <div className="flex flex-col items-start gap-2 w-full">
+                  {/* Enhanced action buttons - single column */}
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
+                    disabled={isDisabled || withdrawMutation.isPending}
+                    onClick={() => withdrawMutation.mutate(item.steam_item_id)}
+                  >
+                    <FaSteam className="h-10 w-10" />
+                    {t("inventory.actions.withdraw")}
+                  </Button>
 
-                <Button
-                  size="lg"
-                  variant="default"
-                  className="w-full text-sm h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-                  disabled={isDisabled || exchangeItemMutation.isPending}
-                  onClick={() =>
-                    exchangeItemMutation.mutate(item.steam_item_id)
-                  }
-                >
-                  <div className="flex flex-col items-center gap-0.5 w-full">
-                    <div className="flex items-center gap-1">
-                      <Zap className="h-3 w-3" />
-                      <span className="whitespace-nowrap">
-                        {t("inventory.actions.exchange")}
+                  <Button
+                    size="lg"
+                    variant="default"
+                    className="w-full text-sm h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                    disabled={isDisabled || exchangeItemMutation.isPending}
+                    onClick={() =>
+                      exchangeItemMutation.mutate(item.steam_item_id)
+                    }
+                  >
+                    <div className="flex flex-col items-center gap-0.5 w-full">
+                      <div className="flex items-center gap-1">
+                        <Zap className="h-3 w-3" />
+                        <span className="whitespace-nowrap">
+                          {t("inventory.actions.exchange")}
+                        </span>
+                      </div>
+                      <span className="text-sm font-semibold break-words text-center leading-tight">
+                        {formatCurrency(cs2bits_value)}
                       </span>
                     </div>
-                    <span className="text-sm font-semibold break-words text-center leading-tight">
-                      {formatCurrency(cs2bits_value)}
-                    </span>
-                  </div>
-                </Button>
-              </div>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
+                    disabled={!trade_offer?.trade_offer_id}
+                    onClick={() =>
+                      window.open(
+                        `https://google.com/${trade_offer?.trade_offer_id}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    {!trade_offer?.trade_offer_id && (
+                      <Loader2Icon className="animate-spin" />
+                    )}
+                    <FaSteam className="h-10 w-10" />
+                    {t("inventory.actions.accept_trade")}
+                  </Button>
+                </div>
+              )}
             </CardFooter>
           </div>
         </Card>
@@ -543,8 +565,8 @@ export default function UserInventory() {
     () =>
       inventoryResponse?.data?.item_data.filter(
         (item) =>
-          !item.inventoty_item.in_trade &&
-          !isPast(item.inventoty_item.expires_in)
+          !item.inventoty_item.item.in_trade &&
+          !isPast(item.inventoty_item.item.expires_in)
       ).length || 0,
     [inventoryResponse?.data]
   );
@@ -637,7 +659,8 @@ export default function UserInventory() {
             >
               {inventoryResponse.data?.item_data.map((i) =>
                 renderInventoryItem(
-                  i.inventoty_item,
+                  i.inventoty_item.item,
+                  i.inventoty_item.trade_offer,
                   i.steam_item,
                   i.cs2bits_rate
                 )

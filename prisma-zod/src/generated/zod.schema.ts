@@ -64,7 +64,7 @@ export type template_status = z.infer<typeof template_status_schema>;
 export const trade_offer_status_schema = z.enum(["new", "pending", "accepted", "declined", "cancelled", "expired"]);
 export type trade_offer_status = z.infer<typeof trade_offer_status_schema>;
 
-export const transaction_type_schema = z.enum(["Deposit", "Reward", "Gift", "RaffleTicket", "Predict", "Exchange", "Refund"]);
+export const transaction_type_schema = z.enum(["Deposit", "DepositSteamItem", "Reward", "Gift", "RaffleTicket", "Predict", "ExchangeSteamItem", "Refund"]);
 export type transaction_type = z.infer<typeof transaction_type_schema>;
 
 export const user_status_schema = z.enum(["Active", "Inative", "Deleted", "Banned"]);

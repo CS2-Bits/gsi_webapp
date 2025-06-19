@@ -3,6 +3,7 @@ import { ActionResponse } from "@/types/action-response";
 import {
   steam_items,
   steam_items_schema,
+  trade_offers,
   user_inventory_items,
   user_inventory_items_schema,
 } from "@prisma-zod/generated/zod.schema";
@@ -15,7 +16,10 @@ import { getCs2BitsUsdRate } from "../currency/get-cs2bits-usd-rate";
 export async function getUserInventoryAction(): Promise<
   ActionResponse<{
     item_data: {
-      inventoty_item: user_inventory_items;
+      inventoty_item: {
+        item: user_inventory_items;
+        trade_offer: trade_offers | null;
+      };
       cs2bits_rate: number;
       steam_item: steam_items;
     }[];
@@ -23,9 +27,6 @@ export async function getUserInventoryAction(): Promise<
   }>
 > {
   try {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     const user = await getCurrentUser();
 
     if (!user) {
@@ -63,11 +64,34 @@ export async function getUserInventoryAction(): Promise<
       }
     }, 0);
 
-    const mappedItems = available_items.map((item) => ({
-      inventoty_item: user_inventory_items_schema.parse(item),
+    const getItemTradeOffer = async (item: user_inventory_items) => {
+      const trade_offer_item = await prisma.trade_offer_items.findFirst({
+        where: {
+          steam_item_id: item.steam_item_id,
+        },
+        include: {
+          trade_offers: true,
+        },
+        orderBy: {
+          trade_offers: {
+            created_at: "asc",
+          },
+        },
+      });
+      if (!trade_offer_item) return null;
+      return trade_offer_item.trade_offers;
+    };
+
+    const mappedItemsAsync = inventory_items.map(async (item) => ({
+      inventoty_item: {
+        item: user_inventory_items_schema.parse(item),
+        trade_offer: item.in_trade ? await getItemTradeOffer(item) : null,
+      },
       cs2bits_rate: cs2bits_usd_rate.toNumber(),
       steam_item: steam_items_schema.parse(item.steam_items),
     }));
+
+    const mappedItems = await Promise.all(mappedItemsAsync);
 
     return {
       success: true,

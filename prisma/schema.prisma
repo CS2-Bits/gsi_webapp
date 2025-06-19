@@ -581,11 +581,12 @@ enum trade_offer_status {
 
 enum transaction_type {
   Deposit
+  DepositSteamItem
   Reward
   Gift
   RaffleTicket
   Predict
-  Exchange
+  ExchangeSteamItem
   Refund
 }
 

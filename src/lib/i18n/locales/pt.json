@@ -479,7 +479,8 @@
       "reward": "Recompesa",
       "predict": "Previsão",
       "deposit": "Compra de CS2Bits",
-      "exchange": "Compra na loja",
+      "depositSteamItem": "Troca de Item Steam",
+      "exchange": "Troca na loja",
       "raffleticket": "Bilhete de Sorteio",
       "refund": "Reembolso"
     },
@@ -487,7 +488,8 @@
       "reward": "Recompesa de CS2Bits",
       "predictGeneric": "Cobrança de CS2Bits",
       "deposit": "Compra de CS2Bits",
-      "raffleTicket": "Compra de bilhete de sorteio"
+      "raffleTicket": "Compra de bilhete de sorteio",
+      "depositSteamItem": "Troca de item Steam"
     },
     "filter": {
       "all": "Todos"
@@ -824,20 +826,27 @@
       "active": "Pronto para trocar",
       "expiredTime": "Expirou {{time}}"
     },
-    "badges": { "inTrade": "Em negociação" },
+    "badges": {
+      "new": "Em fila para negociação",
+      "pending": "Aceitar troca",
+      "accepted": "Troca aceita",
+      "declined": "Troca recusada",
+      "cancelled": "Troca cancelada",
+      "expired": "Troca expirada"
+    },
     "actions": {
       "withdraw": "Retirar para Steam",
       "exchange": "Trocar por",
-      "exchangeAll": "Trocar todos por"
+      "exchangeAll": "Trocar todos por",
+      "accept_trade": "Aceitar Troca"
     },
-    "withdraw:": {
-      "success_title": "Saque iniciado",
-      "error_title": "Erro no saque"
+    "withdraw": {
+      "success": "Retirar para Steam iniciado",
+      "error": "Erro ao retirar para Steam"
     },
     "exchange": {
-      "success_title": "Troca realizada",
-      "success_description": "Você recebeu {{amount}} CS2Bits!",
-      "error_title": "Erro na troca"
+      "success": "Você recebeu {{amount}} CS2Bits!",
+      "error": "Erro na troca"
     }
   }
 }

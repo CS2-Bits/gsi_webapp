@@ -42,14 +42,16 @@ import {
 const getTransactionIcon = (type: transaction_type) => {
   switch (type) {
     case "Deposit":
+    case "DepositSteamItem":
       return <ArrowUpCircle className="h-4 w-4 text-green-500" />;
     case "Reward":
+    case "Gift":
       return <Gift className="h-4 w-4 text-yellow-500" />;
     case "Predict":
       return <Target className="h-4 w-4 text-blue-500" />;
     case "RaffleTicket":
       return <Ticket className="h-4 w-4 text-blue-500" />;
-    case "Exchange":
+    case "ExchangeSteamItem":
       return <RefreshCw className="h-4 w-4 text-purple-500" />;
     case "Refund":
       return <ArrowDownCircle className="h-4 w-4 text-orange-500" />;
@@ -61,6 +63,7 @@ const getTransactionIcon = (type: transaction_type) => {
 const getTransactionColor = (type: transaction_type) => {
   switch (type) {
     case "Deposit":
+    case "DepositSteamItem":
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
     case "Reward":
       return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
@@ -68,7 +71,7 @@ const getTransactionColor = (type: transaction_type) => {
       return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
     case "RaffleTicket":
       return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-    case "Exchange":
+    case "ExchangeSteamItem":
       return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300";
     case "Refund":
       return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300";
@@ -140,6 +143,9 @@ export function TransactionHistory() {
         }
         return t("transactions.descriptions.depositGeneric");
 
+      case "DepositSteamItem":
+        return t("transactions.descriptions.depositSteamItem");
+
       case "Predict":
         if (user_predictions && user_predictions.length > 0) {
           const user_prediction = user_predictions[0];
@@ -155,7 +161,7 @@ export function TransactionHistory() {
       case "RaffleTicket":
         return t("transactions.descriptions.raffleTicket");
 
-      case "Exchange":
+      case "ExchangeSteamItem":
         return t("transactions.descriptions.exchange");
 
       case "Refund":
@@ -207,6 +213,9 @@ export function TransactionHistory() {
             </SelectItem>
             <SelectItem value="Exchange">
               {t("transactions.types.exchange")}
+            </SelectItem>
+            <SelectItem value="DepositSteamItem">
+              {t("transactions.types.depositSteamItem")}
             </SelectItem>
             <SelectItem value="RaffleTicket">
               {t("transactions.types.raffleticket")}
