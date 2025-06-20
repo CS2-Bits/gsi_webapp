@@ -135,7 +135,7 @@ export default function UserInventory() {
    * Get enhanced expiration status with more engaging messaging
    */
   const getExpirationStatus = useCallback(
-    (expiresIn: Date) => {
+    (expiresIn: Date, in_trade: boolean) => {
       const now = new Date();
       const isExpired = isPast(expiresIn);
       const isExpiringSoon = isWithinInterval(expiresIn, {
@@ -148,7 +148,9 @@ export default function UserInventory() {
           text: t("inventory.expiration.expired"),
           variant: "destructive" as const,
           icon: AlertTriangle,
-          timeText: t("inventory.expiration.expiredMessage"),
+          timeText: in_trade
+            ? t("inventory.expiration.expired_trade")
+            : t("inventory.expiration.expired_message"),
           urgency: "critical",
           bgColor: "bg-red-500/10",
           textColor: "text-red-600",
@@ -161,7 +163,7 @@ export default function UserInventory() {
           text: t("inventory.expiration.expiringSoon"),
           variant: "secondary" as const,
           icon: Zap,
-          timeText: `${t("inventory.expiration.in")} ${formatDistanceToNow(
+          timeText: `${in_trade ? t("inventory.expiration.in_trade") : t("inventory.expiration.in")} ${formatDistanceToNow(
             expiresIn,
             {
               locale: ptBR,
@@ -179,7 +181,7 @@ export default function UserInventory() {
         text: t("inventory.expiration.active"),
         variant: "outline" as const,
         icon: Clock,
-        timeText: `${t("inventory.expiration.in")} ${formatDistanceToNow(
+        timeText: `${in_trade ? t("inventory.expiration.in_trade") : t("inventory.expiration.in")} ${formatDistanceToNow(
           expiresIn,
           {
             locale: ptBR,
@@ -317,7 +319,10 @@ export default function UserInventory() {
       steamItem: steam_items,
       cs2bits_rate: number
     ) => {
-      const expirationStatus = getExpirationStatus(item.expires_in);
+      const expirationStatus = getExpirationStatus(
+        trade_offer ? trade_offer.expires_in : item.expires_in,
+        item.in_trade
+      );
       const isExpired = isPast(item.expires_in);
       const isDisabled = item.in_trade || isExpired;
       const cs2bits_value = steamItem.estimated_fiat_value * cs2bits_rate;
@@ -390,25 +395,23 @@ export default function UserInventory() {
                 {/* Enhanced status section */}
                 <div className="space-y-2">
                   {/* Expiration status with enhanced styling */}
-                  {!isDisabled && (
-                    <div
-                      className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
-                    >
-                      <expirationStatus.icon
-                        className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={`font-bold text-xs ${expirationStatus.textColor}`}
-                        >
-                          {expirationStatus.text}
-                        </div>
-                        <div className="text-xs text-muted-foreground break-words">
-                          {expirationStatus.timeText}
-                        </div>
+                  <div
+                    className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
+                  >
+                    <expirationStatus.icon
+                      className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div
+                        className={`font-bold text-xs ${expirationStatus.textColor}`}
+                      >
+                        {expirationStatus.text}
+                      </div>
+                      <div className="text-xs text-muted-foreground break-words">
+                        {expirationStatus.timeText}
                       </div>
                     </div>
-                  )}
+                  </div>
 
                   {/* Trade status badge */}
                   {item.in_trade && trade_offer && (

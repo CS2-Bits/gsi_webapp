@@ -35,6 +35,8 @@ export async function withdrawItemAction(
         },
       });
 
+    const expires_in = new Date(Date.now() + 60 * 60 * 1000);
+
     await prisma.$transaction(async (tx) => {
       await tx.user_inventory_items.update({
         where: {
@@ -45,6 +47,7 @@ export async function withdrawItemAction(
         },
         data: {
           in_trade: true,
+          expires_in: expires_in,
         },
       });
       const steam_bot_inventory_item =
@@ -61,7 +64,7 @@ export async function withdrawItemAction(
         data: {
           user_id: user.id,
           status: trade_offer_status.new,
-          expires_in: new Date(Date.now() + 60 * 60 * 1000),
+          expires_in: expires_in,
         },
       });
       await tx.trade_offer_items.create({

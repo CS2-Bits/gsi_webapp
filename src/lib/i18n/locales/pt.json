@@ -821,10 +821,13 @@
     },
     "expiration": {
       "in": "Troca automatica",
+      "in_trade": "Troca expira",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",
       "active": "Pronto para trocar",
-      "expiredTime": "Expirou {{time}}"
+      "expiredTime": "Expirou {{time}}",
+      "expired_message": "Esse item expirou",
+      "expired_trade": "Troca expirou"
     },
     "badges": {
       "new": "Em fila para negociação",
