@@ -561,7 +561,8 @@
     "bet_amount_too_high": "Valor da aposta muito alto",
     "stream_match_not_found": "Partida não encontrada",
     "fetching_stream_match_details": "Erro ao carregar a partida",
-    "user_not_complete": "Usuário não completo, complete seu perfil para continuar"
+    "user_not_complete": "Usuário não completo, complete seu perfil para continuar",
+    "no_trade_link": "Link de troca não encontrado, por favor, adicione um link de troca válido nas informações do seu perfil"
   },
   "match": {
     "status": {

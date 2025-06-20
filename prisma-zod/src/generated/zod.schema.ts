@@ -61,6 +61,9 @@ export type team_side = z.infer<typeof team_side_schema>;
 export const template_status_schema = z.enum(["Active", "Inactive", "Deprecated"]);
 export type template_status = z.infer<typeof template_status_schema>;
 
+export const trade_action_schema = z.enum(["send", "receive"]);
+export type trade_action = z.infer<typeof trade_action_schema>;
+
 export const trade_offer_status_schema = z.enum(["new", "pending", "accepted", "declined", "cancelled", "expired"]);
 export type trade_offer_status = z.infer<typeof trade_offer_status_schema>;
 
@@ -273,6 +276,7 @@ export type streamers = z.infer<typeof streamers_schema>;
 export const trade_offer_items_schema = z.object({
   trade_offer_id: z.coerce.string(),
   steam_item_id: z.coerce.string(),
+  trade_action: trade_action_schema,
 });
 export type trade_offer_items = z.infer<typeof trade_offer_items_schema>;
 
@@ -313,8 +317,8 @@ export const user_balances_schema = z.object({
 export type user_balances = z.infer<typeof user_balances_schema>;
 
 export const user_inventory_items_schema = z.object({
-  user_id: z.coerce.string(),
   steam_item_id: z.coerce.string(),
+  user_id: z.coerce.string(),
   expires_in: z.preprocess((val: unknown) => val instanceof Date ? val : (typeof val === 'string' || typeof val === 'number' ? new Date(val) : undefined), z.date()),
   in_trade: z.coerce.boolean(),
 });

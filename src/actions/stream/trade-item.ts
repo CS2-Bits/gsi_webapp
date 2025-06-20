@@ -1,21 +1,22 @@
 "use server";
 import { redis } from "@/lib/redis";
-import { StreamEvent, StreamEventType } from "@/types/stream-actions";
+import { SteamEvent } from "@/schemas/steam-events.schema";
 
 export default async function tradeItem(
   steam_bot_id: string,
   trade_offer_id: string
 ) {
-  const event: StreamEvent = {
-    type: StreamEventType.EventTransactionCreated,
+  const event: SteamEvent = {
+    type: "TradeCreated",
     data: {
+      steam_bot_id: steam_bot_id,
       trade_offer_id: trade_offer_id,
     },
   };
   return await redis.xadd(
-    `gsi_steam_${steam_bot_id}_stream`,
+    `gsi_steam_stream`,
     "*",
-    "msg",
+    "request",
     JSON.stringify(event)
   );
 }

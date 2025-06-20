@@ -69,7 +69,11 @@ export default function UserInventory() {
         toast(t("inventory.withdraw.success"));
         queryClient.invalidateQueries({ queryKey: ["user-inventory"] });
       } else {
-        toast(t("inventory.withdraw.error"));
+        toast(
+          data.error_message
+            ? t(data.error_message)
+            : t("inventory.withdraw.error")
+        );
       }
     },
     onError: (error) => {
@@ -261,10 +265,7 @@ export default function UserInventory() {
     () => (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
-          <Card
-            key={index}
-            className="pt-0 pb-1 overflow-hidden border-2 max-h-[280px]"
-          >
+          <Card key={index} className="pt-0 pb-1 overflow-hidden border-2">
             <div className="flex flex-col h-full">
               {/* Image Section Skeleton */}
               <CardContent className="p-0 flex-1">
@@ -317,7 +318,7 @@ export default function UserInventory() {
       item: user_inventory_items,
       trade_offer: trade_offers | null,
       steamItem: steam_items,
-      cs2bits_rate: number
+      cs2bits_value: number
     ) => {
       const expirationStatus = getExpirationStatus(
         trade_offer ? trade_offer.expires_in : item.expires_in,
@@ -325,12 +326,11 @@ export default function UserInventory() {
       );
       const isExpired = isPast(item.expires_in);
       const isDisabled = item.in_trade || isExpired;
-      const cs2bits_value = steamItem.estimated_fiat_value * cs2bits_rate;
 
       return (
         <Card
           key={`${item.user_id}-${item.steam_item_id}`}
-          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group max-h-[280px] ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
+          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] max-h-[320px] ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
             borderColor: getBorderColor(steamItem.item_type),
             boxShadow: `0 0 20px ${getBorderColor(steamItem.item_type)}20`,
@@ -473,7 +473,7 @@ export default function UserInventory() {
                     disabled={!trade_offer?.trade_offer_id}
                     onClick={() =>
                       window.open(
-                        `https://google.com/${trade_offer?.trade_offer_id}`,
+                        `https://steamcommunity.com/tradeoffer/${trade_offer?.trade_offer_id}`,
                         "_blank"
                       )
                     }
@@ -665,7 +665,7 @@ export default function UserInventory() {
                   i.inventoty_item.item,
                   i.inventoty_item.trade_offer,
                   i.steam_item,
-                  i.cs2bits_rate
+                  i.cs2bits_value
                 )
               )}
             </div>

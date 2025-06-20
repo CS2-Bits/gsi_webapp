@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "community.fastly.steamstatic.com",
+        hostname: "effvoxwaracbvwrazgzy.supabase.co",
       },
     ],
   },

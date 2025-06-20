@@ -58,7 +58,11 @@ export async function getExchangeRate(
     // Retry up to 3 times
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
+        console.log(
+          `Attempt ${attempt} to fetch exchange rate from ${fromCurrency} to ${toCurrency}`
+        );
         data = await attemptConcurrentFetch(primaryUrl, fallbackUrl);
+        console.log(`Successfully fetched exchange rate on attempt ${attempt}`);
         break; // Success, exit retry loop
       } catch (error) {
         lastError = error instanceof Error ? error : new Error("Unknown error");
@@ -67,6 +71,9 @@ export async function getExchangeRate(
             `All 3 attempts failed. Last error: ${lastError.message}`
           );
         }
+        console.error(
+          `Attempt ${attempt} failed: ${lastError.message}. Retrying...`
+        );
         // Wait a bit before retrying (exponential backoff)
         await new Promise((resolve) =>
           setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)

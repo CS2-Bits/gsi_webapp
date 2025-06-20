@@ -1,7 +1,7 @@
 "use server";
 import { ActionResponse } from "@/types/action-response";
 import {
-  steam_items,
+  steam_items as steam_items_zod,
   steam_items_schema,
   trade_offers,
   user_inventory_items,
@@ -9,9 +9,10 @@ import {
 } from "@prisma-zod/generated/zod.schema";
 import { getCurrentUser } from "../user/get-current-user";
 import { prisma } from "@/lib/prisma";
-import { currency } from "@prisma/client";
+import { currency, steam_items } from "@prisma/client";
 import { getExchangeRate } from "../currency/get-exchange-rate";
 import { getCs2BitsUsdRate } from "../currency/get-cs2bits-usd-rate";
+import Decimal from "decimal.js";
 
 export async function getUserInventoryAction(): Promise<
   ActionResponse<{
@@ -20,8 +21,8 @@ export async function getUserInventoryAction(): Promise<
         item: user_inventory_items;
         trade_offer: trade_offers | null;
       };
-      cs2bits_rate: number;
-      steam_item: steam_items;
+      cs2bits_value: number;
+      steam_item: steam_items_zod;
     }[];
     total_cs2bits_value: number;
   }>
@@ -51,17 +52,21 @@ export async function getUserInventoryAction(): Promise<
       (item) => !item.in_trade && new Date(item.expires_in) > new Date()
     );
     const brl_to_usd_rate = await getExchangeRate(currency.BRL, currency.USD);
-    const available_value = available_items.reduce((sum, item) => {
-      switch (item.steam_items.currency) {
+
+    const getCs2BitsValue = (item: steam_items) => {
+      switch (item.currency) {
         case currency.USD:
         case currency.USDC:
-          return sum + item.steam_items.estimated_fiat_value.toNumber();
+          return item.estimated_fiat_value.mul(cs2bits_usd_rate);
         case currency.BRL:
-          const brl_value = item.steam_items.estimated_fiat_value.mul(
-            brl_to_usd_rate.rate
-          );
-          return sum + brl_value.mul(brl_value).toNumber();
+          const brl_value = item.estimated_fiat_value.mul(brl_to_usd_rate.rate);
+          return brl_value.mul(cs2bits_usd_rate);
+        default:
+          return new Decimal(0);
       }
+    };
+    const available_value = available_items.reduce((sum, item) => {
+      return sum + getCs2BitsValue(item.steam_items).toNumber();
     }, 0);
 
     const getItemTradeOffer = async (item: user_inventory_items) => {
@@ -87,7 +92,7 @@ export async function getUserInventoryAction(): Promise<
         item: user_inventory_items_schema.parse(item),
         trade_offer: item.in_trade ? await getItemTradeOffer(item) : null,
       },
-      cs2bits_rate: cs2bits_usd_rate.toNumber(),
+      cs2bits_value: getCs2BitsValue(item.steam_items).toNumber(),
       steam_item: steam_items_schema.parse(item.steam_items),
     }));
 
@@ -97,7 +102,7 @@ export async function getUserInventoryAction(): Promise<
       success: true,
       data: {
         item_data: mappedItems,
-        total_cs2bits_value: available_value * cs2bits_usd_rate.toNumber(),
+        total_cs2bits_value: available_value,
       },
     };
   } catch (error) {

@@ -9,10 +9,7 @@ export enum StreamEventType {
 
 export interface StreamEvent {
   type: StreamEventType;
-  data:
-    | PaymentStatusChangedData
-    | TransactionCreatedData
-    | TradeOfferCreatedData;
+  data: PaymentStatusChangedData | TransactionCreatedData;
 }
 
 export interface PaymentStatusChangedData {
@@ -22,8 +19,4 @@ export interface PaymentStatusChangedData {
 
 export interface TransactionCreatedData {
   transaction_id: string;
-}
-
-export interface TradeOfferCreatedData {
-  trade_offer_id: string;
 }

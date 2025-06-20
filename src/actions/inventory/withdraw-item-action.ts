@@ -3,9 +3,10 @@
 import { getCurrentUser } from "../user/get-current-user";
 import { ActionResponse } from "@/types/action-response";
 import { prisma } from "@/lib/prisma";
-import { trade_offer_status } from "@prisma/client";
+import { trade_action, trade_offer_status } from "@prisma/client";
 import tradeItem from "../stream/trade-item";
 import { ActionError } from "@/types/action-error";
+import { validateTradeLinkAction } from "../user/validate-user-trade-link-action";
 
 export async function withdrawItemAction(
   item_id: string
@@ -20,8 +21,15 @@ export async function withdrawItemAction(
       };
     }
 
+    if (!user.trade_link || !(await validateTradeLinkAction(user.trade_link))) {
+      return {
+        success: false,
+        error_message: "error.no_trade_link",
+      };
+    }
+
     const user_inventory_item =
-      await prisma.user_inventory_items.findFirstOrThrow({
+      await prisma.user_inventory_items.findUniqueOrThrow({
         where: {
           steam_item_id: item_id,
           user_id: user.id,
@@ -40,10 +48,8 @@ export async function withdrawItemAction(
     await prisma.$transaction(async (tx) => {
       await tx.user_inventory_items.update({
         where: {
-          user_id_steam_item_id: {
-            user_id: user.id,
-            steam_item_id: user_inventory_item.steam_item_id,
-          },
+          steam_item_id: user_inventory_item.steam_item_id,
+          user_id: user.id,
         },
         data: {
           in_trade: true,
@@ -71,6 +77,7 @@ export async function withdrawItemAction(
         data: {
           trade_offer_id: trade_offer.id,
           steam_item_id: user_inventory_item.steam_item_id,
+          trade_action: trade_action.send,
         },
       });
       const event = await tradeItem(
