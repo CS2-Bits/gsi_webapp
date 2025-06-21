@@ -68,129 +68,121 @@ export default function RafflesPage() {
   return (
     <>
       <CheckUserProfile />
-      <div className="gaming-body">
-        <div className="container mx-auto px-4 py-8">
-          {/* Header with gaming animation */}
-          <div className="gaming-slide-up mb-8">
-            <h1 className="gaming-text-primary text-4xl font-bold mb-2">
-              {t("raffle.title", "Active Raffles")}
-            </h1>
-            <p className="gaming-text-secondary text-lg">
-              {t("raffle.subtitle", "Win amazing CS2 skins and items")}
-            </p>
-          </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Header with gaming animation */}
+        <div className="gaming-slide-up mb-8">
+          <h1 className="gaming-text-primary text-4xl font-bold mb-2">
+            {t("raffle.title", "Active Raffles")}
+          </h1>
+          <p className="gaming-text-secondary text-lg">
+            {t("raffle.subtitle", "Win amazing CS2 skins and items")}
+          </p>
+        </div>
 
-          {/* Gaming divider */}
-          <div className="gaming-divider mb-8"></div>
+        {/* Gaming divider */}
+        <div className="gaming-divider mb-8"></div>
 
-          {/* Active Raffles */}
-          <section className="mb-12">
-            <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                {isLoading
-                  ? Array.from({ length: 3 }).map((_, index) => (
+        {/* Active Raffles */}
+        <section className="mb-12">
+          <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+              {isLoading
+                ? Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="gaming-slide-up"
+                      style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+                    >
+                      <RaffleCardSkeleton />
+                    </div>
+                  ))
+                : activeRaffles.length > 0
+                  ? activeRaffles.map((raffle, index) => (
                       <div
-                        key={index}
+                        key={raffle.id}
                         className="gaming-slide-up"
                         style={{ animationDelay: `${0.1 + index * 0.1}s` }}
                       >
-                        <RaffleCardSkeleton />
+                        <RaffleCard
+                          userBalance={balanceResponse?.data}
+                          raffle={raffle}
+                          isExpanded={expandedRaffleId === raffle.id}
+                          onToggleExpansion={handleToggleExpansion}
+                        />
                       </div>
                     ))
-                  : activeRaffles.length > 0
-                    ? activeRaffles.map((raffle, index) => (
-                        <div
-                          key={raffle.id}
-                          className="gaming-slide-up"
-                          style={{ animationDelay: `${0.1 + index * 0.1}s` }}
-                        >
-                          <RaffleCard
-                            userBalance={balanceResponse?.data}
-                            raffle={raffle}
-                            isExpanded={expandedRaffleId === raffle.id}
-                            onToggleExpansion={handleToggleExpansion}
-                          />
-                        </div>
-                      ))
-                    : null}
+                  : null}
+            </div>
+          </div>
+
+          {!isLoading && activeRaffles.length === 0 && (
+            <div className="gaming-slide-up" style={{ animationDelay: "0.2s" }}>
+              <div className="gaming-card flex flex-col items-center justify-center py-16 px-6 text-center">
+                <div className="bg-primary/10 rounded-full p-6 mb-4 gaming-pulse">
+                  <Ticket className="h-12 w-12 text-primary" />
+                </div>
+                <h3 className="gaming-text-accent text-xl font-bold mb-2">
+                  {t("raffle.no_active_raffles_title")}
+                </h3>
+                <p className="gaming-text-secondary text-center max-w-md">
+                  {t("raffle.no_active_raffles")}
+                </p>
               </div>
             </div>
+          )}
+        </section>
 
-            {!isLoading && activeRaffles.length === 0 && (
-              <div
-                className="gaming-slide-up"
-                style={{ animationDelay: "0.2s" }}
-              >
-                <div className="gaming-card flex flex-col items-center justify-center py-16 px-6 text-center">
-                  <div className="bg-primary/10 rounded-full p-6 mb-4 gaming-pulse">
-                    <Ticket className="h-12 w-12 text-primary" />
-                  </div>
-                  <h3 className="gaming-text-accent text-xl font-bold mb-2">
-                    {t("raffle.no_active_raffles_title")}
-                  </h3>
-                  <p className="gaming-text-secondary text-center max-w-md">
-                    {t("raffle.no_active_raffles")}
-                  </p>
+        {/* Gaming divider */}
+        <div className="gaming-divider mb-8"></div>
+
+        {/* Recent Results */}
+        <section>
+          <div className="gaming-slide-up" style={{ animationDelay: "0.3s" }}>
+            <h2 className="gaming-text-primary text-2xl font-bold mb-6">
+              {t("raffle.recent_results")}
+            </h2>
+          </div>
+
+          {isLoading ? (
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="gaming-slide-up"
+                  style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+                >
+                  <ClosedRaffleItemSkeleton />
                 </div>
-              </div>
-            )}
-          </section>
-
-          {/* Gaming divider */}
-          <div className="gaming-divider mb-8"></div>
-
-          {/* Recent Results */}
-          <section>
-            <div className="gaming-slide-up" style={{ animationDelay: "0.3s" }}>
-              <h2 className="gaming-text-primary text-2xl font-bold mb-6">
-                {t("raffle.recent_results")}
-              </h2>
+              ))}
             </div>
-
-            {isLoading ? (
-              <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="gaming-slide-up"
-                    style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-                  >
-                    <ClosedRaffleItemSkeleton />
-                  </div>
-                ))}
-              </div>
-            ) : closedRaffles.length > 0 ? (
-              <div className="space-y-4">
-                {closedRaffles.map((raffle, index) => (
-                  <div
-                    key={raffle.id}
-                    className="gaming-slide-up"
-                    style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-                  >
-                    <ClosedRaffleItem raffle={raffle} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div
-                className="gaming-slide-up"
-                style={{ animationDelay: "0.4s" }}
-              >
-                <div className="gaming-card flex flex-col items-center justify-center py-16 px-6 text-center">
-                  <div className="bg-primary/10 rounded-full p-6 mb-4 gaming-pulse">
-                    <Trophy className="h-12 w-12 text-primary" />
-                  </div>
-                  <h3 className="gaming-text-accent text-xl font-bold mb-2">
-                    {t("raffle.no_recent_results_title")}
-                  </h3>
-                  <p className="gaming-text-secondary text-center max-w-md">
-                    {t("raffle.no_recent_results")}
-                  </p>
+          ) : closedRaffles.length > 0 ? (
+            <div className="space-y-4">
+              {closedRaffles.map((raffle, index) => (
+                <div
+                  key={raffle.id}
+                  className="gaming-slide-up"
+                  style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+                >
+                  <ClosedRaffleItem raffle={raffle} />
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="gaming-slide-up" style={{ animationDelay: "0.4s" }}>
+              <div className="gaming-card flex flex-col items-center justify-center py-16 px-6 text-center">
+                <div className="bg-primary/10 rounded-full p-6 mb-4 gaming-pulse">
+                  <Trophy className="h-12 w-12 text-primary" />
+                </div>
+                <h3 className="gaming-text-accent text-xl font-bold mb-2">
+                  {t("raffle.no_recent_results_title")}
+                </h3>
+                <p className="gaming-text-secondary text-center max-w-md">
+                  {t("raffle.no_recent_results")}
+                </p>
               </div>
-            )}
-          </section>
-        </div>
+            </div>
+          )}
+        </section>
       </div>
     </>
   );
