@@ -30,7 +30,7 @@ export default function HomeUserHeader() {
   const { data: userResponse } = useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUserAction,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   });
   const userData = userResponse?.data?.user;
 
@@ -38,7 +38,7 @@ export default function HomeUserHeader() {
     queryKey: ["userBalance", userData?.id],
     queryFn: getUserBalanceAction,
     enabled: !!userData,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     select: (data) => (data?.data ? data.data : null),
   });
   const handleOpenPurchaseModal = () => {

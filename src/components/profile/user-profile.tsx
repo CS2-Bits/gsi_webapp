@@ -20,12 +20,14 @@ import { PaymentHistory } from "./payment-history";
 import { user_roles, users } from "@prisma-zod/generated/zod.schema";
 import UserInventory from "./user-inventory";
 import { TradeHistory } from "./trade-history";
+import { useSteamWebSocket } from "@/hooks/use-steam-websocket";
 
 export function UserProfile() {
   const [userData, setUserData] = useState<{
     user: users;
     user_roles: user_roles[];
   } | null>(null);
+  useSteamWebSocket();
 
   const fetchUserData = useCallback(async () => {
     const response = await getCurrentUserAction();

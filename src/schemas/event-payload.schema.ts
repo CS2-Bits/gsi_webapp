@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const EventPayloadSchema = z.object({
-  match_event: z.enum([
+  event_type: z.enum([
     "match",
     "stats",
     "round",
@@ -9,6 +9,7 @@ export const EventPayloadSchema = z.object({
     "prediction",
     "bet",
     "end",
+    "trade",
   ]),
   data: z.string(),
 });

@@ -60,7 +60,7 @@ export function useMatchWebSocket(streamerUserId: string) {
         return;
       }
       const eventPayload = eventPayloadParsed.data;
-      if (eventPayload.match_event === "match") {
+      if (eventPayload.event_type === "match") {
         const json = JSON.parse(eventPayload.data);
         const result = matches_schema.safeParse(json);
         if (result.success) {
@@ -69,7 +69,7 @@ export function useMatchWebSocket(streamerUserId: string) {
           console.error("Invalid match data:", result.error);
           toast.error(t("error.match_update"));
         }
-      } else if (eventPayload.match_event === "stats") {
+      } else if (eventPayload.event_type === "stats") {
         const json = JSON.parse(eventPayload.data);
         const result = match_player_stats_schema.safeParse(json);
         if (result.success) {
@@ -78,7 +78,7 @@ export function useMatchWebSocket(streamerUserId: string) {
           console.error("Invalid match data:", result.error);
           toast.error(t("error.match_update"));
         }
-      } else if (eventPayload.match_event === "round") {
+      } else if (eventPayload.event_type === "round") {
         const json = JSON.parse(eventPayload.data);
         const result = match_player_rounds_schema.safeParse(json);
         if (result.success) {
@@ -87,15 +87,15 @@ export function useMatchWebSocket(streamerUserId: string) {
           console.error("Invalid match data:", result.error);
           toast.error(t("error.match_update"));
         }
-      } else if (eventPayload.match_event === "prediction") {
+      } else if (eventPayload.event_type === "prediction") {
         qc.invalidateQueries({
           queryKey: ["prediction"],
         });
-      } else if (eventPayload.match_event === "bet") {
+      } else if (eventPayload.event_type === "bet") {
         qc.invalidateQueries({
           queryKey: ["predictionDetails", eventPayload.data],
         });
-      } else if (eventPayload.match_event === "end") {
+      } else if (eventPayload.event_type === "end") {
         qc.invalidateQueries({
           queryKey: ["prediction"],
         });
