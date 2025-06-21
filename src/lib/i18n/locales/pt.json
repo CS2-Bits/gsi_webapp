@@ -449,7 +449,8 @@
       "info": "Informações",
       "stats": "Estatísticas",
       "history": "Histórico",
-      "payments": "Pagamentos"
+      "payments": "Pagamentos",
+      "trades": "Trocas"
     },
     "info": {
       "title": "Perfil do Usuário",
@@ -467,6 +468,12 @@
       "noPayments": "Nenhum pagamento encontrado",
       "noPaymentsDescription": "Você pode ver seus pagamentos aqui quando começar a comprar CS2Bits ou participar de desafios.",
       "total": "Total de Pagamentos: {{count}}"
+    },
+    "trades": {
+      "title": "Histórico de Trocas",
+      "noTrades": "Nenhuma troca encontrada",
+      "noTradesDescription": "Suas trocas de itens Steam aparecerão aqui quando você começar a interagir com o CS2 Bits.",
+      "total": "Total de Trocas: {{count}}"
     }
   },
   "pagination": {
@@ -852,5 +859,21 @@
       "success": "Você recebeu {{amount}} CS2Bits!",
       "error": "Erro na troca"
     }
+  },
+  "trades": {
+    "status": {
+      "pending": "Pendente",
+      "accepted": "Aceito",
+      "declined": "Recusada",
+      "cancelled": "Cancelada",
+      "expired": "Expirada"
+    },
+    "itemCount": "{{count}} item(s)",
+    "items": "Itens",
+    "action": {
+      "send": "Enviado",
+      "received": "Recebido"
+    },
+    "expiresAt": "Expira em"
   }
 }

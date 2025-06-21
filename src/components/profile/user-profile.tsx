@@ -19,6 +19,7 @@ import { TransactionHistory } from "./transaction-history";
 import { PaymentHistory } from "./payment-history";
 import { user_roles, users } from "@prisma-zod/generated/zod.schema";
 import UserInventory from "./user-inventory";
+import { TradeHistory } from "./trade-history";
 
 export function UserProfile() {
   const [userData, setUserData] = useState<{
@@ -73,7 +74,7 @@ export function UserProfile() {
         </div>
         <div>
           <Tabs defaultValue="inventory">
-            <TabsList className="grid grid-cols-4 mb-4">
+            <TabsList className="grid grid-cols-5 mb-4">
               <TabsTrigger value="inventory">
                 {t("userProfile.tabs.inventory")}
               </TabsTrigger>
@@ -85,6 +86,9 @@ export function UserProfile() {
               </TabsTrigger>
               <TabsTrigger value="payments">
                 {t("userProfile.tabs.payments")}
+              </TabsTrigger>
+              <TabsTrigger value="trades">
+                {t("userProfile.tabs.trades")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="inventory">
@@ -122,6 +126,9 @@ export function UserProfile() {
             <TabsContent value="payments">
               <PaymentHistory />
             </TabsContent>
+            <TabsContent value="trades">
+              <TradeHistory />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -146,13 +153,16 @@ export function UserProfileSkeleton() {
               <TabsTrigger value="inventory">
                 <Skeleton className="h-4 w-16" />
               </TabsTrigger>
-              <TabsTrigger value="info">
+              <TabsTrigger value="trades">
                 <Skeleton className="h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="history">
                 <Skeleton className="h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="payments">
+                <Skeleton className="h-4 w-16" />
+              </TabsTrigger>
+              <TabsTrigger value="info">
                 <Skeleton className="h-4 w-16" />
               </TabsTrigger>
             </TabsList>
