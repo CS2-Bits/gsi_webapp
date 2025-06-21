@@ -25,7 +25,6 @@ import {
   getUserTradesAction,
   GetUserTradesActionResponse,
 } from "@/actions/user/get-user-trades-action";
-import { formatCurrency } from "@/lib/utils";
 import { trade_offer_status } from "@prisma-zod/generated/zod.schema";
 import Image from "next/image";
 
