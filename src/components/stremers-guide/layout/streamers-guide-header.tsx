@@ -6,18 +6,20 @@ import { useTranslation } from "react-i18next";
 function StreamersGuideHeader() {
   const { t } = useTranslation();
   return (
-    <header className="border-b border-border/30">
+    <header className="gaming-header border-b border-border/30">
       <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 gaming-slide-in">
           <Link
             href="/"
-            className="text-primary hover:text-primary/90 flex items-center gap-1 text-sm mb-2"
+            className="gaming-text-primary hover:text-primary/80 flex items-center gap-1 text-sm mb-2 transition-colors duration-200"
           >
             <ChevronRight className="h-3 w-3 rotate-180" />
             <span> {t("header.back_home")}</span>
           </Link>
-          <h1 className="text-4xl font-bold">{t("header.streamer_guide")}</h1>
-          <p className="text-xl text-foreground/70 max-w-2xl">
+          <h1 className="text-4xl font-bold gaming-text-accent">
+            {t("header.streamer_guide")}
+          </h1>
+          <p className="text-xl gaming-text-secondary max-w-2xl">
             {t("header.streamer_guide_desc")}
           </p>
         </div>

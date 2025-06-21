@@ -60,3 +60,22 @@ export function coinbaseGetLastEvent(timeline: TimelineStatus[]) {
       : curr;
   });
 }
+
+export function getRarityGradient(item_type: string) {
+  if (item_type.includes("Contraband")) {
+    return "from-yellow-500/25 via-yellow-400/20 to-yellow-600/30";
+  }
+  if (item_type.includes("Covert")) {
+    return "from-red-500/25 via-red-400/20 to-red-600/30";
+  }
+  if (item_type.includes("Classified")) {
+    return "from-purple-500/25 via-purple-400/20 to-purple-600/30";
+  }
+  if (item_type.includes("Restricted")) {
+    return "from-green-500/25 via-green-400/20 to-green-600/30";
+  }
+  if (item_type.includes("Mil-Spec")) {
+    return "from-blue-500/25 via-blue-400/20 to-blue-600/30";
+  }
+  return "from-gray-500/25 via-gray-400/20 to-gray-600/30";
+}

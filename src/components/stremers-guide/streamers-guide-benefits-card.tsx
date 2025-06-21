@@ -19,21 +19,23 @@ function StreamerGuideBenefitsCard({
   content,
 }: BenefitsCardProps) {
   return (
-    <Card className="bg-card/30 border-border/30">
+    <Card className="gaming-card">
       <CardHeader>
         <Users className="h-10 w-10 text-primary mb-2" />
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle className="gaming-text-accent">{title}</CardTitle>
+        <CardDescription className="gaming-text-secondary">
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ul className="space-y-2">
           {content.map((item, idx) => (
             <li
               key={"StreamerGuideBenefitsCard-" + idx}
-              className="flex items-start gap-2"
+              className="text-lg flex items-start gap-2"
             >
               <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-              <span>{item}</span>
+              <span className="gaming-text-accent">{item}</span>
             </li>
           ))}
         </ul>

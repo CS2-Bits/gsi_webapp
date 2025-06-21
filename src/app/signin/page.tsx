@@ -16,8 +16,14 @@ export default async function SignInPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-80px)]">
-      <SteamSignIn />
+    <div className="flex items-center justify-center">
+      <div className="container px-4 py-8">
+        <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+          <div className="gaming-slide-up">
+            <SteamSignIn />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

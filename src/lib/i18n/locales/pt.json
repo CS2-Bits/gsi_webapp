@@ -49,7 +49,7 @@
   "logout": "Sair",
   "signInPage": {
     "welcomeTitle": "Bem-vindo ao CS2 Bits",
-    "description": "Entre com sua conta Steam para acessar desafios e previsões em tempo real",
+    "description": "Entre com sua conta Steam para acessar previsões em tempo real",
     "sloganMain": "Challenge. Predict. Engage.",
     "sloganSub": "Interaja com seu streamer favorito de forma nova, competitiva e divertida.",
     "button": {
@@ -199,12 +199,12 @@
     },
     "challenges": {
       "title": "4. Desafios",
-      "intro1": "O CS2 Bits oferece uma plataforma para desafios virtuais relacionados a partidas de CS2. Toda atividade é realizada com moeda virtual da plataforma, que pode ser adquirida pelos métodos disponíveis no site.",
+      "intro1": "O CS2 Bits oferece uma plataforma para previsões virtuais relacionados a partidas de CS2. Toda atividade é realizada com moeda virtual da plataforma, que pode ser adquirida pelos métodos disponíveis no site.",
       "intro2": "Você entende e concorda que:",
       "items": {
-        "1": "Os desafios são apenas para entretenimento.",
-        "2": "Os resultados dos desafios são baseados em eventos reais das partidas de CS2.",
-        "3": "O CS2 Bits reserva-se o direito de cancelar desafios em caso de problemas técnicos, suspeita de fraude ou outras circunstâncias que possam comprometer a integridade da plataforma.",
+        "1": "As previsões são apenas para entretenimento.",
+        "2": "Os resultados das previsões são baseados em eventos reais das partidas de CS2.",
+        "3": "O CS2 Bits reserva-se o direito de cancelar previsões em caso de problemas técnicos, suspeita de fraude ou outras circunstâncias que possam comprometer a integridade da plataforma.",
         "4": "Você não pode transferir ou vender moeda virtual para outros usuários, nem trocá-la por dinheiro real.",
         "5": "O CS2 Bits pode modificar, suspender ou descontinuar qualquer aspecto do serviço a qualquer momento."
       }
@@ -305,7 +305,7 @@
         "description": "Também coletamos informações sobre como você interage com nosso serviço:",
         "items": {
           "accessLogs": "Logs de acesso e atividade",
-          "betsChallenges": "Informações sobre desafios",
+          "betsChallenges": "Informações sobre previsões",
           "interactions": "Interações com outros usuários",
           "preferences": "Preferências e configurações",
           "deviceInfo": "Informações do dispositivo e navegador",
@@ -318,7 +318,7 @@
       "description": "Usamos as informações coletadas para:",
       "items": {
         "provide": "Fornecer, manter e melhorar nossos serviços",
-        "process": "Processar e gerenciar sua conta, desafios e transações",
+        "process": "Processar e gerenciar sua conta, previsões e transações",
         "personalize": "Personalizar sua experiência na plataforma",
         "communicate": "Comunicar-se com você sobre atualizações, promoções e eventos",
         "fraudPrevention": "Detectar e prevenir atividades fraudulentas ou abusivas",
@@ -460,13 +460,13 @@
       "title": "Histórico de Atividades",
       "description": "Suas atividades recentes no CS2 Bits",
       "noActivity": "Nenhuma atividade recente",
-      "noActivityDescription": "Suas atividades aparecerão aqui quando você começar a interagir com desafios e previsões.",
+      "noActivityDescription": "Suas atividades aparecerão aqui quando você começar a interagir com previsões.",
       "total": "Total de Atividades: {{count}}"
     },
     "payments": {
       "title": "Histórico de Pagamentos",
       "noPayments": "Nenhum pagamento encontrado",
-      "noPaymentsDescription": "Você pode ver seus pagamentos aqui quando começar a comprar CS2Bits ou participar de desafios.",
+      "noPaymentsDescription": "Você pode ver seus pagamentos aqui quando começar a comprar CS2Bits ou participar de previsões.",
       "total": "Total de Pagamentos: {{count}}"
     },
     "trades": {
@@ -580,7 +580,7 @@
       "Intermission": "Pausa",
       "Gameover": "Finalizada"
     },
-    "offline": "OFFLINE",
+    "offline": "Aguardando",
     "kills": "Kills",
     "deaths": "Deaths",
     "assists": "Assists",
@@ -731,6 +731,7 @@
   },
   "matches": {
     "title": "Partidas",
+    "subtitle": "Encontre todas as partidas ao vivo e finalizadas",
     "description": "Visualize e filtre partidas ao vivo e finalizadas do CS2 dos seus streamers favoritos",
     "filters": {
       "title": "Filtros",

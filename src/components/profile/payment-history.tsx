@@ -98,10 +98,10 @@ export function PaymentHistory() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium">
+          <h3 className="gaming-text-primary text-lg font-medium">
             {t("userProfile.payments.title")}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="gaming-text-secondary text-sm">
             {t("userProfile.payments.total", { count: pagination.total })}
           </p>
         </div>
@@ -109,12 +109,12 @@ export function PaymentHistory() {
 
       {paymentsData.length === 0 ? (
         <>
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="gaming-card flex flex-col items-center justify-center py-12 text-center">
             <History className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">
+            <h3 className="gaming-text-accent text-lg font-medium">
               {t("userProfile.history.noActivity")}
             </h3>
-            <p className="text-muted-foreground mt-2">
+            <p className="gaming-text-secondary mt-2">
               {t("userProfile.history.noActivityDescription")}
             </p>
           </div>
@@ -126,45 +126,49 @@ export function PaymentHistory() {
       ) : (
         <ScrollArea className="h-[500px] w-full">
           <div className="space-y-3">
-            {paymentsData.map((data) => (
-              <Card key={data.user_payment.id} className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {getTransactionIcon(data.user_payment.status)}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="secondary"
-                          className={getTextColror(data.user_payment.status)}
-                        >
-                          ID: {data.user_payment.id}
-                        </Badge>
+            {paymentsData.map((data, index) => (
+              <div
+                key={data.user_payment.id}
+                className="gaming-slide-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <Card className="gaming-card p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {getTransactionIcon(data.user_payment.status)}
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="secondary"
+                            className={getTextColror(data.user_payment.status)}
+                          >
+                            ID: {data.user_payment.id}
+                          </Badge>
+                        </div>
+                        <p className="gaming-text-secondary text-sm">
+                          {t(`payment.status.${data.user_payment.status}`)}
+                        </p>
+                        <p className="gaming-text-secondary text-xs">
+                          {format(
+                            data.user_payment.created_at,
+                            "dd/MM/yyyy HH:mm"
+                          )}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {t(`payment.status.${data.user_payment.status}`)}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {format(
-                          data.user_payment.created_at,
-                          "dd/MM/yyyy HH:mm"
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-medium $gaming-text-primary`}>
+                        {formatCurrency(
+                          Number(
+                            data.point_packages.points_amount +
+                              data.point_packages.bonus_points
+                          )
                         )}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p
-                      className={`font-medium $text-green-600 dark:text-green-400`}
-                    >
-                      {formatCurrency(
-                        Number(
-                          data.point_packages.points_amount +
-                            data.point_packages.bonus_points
-                        )
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             ))}
           </div>
         </ScrollArea>
@@ -172,7 +176,7 @@ export function PaymentHistory() {
 
       {pagination.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="text-sm text-muted-foreground">
+          <div className="gaming-text-secondary text-sm">
             {t("pagination.showing", {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(
@@ -186,6 +190,7 @@ export function PaymentHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!pagination.hasPrev || isFetching}
             >
@@ -217,7 +222,7 @@ export function PaymentHistory() {
                       size="sm"
                       onClick={() => handlePageChange(pageNumber)}
                       disabled={isFetching}
-                      className="w-8 h-8 p-0"
+                      className={`w-8 h-8 p-0 hover:scale-105 transition-transform ${currentPage === pageNumber ? "gaming-button text-foreground" : ""}`}
                     >
                       {pageNumber}
                     </Button>
@@ -229,6 +234,7 @@ export function PaymentHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!pagination.hasNext || isFetching}
             >

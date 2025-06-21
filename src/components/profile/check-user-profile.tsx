@@ -47,7 +47,7 @@ export function CheckUserProfile() {
       title={t("profile.incompleteProfile")}
       description={t("profile.incompleteProfileDescription")}
     >
-      <div className=" px-4">
+      <div className="px-4">
         <UserInfo
           userData={userResponse.data.user}
           onUserDataUpdate={handleUserDataUpdate}

@@ -28,59 +28,60 @@ export function PaymentMethodSelector({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">{t("purchase.payment_method")}</h3>
+      <h3 className="gaming-text-accent text-lg font-medium">
+        {t("purchase.payment_method")}
+      </h3>
       <Tabs
         defaultValue={selected}
         onValueChange={(value) => onSelect(value as "stripe" | "coinbase")}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="stripe">
+        <TabsList className="grid w-full grid-cols-2 gaming-tabs-card">
+          <TabsTrigger value="stripe" className="gaming-text-secondary">
             {t("purchase.pay_with_card_or_pix")}
           </TabsTrigger>
-          <TabsTrigger value="coinbase">
+          <TabsTrigger value="coinbase" className="gaming-text-secondary">
             {t("purchase.crypto_usdc")}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="stripe">
-          <Card>
-            <CardContent className=" space-y-4">
+          <Card className="gaming-card">
+            <CardContent className="space-y-4">
               <div className="flex items-center w-full max-h-9 justify-between">
                 <div className="flex w-full space-x-4">
-                  <SiVisa className="flex-1 h-full" />
-                  <FaCcMastercard className="flex-1 h-full" />
-                  <FaGooglePay className="flex-1 h-full" />
-                  <FaCcApplePay className="flex-1 h-full" />
+                  <SiVisa className="flex-1 h-full text-primary" />
+                  <FaCcMastercard className="flex-1 h-full text-primary" />
+                  <FaGooglePay className="flex-1 h-full text-primary" />
+                  <FaCcApplePay className="flex-1 h-full text-primary" />
                 </div>
               </div>
               {showStripeForm && stripeFormContent && (
-                <div className="mt-4">{stripeFormContent}</div>
+                <div className="mt-4 gaming-slide-up">{stripeFormContent}</div>
               )}
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="coinbase">
-          <Card>
+          <Card className="gaming-card">
             <CardContent className="space-y-4">
               <div className="flex items-center w-full max-h-9 justify-between">
                 <div className="flex w-full space-x-4">
-                  <FaBitcoin className="flex-1 h-full" />
+                  <FaBitcoin className="flex-1 h-full text-primary" />
                   <TokenETH
                     variant="mono"
-                    color="#FFFFFF"
+                    color="#f27405"
                     className="flex-1 h-full"
                   />
                   <TokenUSDC
                     variant="mono"
-                    color="#FFFFFF"
+                    color="#f27405"
                     className="flex-1 h-full"
                   />
                   <TokenUSDT
                     variant="mono"
-                    color="#FFFFFF"
+                    color="#f27405"
                     className="flex-1 h-full"
                   />
-                  {/* <SiCoinbase className="flex-1 h-full" /> */}
                 </div>
               </div>
             </CardContent>

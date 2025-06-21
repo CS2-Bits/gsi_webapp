@@ -12,15 +12,27 @@ export default async function HomePage() {
   }
 
   return (
-    <>
-      {/* Hero Section AJustar imagem streamer*/}
-      <HomeHeroSection />
+    <div className="w-full max-w-7xl mx-auto">
+      {/* Hero Section with gaming animation */}
+      <div className="gaming-slide-up">
+        <HomeHeroSection />
+      </div>
 
-      {/* Features Section */}
-      <HomeFeaturesSection />
+      {/* Gaming divider */}
+      <div className="gaming-divider"></div>
 
-      {/* CTA Section */}
-      <HomeCTA />
-    </>
+      {/* Features Section with staggered animation */}
+      <div className="gaming-slide-up" style={{ animationDelay: "0.2s" }}>
+        <HomeFeaturesSection />
+      </div>
+
+      {/* Gaming divider */}
+      <div className="gaming-divider"></div>
+
+      {/* CTA Section with delayed animation */}
+      <div className="gaming-slide-up" style={{ animationDelay: "0.4s" }}>
+        <HomeCTA />
+      </div>
+    </div>
   );
 }

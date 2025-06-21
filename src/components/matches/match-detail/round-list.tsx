@@ -87,7 +87,7 @@ function getRoundConclusionInfo(conclusionName: string | null, t: TFunction) {
 
 export function RoundList({ rounds, streamer, t }: RoundListProps) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden gaming-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Flame size={18} className="text-primary" />

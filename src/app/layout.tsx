@@ -7,8 +7,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import "@/lib/i18n/i18n-provider";
 import { I18nProvider } from "@/lib/i18n/i18n-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Teko } from "next/font/google";
 import HomeHeader from "@/components/home/layout/home-header";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -20,6 +19,11 @@ export const metadata: Metadata = {
     "Uma nova forma de assistir Counter Strike. Desafie seu streamer favorito.",
 };
 
+const dFont = Teko({
+  subsets: ["latin"],
+  variable: "--font-gaming",
+});
+
 export default async function RootLayout({
   children,
 }: {
@@ -28,13 +32,11 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value ?? "pt";
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body
-        className={`${GeistSans.variable} ${GeistMono.variable} min-h-screen flex flex-col items-center`}
-      >
+    <html lang={locale} className={dFont.className} suppressHydrationWarning>
+      <body className={`min-h-screen flex flex-col items-center gaming-body`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

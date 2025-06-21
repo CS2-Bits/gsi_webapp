@@ -66,13 +66,15 @@ export default function MatchesPage() {
   if (matchesError) {
     return (
       <div className="container mx-auto max-w-[1200px] px-4 py-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-red-600">
-            {t("matches.error.title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("matches.error.description")}
-          </p>
+        <div className="gaming-slide-up">
+          <div className="gaming-card flex flex-col items-center justify-center py-16 px-6 text-center">
+            <h1 className="gaming-text-primary text-2xl font-bold mb-4">
+              {t("matches.error.title")}
+            </h1>
+            <p className="gaming-text-secondary">
+              {t("matches.error.description")}
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -80,10 +82,24 @@ export default function MatchesPage() {
 
   return (
     <div className="container px-4 py-8 space-y-6">
+      {/* Header with gaming animation */}
+      <div className="gaming-slide-up mb-8">
+        <h1 className="gaming-text-primary text-4xl font-bold mb-2">
+          {t("matches.title")}
+        </h1>
+        <p className="gaming-text-secondary text-lg">{t("matches.subtitle")}</p>
+      </div>
+
+      {/* Gaming divider */}
+      <div className="gaming-divider mb-8"></div>
+
       {/* Filters and Cards Layout */}
       <div className="flex flex-col xl:flex-row gap-6">
         {/* Filters Sidebar - Increased Width */}
-        <div className="xl:w-[280px] xl:flex-shrink-0">
+        <div
+          className="xl:w-[280px] xl:flex-shrink-0 gaming-slide-up"
+          style={{ animationDelay: "0.1s" }}
+        >
           <StreamMatchFilters
             filters={filters}
             onFiltersChange={handleFiltersChange}
@@ -94,14 +110,17 @@ export default function MatchesPage() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 space-y-6">
+        <div
+          className="flex-1 space-y-6 gaming-slide-up"
+          style={{ animationDelay: "0.2s" }}
+        >
           {/* Results Header */}
           {!isLoadingMatches && pageData && (
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">
+              <h2 className="gaming-text-accent text-lg font-semibold">
                 {t("matches.results.title")}
               </h2>
-              <span className="text-sm text-muted-foreground">
+              <span className="gaming-text-secondary text-sm">
                 {t("matches.table.showing", {
                   start:
                     (pageData.pagination.page - 1) * pageData.pagination.limit +
@@ -128,7 +147,7 @@ export default function MatchesPage() {
             pageData.matchesData.length > 0 &&
             pageData.pagination.totalPages > 1 && (
               <div className="flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
+                <div className="gaming-text-secondary text-sm">
                   {t("matches.pagination.page", {
                     current: pageData.pagination.page,
                     total: pageData.pagination.totalPages,
@@ -138,6 +157,7 @@ export default function MatchesPage() {
                   <Button
                     variant="outline"
                     size="sm"
+                    className="gaming-button text-foreground hover:scale-105 transition-transform"
                     onClick={() =>
                       handlePageChange(pageData.pagination.page - 1)
                     }
@@ -149,6 +169,7 @@ export default function MatchesPage() {
                   <Button
                     variant="outline"
                     size="sm"
+                    className="gaming-button text-foreground hover:scale-105 transition-transform"
                     onClick={() =>
                       handlePageChange(pageData.pagination.page + 1)
                     }

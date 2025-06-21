@@ -91,27 +91,28 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Username (disabled) */}
               <FormItem className="flex-1">
-                <FormLabel className="text-muted-foreground">
+                {" "}
+                <FormLabel className="gaming-text-secondary">
                   <User className="h-4 w-4" /> {t("profile.username")}
                 </FormLabel>
                 <FormControl>
                   <Input
                     value={userData.username}
                     disabled
-                    className="text-lg font-medium w-full"
+                    className="gaming-input text-lg font-medium w-full"
                   />
                 </FormControl>
               </FormItem>
 
               {/* Email */}
               <FormItem className="flex-1 relative">
-                <FormLabel className="text-muted-foreground flex items-center gap-1">
+                <FormLabel className="gaming-text-secondary flex items-center gap-1">
                   <AtSign className="h-4 w-4" /> {t("profile.email")}
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...form.register("email")}
-                    className="text-lg font-medium w-full"
+                    className="gaming-input text-lg font-medium w-full"
                     onPaste={() => {
                       setTimeout(() => form.trigger("email"), 0);
                     }}
@@ -132,7 +133,7 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
 
               {/* Steam ID (toggle) */}
               <FormItem className="flex-1">
-                <FormLabel className="text-muted-foreground flex items-center gap-1">
+                <FormLabel className="gaming-text-secondary flex items-center gap-1">
                   <FaSteam className="h-4 w-4" /> {t("profile.steam_id")}
                 </FormLabel>
                 <FormControl>
@@ -141,12 +142,12 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
                       type={showSteamId ? "text" : "password"}
                       value={userData.steam_id}
                       disabled
-                      className="text-lg font-medium w-full"
+                      className="gaming-input text-lg font-medium w-full"
                     />
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute bottom-1 right-1 h-7 w-7"
+                      className="absolute bottom-1 right-1 h-7 w-7 hover:bg-primary/20"
                       onClick={() => setShowSteamId(!showSteamId)}
                     >
                       {showSteamId ? (
@@ -164,13 +165,13 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
 
               {/* Trade Link */}
               <FormItem className="flex-1 relative">
-                <FormLabel className="text-muted-foreground flex items-center gap-1">
+                <FormLabel className="gaming-text-secondary flex items-center gap-1">
                   <ExternalLink className="h-4 w-4" /> {t("profile.trade_link")}
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...form.register("trade_link")}
-                    className="text-lg font-medium w-full"
+                    className="gaming-input text-lg font-medium w-full"
                     onPaste={() => {
                       setTimeout(() => form.trigger("trade_link"), 0);
                     }}
@@ -193,6 +194,7 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
           <div className="flex justify-end mt-4">
             <Button
               type="submit"
+              className="gaming-button text-foreground"
               disabled={
                 !form.formState.isDirty ||
                 !form.formState.isValid ||

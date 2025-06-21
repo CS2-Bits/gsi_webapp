@@ -208,15 +208,31 @@ export function PredictionCard({
 
   const getStatusBadge = () => {
     if (isResolved) {
-      return <Badge>{t("predictions.resolved")}</Badge>;
+      return (
+        <Badge className="gaming-badge">{t("predictions.resolved")}</Badge>
+      );
     } else if (isClosed) {
-      return <Badge variant="secondary">{t("predictions.closed")}</Badge>;
+      return (
+        <Badge variant="secondary" className="gaming-badge">
+          {t("predictions.closed")}
+        </Badge>
+      );
     } else if (isCanceled) {
-      return <Badge variant="destructive">{t("predictions.canceled")}</Badge>;
+      return (
+        <Badge variant="destructive" className="gaming-badge">
+          {t("predictions.canceled")}
+        </Badge>
+      );
     } else if (isRoundThresholdReached) {
-      return <Badge>{t("predictions.ending_soon")}</Badge>;
+      return (
+        <Badge className="gaming-badge">{t("predictions.ending_soon")}</Badge>
+      );
     } else {
-      return <Badge variant="default">{t("predictions.open")}</Badge>;
+      return (
+        <Badge variant="default" className="gaming-badge">
+          {t("predictions.open")}
+        </Badge>
+      );
     }
   };
 
@@ -236,10 +252,10 @@ export function PredictionCard({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="gaming-card gaming-card-interactive overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-lg font-bold">
+          <CardTitle className="gaming-text-accent text-lg font-bold">
             {t(`predictions.${prediction.prediction_templates.kind}`, {
               streamer: streamer.username_id,
               round: prediction.prediction_templates.threshold_round + 0.5,
@@ -247,8 +263,10 @@ export function PredictionCard({
           </CardTitle>
           {getStatusBadge()}
         </div>
-        <CardDescription>{t(`predictions.select_description`)}</CardDescription>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+        <CardDescription className="gaming-text-secondary">
+          {t(`predictions.select_description`)}
+        </CardDescription>
+        <div className="flex items-center gap-2 text-xs gaming-text-secondary mt-1">
           <Clock size={14} />
           <span>
             {formatDistance(prediction.created_at, new Date(), {
@@ -287,7 +305,7 @@ export function PredictionCard({
             ))}
           </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between text-xs gaming-text-secondary">
             <div className="flex items-center gap-1">
               <Users size={14} />
               <span>
@@ -320,7 +338,7 @@ export function PredictionCard({
                             type="text"
                             placeholder={t("predictions.enter_amount")}
                             {...field}
-                            className={`flex-1`}
+                            className="gaming-input flex-1"
                             disabled={!selectedOptionLabel || isSubmitting}
                             min={Number(
                               prediction.prediction_templates.min_bet_amount
@@ -330,7 +348,7 @@ export function PredictionCard({
                         <Button
                           type="submit"
                           disabled={!selectedOptionLabel || isSubmitting}
-                          className="whitespace-nowrap"
+                          className="gaming-button text-foreground whitespace-nowrap"
                         >
                           {t("predictions.place_bet")}
                         </Button>
@@ -354,7 +372,7 @@ export function PredictionCard({
                         isSubmitting ||
                         amount > userBalance.balance
                       }
-                      className="flex-1"
+                      className="flex-1 hover:scale-105 transition-transform"
                     >
                       {Number(amount)}
                     </Button>
@@ -369,14 +387,14 @@ export function PredictionCard({
                       isSubmitting ||
                       userBalance.balance <= 0
                     }
-                    className="flex-1"
+                    className="flex-1 hover:scale-105 transition-transform"
                   >
                     {t("predictions.all_in")}
                   </Button>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs gaming-text-secondary">
                     {t("predictions.min_bet")}:{" "}
                     {Number(prediction.prediction_templates.min_bet_amount)}
                   </p>
@@ -387,9 +405,11 @@ export function PredictionCard({
 
           {userHasBet && (
             <div className="pt-2 border-t">
-              <p className="text-sm font-medium">
+              <p className="text-sm font-medium gaming-text-accent">
                 {t("predictions.your_bets")}:{" "}
-                {predictionDetails.userTotalBets.toFixed(2)}
+                <span className="gaming-text-primary">
+                  {predictionDetails.userTotalBets.toFixed(2)}
+                </span>
               </p>
             </div>
           )}
@@ -409,7 +429,7 @@ export function PredictionCard({
 
           {isCanceled && (
             <div className="pt-2 border-t">
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-sm font-medium gaming-text-secondary">
                 {t("predictions.canceled_description")}
               </p>
             </div>
@@ -424,11 +444,11 @@ function PredictionCardLoading() {
   return (
     <CardContent className="space-y-4">
       <div className="space-y-3">
-        <Skeleton className="h-16 w-full" />
-        <Skeleton className="h-16 w-full" />
+        <Skeleton className="gaming-skeleton h-16 w-full" />
+        <Skeleton className="gaming-skeleton h-16 w-full" />
       </div>
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-10 w-full" />
+      <Skeleton className="gaming-skeleton h-4 w-full" />
+      <Skeleton className="gaming-skeleton h-10 w-full" />
     </CardContent>
   );
 }

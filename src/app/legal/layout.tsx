@@ -13,22 +13,27 @@ export default function LegalLayout({
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-border/30">
+    <div className="gaming-body">
+      {/* Header with gaming animation */}
+      <header className="gaming-header border-b border-border/30">
         <div className="container mx-auto py-6 px-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" asChild>
+          <div className="gaming-slide-in flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="gaming-button"
+            >
               <Link href="/">
                 <ChevronLeft className="h-5 w-5" />
                 <span className="sr-only">{t("legalLayout.back")}</span>
               </Link>
             </Button>
             <div>
-              <h1 className="text-2xl font-bold">
+              <h1 className="gaming-text-primary text-2xl font-bold">
                 {t("legalLayout.headerTitle")}
               </h1>
-              <p className="text-sm text-foreground/60">
+              <p className="gaming-text-secondary text-sm">
                 {t("legalLayout.headerSubtitle")}
               </p>
             </div>

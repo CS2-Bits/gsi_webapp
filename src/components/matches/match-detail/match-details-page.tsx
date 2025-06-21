@@ -41,23 +41,31 @@ export default function MatchDetailsPage({
     return <MatchDetailsLoading />;
   }
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* Coluna principal */}
-      <div className="lg:col-span-8 space-y-6">
-        <MatchHeader
-          matchData={matchData}
-          statsData={statsData}
-          streamer={streamer}
-        />
-        <RoundList rounds={roundsData || []} streamer={streamer} t={t} />
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Main Column */}
+        <div className="lg:col-span-8 space-y-6">
+          <div className="gaming-slide-up">
+            <MatchHeader
+              matchData={matchData}
+              statsData={statsData}
+              streamer={streamer}
+            />
+          </div>
+          <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
+            <RoundList rounds={roundsData || []} streamer={streamer} t={t} />
+          </div>
+        </div>
 
-      <div className="lg:col-span-4 space-y-6">
-        <PredictionsList
-          streamer={streamer}
-          predictions={predictionsData}
-          currentRound={statsData?.round || 0}
-        />
+        <div className="lg:col-span-4 space-y-6">
+          <div className="gaming-slide-up" style={{ animationDelay: "0.2s" }}>
+            <PredictionsList
+              streamer={streamer}
+              predictions={predictionsData}
+              currentRound={statsData?.round || 0}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -65,20 +73,22 @@ export default function MatchDetailsPage({
 
 function MatchDetailsLoading() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div className="lg:col-span-8 space-y-6">
-        <div className="space-y-4 animate-pulse">
-          <div className="flex justify-between items-center">
-            <div className="h-10 w-64 bg-muted rounded-md" />
-            <div className="h-6 w-20 bg-muted rounded-md" />
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="space-y-4 animate-pulse gaming-slide-up">
+            <div className="flex justify-between items-center">
+              <div className="h-10 w-64 bg-muted rounded-md gaming-skeleton" />
+              <div className="h-6 w-20 bg-muted rounded-md gaming-skeleton" />
+            </div>
+            <div className="h-64 w-full bg-muted rounded-lg gaming-skeleton" />
           </div>
-          <div className="h-64 w-full bg-muted rounded-lg" />
+          <div className="h-80 w-full bg-muted rounded-lg gaming-skeleton" />
         </div>
-        <div className="h-80 w-full bg-muted rounded-lg" />
-      </div>
-      <div className="lg:col-span-4 space-y-6">
-        <div className="h-96 w-full bg-muted rounded-lg" />
-        <div className="h-80 w-full bg-muted rounded-lg" />
+        <div className="lg:col-span-4 space-y-6">
+          <div className="h-96 w-full bg-muted rounded-lg gaming-skeleton" />
+          <div className="h-80 w-full bg-muted rounded-lg gaming-skeleton" />
+        </div>
       </div>
     </div>
   );

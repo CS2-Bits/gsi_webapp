@@ -2,8 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "CS2 Bits - Pagamento Concluído",
-  description:
-    "Uma nova forma de viver o CS2. Aposte, desafie e interaja enquanto assiste seu streamer favorito.",
+  description: "Página de confirmação de pagamento do CS2 Bits",
 };
 
 export default async function Layout({
@@ -11,5 +10,5 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <div className="gaming-body">{children}</div>;
 }

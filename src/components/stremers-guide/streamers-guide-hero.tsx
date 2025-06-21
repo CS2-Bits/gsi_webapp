@@ -13,15 +13,15 @@ function StremersGuideHero() {
       <div className="bg-gradient-to-r from-primary/20 to-black/40 rounded-2xl p-8 md:p-12 mb-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">
+            <h2 className="text-3xl md:text-4xl font-bold gaming-text-accent">
               {t("hero.stream_expirence")}
             </h2>
-            <p className="text-lg text-foreground/80">
+            <p className="text-xl gaming-text-secondary">
               {t("hero.stream_expirence_desc")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
-                className="bg-primary hover:bg-primary/90 text-foreground"
+                className="gaming-button text-foreground font-semibold"
                 onClick={() => setIsModalOpen(true)}
               >
                 {t("hero.partner")}
@@ -43,11 +43,13 @@ function StremersGuideHero() {
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="bg-primary w-3 h-3 rounded-full animate-pulse"></div>
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium gaming-text-accent">
                         {t("hero.live")}
                       </span>
                     </div>
-                    <p className="font-bold">{t("hero.live_desc")}</p>
+                    <p className="font-bold gaming-text-accent">
+                      {t("hero.live_desc")}
+                    </p>
                   </div>
                 </div>
               </div>

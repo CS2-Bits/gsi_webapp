@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "effvoxwaracbvwrazgzy.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "community.fastly.steamstatic.com",
+      },
     ],
   },
   staticPageGenerationTimeout: 300,

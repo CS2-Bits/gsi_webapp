@@ -16,16 +16,26 @@ function HomeHeroSection() {
     <section className="container mx-auto px-4 py-6 md:py-20">
       <div className="grid md:grid-cols-2 gap-4 md:gap-8">
         <div className="space-y-4 md:space-y-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
-            <span className="block">{t("hero.challenge")}</span>
-            <span className="block">{t("hero.predict")}</span>
-            <span className="block">{t("hero.engage")}</span>
+          <h1 className="gaming-text-primary text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
+            <span className="block gaming-slide-in">{t("hero.challenge")}</span>
+            <span
+              className="block gaming-slide-in"
+              style={{ animationDelay: "0.1s" }}
+            >
+              {t("hero.predict")}
+            </span>
+            <span
+              className="block gaming-slide-in"
+              style={{ animationDelay: "0.2s" }}
+            >
+              {t("hero.engage")}
+            </span>
           </h1>
-          <p className="text-base md:text-xl text-foreground/80">
+          <p className="gaming-text-accent text-base md:text-xl">
             {t("hero.engage_streamer")}
           </p>
           <Link href={"/matches"}>
-            <Button className="bg-primary hover:bg-primary/90 text-foreground text-base md:text-lg px-6 py-2 md:px-8 md:py-6">
+            <Button className="gaming-button text-foreground text-base md:text-lg px-6 py-2 md:px-8 md:py-6">
               {t("hero.live_cs2")}
             </Button>
           </Link>
@@ -64,18 +74,18 @@ function HomeHeroSection() {
             <div
               className={`absolute ${isMobile ? "bottom-2 left-2" : "top-4 right-4"} w-[calc(50%-16px)] sm:w-48 md:w-56`}
             >
-              <Card className="bg-card/80 border-0 py-2">
+              <Card className="gaming-card bg-card/80 border-0 py-2">
                 <CardContent className="p-2 md:px-4">
                   <div className="flex items-center gap-2 md:gap-2 mb-1 md:mb-2">
                     <CS2BitsIcon />
-                    <span className="font-medium text-xs md:text-base">
+                    <span className="gaming-text-secondary font-medium text-xs md:text-base">
                       Desafio
                     </span>
                   </div>
-                  <p className="text-sm md:text-lg font-bold mb-2 md:mb-4">
+                  <p className="gaming-text-primary text-sm md:text-lg font-bold mb-2 md:mb-4">
                     Matar + de 30.5
                   </p>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-xs md:text-sm h-7 md:h-9">
+                  <Button className="gaming-button w-full text-xs md:text-sm h-7 md:h-9">
                     Enviar
                   </Button>
                 </CardContent>
@@ -86,25 +96,29 @@ function HomeHeroSection() {
             <div
               className={`absolute bottom-2 right-2 md:bottom-4 md:right-4 w-[calc(50%-16px)] sm:w-48 md:w-56`}
             >
-              <Card className="bg-card/80 border-0 py-2">
+              <Card className="gaming-card bg-card/80 border-0 py-2">
                 <CardContent className="p-2 md:px-4">
                   <div className="flex items-center gap-2 md:gap-2 mb-1 md:mb-2">
                     <CS2BitsIcon />
-                    <span className="font-medium text-xs md:text-base">
+                    <span className="gaming-text-secondary font-medium text-xs md:text-base">
                       Quem vai vencer?
                     </span>
                   </div>
                   <div className="space-y-1 md:space-y-2 mb-2 md:mb-4 text-xs md:text-base">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gaming-text-accent">
                       <span>Streamer</span>
-                      <span>3,25</span>
+                      <span className="gaming-text-primary font-bold">
+                        3,25
+                      </span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gaming-text-accent">
                       <span>Adversarios</span>
-                      <span>1,40</span>
+                      <span className="gaming-text-primary font-bold">
+                        1,40
+                      </span>
                     </div>
                   </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-xs md:text-sm h-7 md:h-9">
+                  <Button className="gaming-button w-full text-xs md:text-sm h-7 md:h-9">
                     Prever
                   </Button>
                 </CardContent>

@@ -118,13 +118,18 @@ export function StreamMatchFilters({
     (filters.mapIds && filters.mapIds.length > 0);
 
   return (
-    <Card>
+    <Card className="gaming-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 gaming-text-accent">
           <Filter className="h-5 w-5" />
           {t("matches.filters.title")}
           {hasActiveFilters && (
-            <Button variant="ghost" size="sm" onClick={clearFilters}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="gaming-button"
+            >
               {t("matches.filters.clear")}
             </Button>
           )}

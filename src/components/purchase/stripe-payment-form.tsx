@@ -139,7 +139,7 @@ export function StripePaymentForm({
           variant="outline"
           onClick={handleCancel}
           disabled={isLoading}
-          className="flex-1"
+          className="flex-1 hover:bg-muted/80 transition-colors"
         >
           {t("purchase.cancel")}
         </Button>
@@ -147,7 +147,7 @@ export function StripePaymentForm({
         <Button
           type="submit"
           disabled={!stripe || isLoading}
-          className="flex-1"
+          className="flex-1 gaming-button text-foreground font-semibold hover:scale-105 transition-transform"
         >
           {isLoading ? (
             <>

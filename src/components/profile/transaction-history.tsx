@@ -189,10 +189,10 @@ export function TransactionHistory() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium">
+          <h3 className="gaming-text-primary text-lg font-medium">
             {t("userProfile.history.title")}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="gaming-text-secondary text-sm">
             {t("userProfile.history.total", { count: pagination.total })}
           </p>
         </div>
@@ -229,12 +229,12 @@ export function TransactionHistory() {
 
       {transactionsData.length === 0 ? (
         <>
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="gaming-card flex flex-col items-center justify-center py-12 text-center">
             <History className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">
+            <h3 className="gaming-text-accent text-lg font-medium">
               {t("userProfile.history.noActivity")}
             </h3>
-            <p className="text-muted-foreground mt-2">
+            <p className="gaming-text-secondary mt-2">
               {t("userProfile.history.noActivityDescription")}
             </p>
           </div>
@@ -246,53 +246,61 @@ export function TransactionHistory() {
       ) : (
         <ScrollArea className="h-[500px] w-full">
           <div className="space-y-3">
-            {transactionsData.map((data) => (
-              <Card key={data.transaction.id} className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {getTransactionIcon(data.transaction.type)}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="secondary"
-                          className={getTransactionColor(data.transaction.type)}
-                        >
-                          {t(
-                            `transactions.types.${data.transaction.type.toLowerCase()}`
+            {transactionsData.map((data, index) => (
+              <div
+                key={data.transaction.id}
+                className="gaming-slide-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <Card className="gaming-card p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {getTransactionIcon(data.transaction.type)}
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="secondary"
+                            className={getTransactionColor(
+                              data.transaction.type
+                            )}
+                          >
+                            {t(
+                              `transactions.types.${data.transaction.type.toLowerCase()}`
+                            )}
+                          </Badge>
+                        </div>
+                        <p className="gaming-text-secondary text-sm">
+                          {getTransactionDescription(
+                            data.transaction.type,
+                            data.user_payments_data
                           )}
-                        </Badge>
+                        </p>
+                        <p className="gaming-text-secondary text-xs">
+                          {format(
+                            data.transaction.created_at,
+                            "dd/MM/yyyy HH:mm"
+                          )}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {getTransactionDescription(
-                          data.transaction.type,
-                          data.user_payments_data
-                        )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {format(
-                          data.transaction.created_at,
-                          "dd/MM/yyyy HH:mm"
+                    </div>
+                    <div className="text-right">
+                      <p
+                        className={`font-medium ${
+                          data.transaction.type === "Predict" ||
+                          data.transaction.type === "RaffleTicket"
+                            ? "text-orange-600 dark:text-orange-400"
+                            : "gaming-text-primary"
+                        }`}
+                      >
+                        {formatAmount(
+                          Number(data.transaction.amount),
+                          data.transaction.type
                         )}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p
-                      className={`font-medium ${
-                        data.transaction.type === "Predict" ||
-                        data.transaction.type === "RaffleTicket"
-                          ? "text-orange-600 dark:text-orange-400"
-                          : "text-green-600 dark:text-green-400"
-                      }`}
-                    >
-                      {formatAmount(
-                        Number(data.transaction.amount),
-                        data.transaction.type
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             ))}
           </div>
         </ScrollArea>
@@ -300,7 +308,7 @@ export function TransactionHistory() {
 
       {pagination.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="text-sm text-muted-foreground">
+          <div className="gaming-text-secondary text-sm">
             {t("pagination.showing", {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(
@@ -314,6 +322,7 @@ export function TransactionHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!pagination.hasPrev || isFetching}
             >
@@ -345,7 +354,7 @@ export function TransactionHistory() {
                       size="sm"
                       onClick={() => handlePageChange(pageNumber)}
                       disabled={isFetching}
-                      className="w-8 h-8 p-0"
+                      className={`w-8 h-8 p-0 ${currentPage === pageNumber ? "gaming-button text-foreground" : ""}`}
                     >
                       {pageNumber}
                     </Button>
@@ -357,6 +366,7 @@ export function TransactionHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!pagination.hasNext || isFetching}
             >

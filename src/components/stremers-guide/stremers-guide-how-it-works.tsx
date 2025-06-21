@@ -8,7 +8,9 @@ function StreamerGuideHowItWorks() {
   const { t } = useTranslation();
   return (
     <section className="mb-16">
-      <h2 className="text-3xl font-bold mb-8">{t("howItWorks.title")}</h2>
+      <h2 className="text-3xl font-bold mb-8 gaming-text-accent">
+        {t("howItWorks.title")}
+      </h2>
       <Tabs defaultValue="setup" className="w-full">
         <TabsList className="grid grid-cols-2 mb-8">
           <TabsTrigger value="setup">{t("howItWorks.tabs.setup")}</TabsTrigger>

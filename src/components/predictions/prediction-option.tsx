@@ -31,25 +31,31 @@ export function PredictionOption({
   return (
     <div
       className={cn(
-        "relative p-3 rounded-md border transition-all cursor-pointer hover:bg-accent/50",
-        isSelected && "border-primary bg-primary/10",
-        isWinner && "border-green-500 bg-green-500/10",
+        "relative p-3 rounded-md border transition-all cursor-pointer hover:bg-accent/50 gaming-card-interactive",
+        isSelected && "border-primary bg-primary/10 gaming-glow",
+        isWinner && "border-green-500 bg-green-500/10 gaming-pulse",
         disabled && "opacity-80 cursor-default"
       )}
       onClick={!disabled ? onClick : undefined}
     >
       <div className="flex justify-between items-center mb-1">
-        <div className="font-medium flex items-center gap-1.5">
+        <div className="font-medium flex items-center gap-1.5 gaming-text-accent">
           {t(`predictions.labels.${option.label}`)}
-          {isSelected && <CheckCircle2 size={16} className="text-primary" />}
-          {isWinner && <Trophy size={16} className="text-green-500" />}
+          {isSelected && (
+            <CheckCircle2 size={16} className="text-primary gaming-pop" />
+          )}
+          {isWinner && (
+            <Trophy size={16} className="text-green-500 gaming-pop" />
+          )}
         </div>
-        <div className="text-sm font-mono">{formattedPercentage}%</div>
+        <div className="text-sm font-mono gaming-text-primary">
+          {formattedPercentage}%
+        </div>
       </div>
 
       <Progress value={percentage} className="h-2 mb-2" />
 
-      <div className="flex justify-between items-center text-xs text-muted-foreground">
+      <div className="flex justify-between items-center text-xs gaming-text-secondary">
         <div>
           {option.betCount} {t("predictions.bets")}
         </div>
@@ -57,7 +63,7 @@ export function PredictionOption({
       </div>
 
       {option.userAmount > 0 && (
-        <div className="mt-1 text-xs text-primary">
+        <div className="mt-1 text-xs gaming-text-primary font-medium">
           You bet: {option.userAmount.toFixed(2)}
         </div>
       )}

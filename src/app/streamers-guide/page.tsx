@@ -6,20 +6,42 @@ import StreamersGuideCTA from "@/components/stremers-guide/streamers-guide-cta";
 
 export default function StreamerGuidePage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <StreamersGuideHeader />
+    <div className="w-full max-w-7xl mx-auto">
+      {/* Header with gaming animation */}
+      <div className="gaming-slide-up">
+        <StreamersGuideHeader />
+      </div>
 
       {/* Main Content */}
       <main className="container mx-auto py-12 px-4">
-        {/* Hero Section */}
-        <StremersGuideHero />
-        {/* Benefits Section */}
-        <StremersGuideBenefits />
-        {/* How It Works Section */}
-        <StreamerGuideHowItWorks />
-        {/* CTA Section */}
-        <StreamersGuideCTA />
+        {/* Hero Section with gaming animation */}
+        <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
+          <StremersGuideHero />
+        </div>
+
+        {/* Gaming divider */}
+        <div className="gaming-divider"></div>
+
+        {/* Benefits Section with gaming animation */}
+        <div className="gaming-slide-up" style={{ animationDelay: "0.2s" }}>
+          <StremersGuideBenefits />
+        </div>
+
+        {/* Gaming divider */}
+        <div className="gaming-divider"></div>
+
+        {/* How It Works Section with gaming animation */}
+        <div className="gaming-slide-up" style={{ animationDelay: "0.3s" }}>
+          <StreamerGuideHowItWorks />
+        </div>
+
+        {/* Gaming divider */}
+        <div className="gaming-divider"></div>
+
+        {/* CTA Section with gaming animation */}
+        <div className="gaming-slide-up" style={{ animationDelay: "0.4s" }}>
+          <StreamersGuideCTA />
+        </div>
       </main>
     </div>
   );

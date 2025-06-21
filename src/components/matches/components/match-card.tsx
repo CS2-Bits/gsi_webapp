@@ -72,27 +72,27 @@ export function MatchCard({ matchData }: MatchCardProps) {
 
   return (
     <Card
-      className="cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-[1.02] group border-border/50 hover:border-border"
+      className="gaming-card gaming-card-interactive cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-[1.02] group border-border/50 hover:border-primary/50"
       onClick={handleCardClick}
     >
       <CardContent className="p-4 space-y-4">
         {/* Header with Streamer and Status */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
+            <Avatar className="h-10 w-10 gaming-slide-in">
               <AvatarImage
                 src={matchData.streamer.avatar_url ?? undefined}
                 alt={matchData.streamer.username_id}
               />
-              <AvatarFallback>
+              <AvatarFallback className="gaming-text-accent bg-primary/10">
                 {matchData.streamer.username_id.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">
+              <h3 className="gaming-text-accent font-semibold text-sm group-hover:text-primary transition-colors">
                 {matchData.streamer.username_id}
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className="gaming-text-secondary text-xs">
                 {isLive
                   ? t("matches.card.streaming")
                   : t("matches.card.streamed")}
@@ -104,8 +104,8 @@ export function MatchCard({ matchData }: MatchCardProps) {
 
         {/* Map Information */}
         <div className="flex items-center gap-2 text-sm">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
-          <span className="font-mono font-medium">
+          <MapPin className="h-4 w-4 text-primary" />
+          <span className="gaming-text-accent font-mono font-medium">
             {matchData.match.map_name}
           </span>
         </div>
@@ -114,34 +114,38 @@ export function MatchCard({ matchData }: MatchCardProps) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
+              <Target className="h-4 w-4 text-primary" />
+              <span className="gaming-text-secondary text-sm">
                 {t("matches.card.round")}
               </span>
             </div>
-            <span className="font-mono font-bold text-lg">
+            <span className="gaming-text-primary font-mono font-bold text-lg">
               {matchData.match_player_stats.round}
             </span>
           </div>
 
           {/* Enhanced Score Display */}
-          <div className="flex items-center justify-center gap-3 font-mono text-center">
+          <div className="flex items-center justify-center gap-3 font-mono text-center gaming-card bg-background/50 rounded-lg p-2">
             <div className="flex items-baseline gap-1">
-              <span className="text-xs font-medium text-blue-500">CT</span>
-              <span className="text-2xl font-bold text-blue-500">
+              <span className="text-xs font-medium text-blue-400 gaming-text-shimmer">
+                CT
+              </span>
+              <span className="text-2xl font-bold text-blue-400">
                 {matchData.match_player_stats.ct_score
                   .toString()
                   .padStart(2, "0")}
               </span>
             </div>
-            <span className="text-xl font-bold text-foreground">-</span>
+            <span className="text-xl font-bold gaming-text-primary">-</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-2xl font-bold text-orange-400">
                 {matchData.match_player_stats.t_score
                   .toString()
                   .padStart(2, "0")}
               </span>
-              <span className="text-xs font-medium text-orange-500">T</span>
+              <span className="text-xs font-medium text-orange-400 gaming-text-shimmer">
+                T
+              </span>
             </div>
           </div>
         </div>
@@ -150,7 +154,7 @@ export function MatchCard({ matchData }: MatchCardProps) {
         {!isLive && (
           <div className="grid grid-cols-3 gap-3 text-center border-t pt-3">
             <div className="space-y-1">
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-xs gaming-text-secondary font-medium">
                 {t("matches.card.kills")}
               </div>
               <div className="text-sm font-bold text-green-600">
@@ -158,7 +162,7 @@ export function MatchCard({ matchData }: MatchCardProps) {
               </div>
             </div>
             <div className="space-y-1">
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-xs gaming-text-secondary font-medium">
                 {t("matches.card.deaths")}
               </div>
               <div className="text-sm font-bold text-red-600">
@@ -166,7 +170,7 @@ export function MatchCard({ matchData }: MatchCardProps) {
               </div>
             </div>
             <div className="space-y-1">
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-xs gaming-text-secondary font-medium">
                 {t("matches.card.assists")}
               </div>
               <div className="text-sm font-bold text-blue-600">
@@ -177,7 +181,7 @@ export function MatchCard({ matchData }: MatchCardProps) {
         )}
 
         {/* Time Information */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/30 px-2 py-1 rounded">
+        <div className="flex items-center gap-2 text-xs gaming-text-secondary bg-muted/30 px-2 py-1 rounded">
           <Clock className="h-3 w-3" />
           <span>{relativeTime}</span>
         </div>

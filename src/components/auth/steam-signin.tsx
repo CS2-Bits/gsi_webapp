@@ -30,37 +30,52 @@ export function SteamSignIn() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="gaming-card w-full max-w-md">
       <CardHeader className="text-center">
-        <div className="flex justify-center mb-4">
+        <div
+          className="flex justify-center mb-4 gaming-slide-in"
+          style={{ animationDelay: "0.1s" }}
+        >
           <div className="relative w-32 h-32">
             <Image
               src="/CS2Bits-logo.png"
               alt="CS2 Bits Logo"
               width={140}
               height={140}
-              className="rounded-lg"
+              className="rounded-lg hover:scale-105 transition-transform duration-200"
               priority
             />
           </div>
         </div>
-        <CardTitle className="text-2xl">
+        <CardTitle
+          className="gaming-text-primary text-3xl font-bold mb-2 gaming-slide-in"
+          style={{ animationDelay: "0.2s" }}
+        >
           {t("signInPage.welcomeTitle")}
         </CardTitle>
-        <CardDescription>{t("signInPage.description")}</CardDescription>
+        <CardDescription
+          className="gaming-text-secondary text-lg gaming-slide-in"
+          style={{ animationDelay: "0.3s" }}
+        >
+          {t("signInPage.description")}
+        </CardDescription>
       </CardHeader>
 
-      <CardFooter>
+      <CardFooter
+        className="gaming-slide-in"
+        style={{ animationDelay: "0.4s" }}
+      >
         <Button
           onClick={handleSignIn}
-          className="w-full bg-primary hover:bg-primary/90 text-foreground"
+          className="gaming-button w-full text-foreground flex items-center justify-center gap-3 font-semibold text-lg py-3"
           disabled={isLoading}
         >
           <Image
             src="/steam-logo.png"
-            alt="CS2 Gameplay"
-            width={35}
-            height={35}
+            alt="Steam Logo"
+            width={30}
+            height={30}
+            className="transition-transform duration-200 group-hover:scale-110"
           />
           {isLoading
             ? t("signInPage.button.connecting")
@@ -68,19 +83,22 @@ export function SteamSignIn() {
         </Button>
       </CardFooter>
 
-      <div className="px-6 pb-6 text-center text-sm text-muted-foreground">
+      <div
+        className="px-6 pb-6 text-center text-sm gaming-text-secondary gaming-slide-in"
+        style={{ animationDelay: "0.5s" }}
+      >
         <Trans
           i18nKey="signInPage.agreement"
           components={[
             <Link
               key="0"
               href="/legal/terms-of-use"
-              className="underline hover:text-foreground"
+              className="gaming-text-accent underline hover:text-primary hover:scale-105 inline-block transition-all duration-200"
             />,
             <Link
               key="1"
               href="/legal/privacy"
-              className="underline hover:text-foreground"
+              className="gaming-text-accent underline hover:text-primary hover:scale-105 inline-block transition-all duration-200"
             />,
           ]}
         />

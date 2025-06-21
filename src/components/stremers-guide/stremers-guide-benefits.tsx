@@ -6,7 +6,9 @@ function StremersGuideBenefits() {
   const { t } = useTranslation();
   return (
     <section className="mb-16">
-      <h2 className="text-3xl font-bold mb-8">{t("benefits.title")}</h2>
+      <h2 className="text-3xl font-bold mb-8 gaming-text-accent">
+        {t("benefits.title")}
+      </h2>
       <div className="grid md:grid-cols-3 gap-8">
         <StreamerGuideBenefitsCard
           title={t("benefits.engagement_title")}

@@ -30,27 +30,34 @@ export function PredictionsList({
   return (
     <div className="space-y-4">
       {predictions.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Flame size={18} className="text-primary" />
-              {t("predictions.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              {t("predictions.no_predictions")}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="gaming-slide-up">
+          <Card className="gaming-card">
+            <CardHeader>
+              <CardTitle className="gaming-text-accent flex items-center gap-2">
+                <Flame size={18} className="text-primary gaming-pulse" />
+                {t("predictions.title")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="gaming-text-secondary">
+                {t("predictions.no_predictions")}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
-        predictions.map((prediction) => (
-          <PredictionCard
+        predictions.map((prediction, index) => (
+          <div
             key={prediction.id}
-            streamer={streamer}
-            prediction={prediction}
-            currentRound={currentRound}
-          />
+            className="gaming-slide-up"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <PredictionCard
+              streamer={streamer}
+              prediction={prediction}
+              currentRound={currentRound}
+            />
+          </div>
         ))
       )}
     </div>

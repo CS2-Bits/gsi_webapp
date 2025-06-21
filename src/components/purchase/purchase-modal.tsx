@@ -166,47 +166,57 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-[900px] max-h-[90vh] overflow-hidden flex flex-col p-0"
+        className="gaming-modal sm:max-w-[900px] max-h-[90vh] overflow-hidden flex flex-col p-0"
         title=""
       >
-        <DialogHeader className="p-6 pb-2">
-          <DialogTitle className="text-2xl font-bold text-center">
+        <DialogHeader className="p-6 pb-2 gaming-slide-up">
+          <DialogTitle className="gaming-text-primary text-2xl font-bold text-center">
             {t("purchase.title")}
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Package Selection - Left Side */}
-          <div className="md:w-3/5 p-6 overflow-y-auto border-r border-border">
-            <h3 className="text-lg font-medium mb-4">
+          <div
+            className="md:w-3/5 p-6 overflow-y-auto border-r border-border gaming-slide-up"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <h3 className="gaming-text-accent text-lg font-medium mb-4">
               {t("purchase.select_package")}
             </h3>
 
-            <div className="rounded-md border">
+            <div className="gaming-card rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[50px]"></TableHead>
-                    <TableHead>{t("purchase.points")}</TableHead>
-                    <TableHead>{t("purchase.bonus")}</TableHead>
-                    <TableHead>{t("purchase.price")}</TableHead>
+                    <TableHead className="gaming-text-secondary">
+                      {t("purchase.points")}
+                    </TableHead>
+                    <TableHead className="gaming-text-secondary">
+                      {t("purchase.bonus")}
+                    </TableHead>
+                    <TableHead className="gaming-text-secondary">
+                      {t("purchase.price")}
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {packages.map((pkg) => {
+                  {packages.map((pkg, index) => {
                     const bonusPercentage = calculateBonusPercentage(pkg);
                     const isSelected = selectedPackage?.id === pkg.id;
 
                     return (
                       <TableRow
                         key={pkg.id}
-                        className={`cursor-pointer ${isSelected ? "bg-primary/5" : ""}`}
+                        className={`cursor-pointer transition-all duration-200 gaming-slide-up ${isSelected ? "bg-primary/5 border-primary/30" : "hover:bg-muted/30"}`}
+                        style={{ animationDelay: `${0.2 + index * 0.05}s` }}
                         onClick={() => setSelectedPackage(pkg)}
                       >
                         <TableCell>
                           <div className="flex items-center justify-center">
                             {isSelected ? (
-                              <CheckCircle className="h-5 w-5 text-primary" />
+                              <CheckCircle className="h-5 w-5 text-primary gaming-pulse" />
                             ) : (
                               <div className="h-5 w-5 rounded-full border border-muted-foreground" />
                             )}
@@ -214,10 +224,10 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                         </TableCell>
                         <TableCell className="font-medium">
                           <div className="flex flex-col">
-                            <span className="font-bold">
+                            <span className="gaming-text-primary font-bold">
                               {formatCurrency(pkg.points_amount)}
                             </span>
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-sm gaming-text-secondary">
                               {pkg.points_amount} {t("purchase.points_label")}
                             </span>
                           </div>
@@ -225,7 +235,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                         <TableCell>
                           {bonusPercentage > 0 ? (
                             <div className="flex flex-col">
-                              <Badge className="w-fit bg-green-500 mb-1">
+                              <Badge className="gaming-badge w-fit bg-green-500 mb-1">
                                 +{bonusPercentage}%
                               </Badge>
                               <span className="text-sm text-green-500">
@@ -233,10 +243,10 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                               </span>
                             </div>
                           ) : (
-                            <span>-</span>
+                            <span className="gaming-text-secondary">-</span>
                           )}
                         </TableCell>
-                        <TableCell className="font-bold">
+                        <TableCell className="gaming-text-accent font-bold">
                           {formatPrice(pkg.price, pkg.currency)}
                         </TableCell>
                       </TableRow>
@@ -248,28 +258,41 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
           </div>
 
           {/* Payment Methods - Right Side */}
-          <div className="md:w-2/5 p-6 overflow-y-auto">
+          <div
+            className="md:w-2/5 p-6 overflow-y-auto gaming-slide-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             {!showStripeForm ? (
               <>
-                <PaymentMethodSelector
-                  selected={
-                    paymentMethod.toLowerCase() as "stripe" | "coinbase"
-                  }
-                  onSelect={(method) =>
-                    setPaymentMethod(
-                      method === "stripe" ? "Stripe" : "Coinbase"
-                    )
-                  }
-                />
+                <div
+                  className="gaming-slide-up"
+                  style={{ animationDelay: "0.3s" }}
+                >
+                  <PaymentMethodSelector
+                    selected={
+                      paymentMethod.toLowerCase() as "stripe" | "coinbase"
+                    }
+                    onSelect={(method) =>
+                      setPaymentMethod(
+                        method === "stripe" ? "Stripe" : "Coinbase"
+                      )
+                    }
+                  />
+                </div>
 
                 {selectedPackage && (
-                  <div className="mt-6 p-4 bg-muted/30 rounded-lg">
-                    <h4 className="font-medium mb-2">
+                  <div
+                    className="mt-6 p-4 gaming-card bg-muted/30 rounded-lg gaming-slide-up"
+                    style={{ animationDelay: "0.4s" }}
+                  >
+                    <h4 className="gaming-text-accent font-medium mb-2">
                       {t("purchase.summary")}
                     </h4>
                     <div className="flex justify-between mb-1">
-                      <span>{t("purchase.selected_package")}:</span>
-                      <span className="font-bold">
+                      <span className="gaming-text-secondary">
+                        {t("purchase.selected_package")}:
+                      </span>
+                      <span className="gaming-text-primary font-bold">
                         {formatCurrency(selectedPackage.points_amount)}
                       </span>
                     </div>
@@ -284,8 +307,10 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                     )}
 
                     <div className="border-t border-border mt-2 pt-2 flex justify-between font-bold">
-                      <span>{t("purchase.total_price")}:</span>
-                      <span>
+                      <span className="gaming-text-accent">
+                        {t("purchase.total_price")}:
+                      </span>
+                      <span className="gaming-text-primary">
                         {formatPrice(
                           selectedPackage.price,
                           selectedPackage.currency
@@ -297,7 +322,8 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
 
                 <Button
                   onClick={handlePurchase}
-                  className="w-full mt-6 py-6 text-lg"
+                  className="gaming-button w-full mt-6 py-6 text-lg text-foreground font-semibold hover:scale-105 transition-transform gaming-slide-up"
+                  style={{ animationDelay: "0.5s" }}
                   disabled={isLoading || !selectedPackage}
                 >
                   {isLoading ? (
@@ -315,15 +341,22 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
               </>
             ) : (
               <>
-                <h3 className="text-lg font-medium mb-4">
-                  {t("purchase.complete_payment")}
-                </h3>
+                <div className="gaming-slide-up">
+                  <h3 className="gaming-text-accent text-lg font-medium mb-4">
+                    {t("purchase.complete_payment")}
+                  </h3>
+                </div>
 
                 {selectedPackage && (
-                  <div className="mb-6 p-4 bg-muted/30 rounded-lg">
+                  <div
+                    className="mb-6 p-4 gaming-card bg-muted/30 rounded-lg gaming-slide-up"
+                    style={{ animationDelay: "0.1s" }}
+                  >
                     <div className="flex justify-between mb-1">
-                      <span>{t("purchase.total_points")}:</span>
-                      <span className="font-bold">
+                      <span className="gaming-text-secondary">
+                        {t("purchase.total_points")}:
+                      </span>
+                      <span className="gaming-text-primary font-bold">
                         {formatCurrency(
                           selectedPackage.points_amount +
                             selectedPackage.bonus_points
@@ -331,8 +364,10 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                       </span>
                     </div>
                     <div className="flex justify-between font-bold">
-                      <span>{t("purchase.total")}:</span>
-                      <span>
+                      <span className="gaming-text-accent">
+                        {t("purchase.total")}:
+                      </span>
+                      <span className="gaming-text-primary">
                         {formatPrice(
                           selectedPackage.price,
                           selectedPackage.currency
@@ -343,26 +378,31 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                 )}
 
                 {stripeClientSecret && user && selectedPackage && paymentId && (
-                  <Elements
-                    stripe={stripePromise}
-                    options={{
-                      clientSecret: stripeClientSecret,
-                      appearance: {
-                        theme: "night" as const,
-                        variables: {
-                          colorPrimary: "#6366f1", // Primary color
-                        },
-                      },
-                    }}
+                  <div
+                    className="gaming-slide-up"
+                    style={{ animationDelay: "0.2s" }}
                   >
-                    <StripePaymentForm
-                      paymentId={paymentId}
-                      Pointpackage={selectedPackage}
-                      user={user}
-                      onSuccess={handleStripeSuccess}
-                      onCancel={handleStripeCancel}
-                    />
-                  </Elements>
+                    <Elements
+                      stripe={stripePromise}
+                      options={{
+                        clientSecret: stripeClientSecret,
+                        appearance: {
+                          theme: "night" as const,
+                          variables: {
+                            colorPrimary: "#f27405", // Gaming primary color
+                          },
+                        },
+                      }}
+                    >
+                      <StripePaymentForm
+                        paymentId={paymentId}
+                        Pointpackage={selectedPackage}
+                        user={user}
+                        onSuccess={handleStripeSuccess}
+                        onCancel={handleStripeCancel}
+                      />
+                    </Elements>
+                  </div>
                 )}
               </>
             )}

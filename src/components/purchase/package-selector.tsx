@@ -34,7 +34,9 @@ export function PackageSelector({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">{t("purchase.select_package")}</h3>
+      <h3 className="gaming-text-accent text-lg font-medium">
+        {t("purchase.select_package")}
+      </h3>
       <RadioGroup
         value={selectedPackage?.id.toString()}
         onValueChange={(value) => {
@@ -43,10 +45,14 @@ export function PackageSelector({
         }}
         className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1"
       >
-        {packages.map((pkg) => {
+        {packages.map((pkg, index) => {
           const bonusPercentage = calculateBonusPercentage(pkg);
           return (
-            <div key={pkg.id} className="relative">
+            <div
+              key={pkg.id}
+              className="relative gaming-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <RadioGroupItem
                 value={pkg.id.toString()}
                 id={`package-${pkg.id}`}
@@ -57,27 +63,27 @@ export function PackageSelector({
                 className="cursor-pointer block"
               >
                 <Card
-                  className={`h-full transition-all ${
+                  className={`gaming-card h-full transition-all hover:scale-105 ${
                     selectedPackage?.id === pkg.id
-                      ? "border-primary bg-primary/5"
+                      ? "border-primary bg-primary/5 gaming-glow"
                       : ""
                   }`}
                 >
                   <CardContent className="p-4 flex flex-col h-full">
                     <div className="flex justify-between items-start mb-1">
-                      <span className="font-bold text-lg">
+                      <span className="gaming-text-primary font-bold text-lg">
                         {formatCurrency(pkg.points_amount)}
                       </span>
                       {bonusPercentage > 0 && (
-                        <Badge className="bg-green-500">
+                        <Badge className="gaming-badge bg-green-500">
                           +{bonusPercentage}%
                         </Badge>
                       )}
                     </div>
-                    <div className="text-sm text-muted-foreground mb-2">
+                    <div className="text-sm gaming-text-secondary mb-2">
                       {pkg.points_amount} {t("purchase.points")}
                     </div>
-                    <div className="mt-auto font-semibold">
+                    <div className="mt-auto gaming-text-accent font-semibold">
                       {formatPrice(pkg.price, pkg.currency)}
                     </div>
                     {pkg.bonus_points > 0 && (

@@ -59,12 +59,12 @@ export function StreamerInfo({ userData }: StreamerInfoProps) {
 
   return (
     <Form {...form}>
-      <h3 className="text-lg font-semibold mb-4">
+      <h3 className="gaming-text-primary text-lg font-semibold mb-4">
         {t("profile.streamer.title")}
       </h3>
       <div className="space-y-6">
         <FormItem>
-          <FormLabel className="text-muted-foreground flex items-center gap-2">
+          <FormLabel className="gaming-text-secondary flex items-center gap-2">
             <TvMinimalPlayIcon className="h-5 w-5 text-primary" />{" "}
             {t("profile.streamer.username")}
           </FormLabel>
@@ -78,11 +78,12 @@ export function StreamerInfo({ userData }: StreamerInfoProps) {
                   streamerData.username_id
                 }
                 disabled
-                className="text-lg font-medium max-w-xs border border-gray-300 rounded-md shadow-sm"
+                className="gaming-input text-lg font-medium max-w-xs"
               />
               <Button
                 variant="outline"
                 size="icon"
+                className="gaming-button"
                 onClick={() => {
                   navigator.clipboard.writeText(
                     process.env.NEXT_PUBLIC_BASE_URL +
@@ -100,7 +101,7 @@ export function StreamerInfo({ userData }: StreamerInfoProps) {
           </FormControl>
         </FormItem>
         <FormItem>
-          <FormLabel className="text-muted-foreground flex items-center gap-2">
+          <FormLabel className="gaming-text-secondary flex items-center gap-2">
             <ExternalLink className="h-5 w-5 text-primary" />{" "}
             {t("profile.streamer.stream_url")}
           </FormLabel>
@@ -117,7 +118,7 @@ export function StreamerInfo({ userData }: StreamerInfoProps) {
                   <Input
                     value={urls.url}
                     disabled
-                    className="text-lg font-medium max-w-xs border border-gray-300 rounded-md shadow-sm"
+                    className="gaming-input text-lg font-medium max-w-xs"
                   />
                 </div>
               ))}

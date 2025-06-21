@@ -8,7 +8,7 @@ export default function StreamerGuideHowItWorksSetup() {
   return (
     <div className="grid md:grid-cols-2 gap-8">
       <div>
-        <h3 className="text-2xl font-bold mb-4">
+        <h3 className="text-2xl font-bold mb-4 gaming-text-accent">
           {t("howItWorks.setup.title")}
         </h3>
         <ol className="space-y-6">
@@ -17,10 +17,10 @@ export default function StreamerGuideHowItWorksSetup() {
               1
             </div>
             <div>
-              <h4 className="font-bold text-lg">
+              <h4 className="font-bold text-lg gaming-text-accent">
                 {t("howItWorks.setup.steps.step1.title")}
               </h4>
-              <p className="text-foreground/70">
+              <p className="gaming-text-secondary">
                 {t("howItWorks.setup.steps.step1.description")}
               </p>
             </div>
@@ -31,10 +31,10 @@ export default function StreamerGuideHowItWorksSetup() {
               2
             </div>
             <div>
-              <h4 className="font-bold text-lg">
+              <h4 className="font-bold text-lg gaming-text-accent">
                 {t("howItWorks.setup.steps.step2.title")}
               </h4>
-              <p className="text-foreground/70">
+              <p className="gaming-text-secondary">
                 {t("howItWorks.setup.steps.step2.description")}
               </p>
             </div>
@@ -45,10 +45,10 @@ export default function StreamerGuideHowItWorksSetup() {
               3
             </div>
             <div>
-              <h4 className="font-bold text-lg">
+              <h4 className="font-bold text-lg gaming-text-accent">
                 {t("howItWorks.setup.steps.step3.title")}
               </h4>
-              <p className="text-foreground/70">
+              <p className="gaming-text-secondary">
                 {t("howItWorks.setup.steps.step3.description")}
               </p>
             </div>
@@ -56,18 +56,18 @@ export default function StreamerGuideHowItWorksSetup() {
         </ol>
       </div>
 
-      <div className="bg-card/30 rounded-xl p-6 border border-border/30">
-        <h3 className="text-xl font-bold mb-4">
+      <div className="gaming-card">
+        <h3 className="text-xl font-bold mb-4 gaming-text-accent">
           {t("howItWorks.setup.requirements.title")}
         </h3>
         <ul className="space-y-3">
           <li className="flex items-start gap-2">
             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="font-medium">
+              <span className="font-medium gaming-text-accent">
                 {t("howItWorks.setup.requirements.items.cs2Game.name")}
               </span>
-              <p className="text-sm text-foreground/70">
+              <p className="text-sm gaming-text-secondary">
                 {t("howItWorks.setup.requirements.items.cs2Game.description")}
               </p>
             </div>
@@ -76,12 +76,12 @@ export default function StreamerGuideHowItWorksSetup() {
           <li className="flex items-start gap-2">
             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="font-medium">
+              <span className="font-medium gaming-text-accent">
                 {t("howItWorks.setup.requirements.items.competitiveMode.name")}
               </span>
-              <p className="text-sm text-foreground/70">
+              <p className="text-sm gaming-text-secondary">
                 {t(
-                  "howItWorks.setup.requirements.items.competitiveMode.description",
+                  "howItWorks.setup.requirements.items.competitiveMode.description"
                 )}
               </p>
             </div>
@@ -90,14 +90,14 @@ export default function StreamerGuideHowItWorksSetup() {
           <li className="flex items-start gap-2">
             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="font-medium">
+              <span className="font-medium gaming-text-accent">
                 {t(
-                  "howItWorks.setup.requirements.items.streamingPlatform.name",
+                  "howItWorks.setup.requirements.items.streamingPlatform.name"
                 )}
               </span>
-              <p className="text-sm text-foreground/70">
+              <p className="text-sm gaming-text-secondary">
                 {t(
-                  "howItWorks.setup.requirements.items.streamingPlatform.description",
+                  "howItWorks.setup.requirements.items.streamingPlatform.description"
                 )}
               </p>
             </div>
@@ -106,14 +106,14 @@ export default function StreamerGuideHowItWorksSetup() {
           <li className="flex items-start gap-2">
             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="font-medium">
+              <span className="font-medium gaming-text-accent">
                 {t(
-                  "howItWorks.setup.requirements.items.gameStateIntegration.name",
+                  "howItWorks.setup.requirements.items.gameStateIntegration.name"
                 )}
               </span>
-              <p className="text-sm text-foreground/70">
+              <p className="text-sm gaming-text-secondary">
                 {t(
-                  "howItWorks.setup.requirements.items.gameStateIntegration.description",
+                  "howItWorks.setup.requirements.items.gameStateIntegration.description"
                 )}
               </p>
             </div>

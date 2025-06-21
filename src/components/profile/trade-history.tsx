@@ -106,10 +106,10 @@ export function TradeHistory() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium">
+          <h3 className="gaming-text-primary text-lg font-medium">
             {t("userProfile.trades.title")}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="gaming-text-secondary text-sm">
             {t("userProfile.trades.total", { count: pagination.total })}
           </p>
         </div>
@@ -117,12 +117,12 @@ export function TradeHistory() {
 
       {tradesData.length === 0 ? (
         <>
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="gaming-card flex flex-col items-center justify-center py-12 text-center">
             <ArrowUpDown className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">
+            <h3 className="gaming-text-accent text-lg font-medium">
               {t("userProfile.trades.noActivity")}
             </h3>
-            <p className="text-muted-foreground mt-2">
+            <p className="gaming-text-secondary mt-2">
               {t("userProfile.trades.noActivityDescription")}
             </p>
           </div>
@@ -134,114 +134,122 @@ export function TradeHistory() {
       ) : (
         <ScrollArea className="h-[500px] w-full">
           <div className="space-y-3">
-            {tradesData.map((data) => (
-              <Card key={data.trade_offer.id} className="p-4">
-                <div className="flex flex-col space-y-4">
-                  {/* Trade offer header */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {getStatusIcon(data.trade_offer.status)}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant="secondary"
-                            className={getStatusColor(data.trade_offer.status)}
-                          >
-                            {t(`trades.status.${data.trade_offer.status}`)}
-                          </Badge>
-                          {data.trade_offer.trade_offer_id && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              disabled={
-                                !(data.trade_offer.status === "pending")
-                              }
-                              onClick={() =>
-                                window.open(
-                                  `https://steamcommunity.com/tradeoffer/${data.trade_offer.trade_offer_id}`,
-                                  "_blank"
-                                )
-                              }
-                              className="h-6 px-2"
+            {tradesData.map((data, index) => (
+              <div
+                key={data.trade_offer.id}
+                className="gaming-slide-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <Card className="gaming-card p-4">
+                  <div className="flex flex-col space-y-4">
+                    {/* Trade offer header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {getStatusIcon(data.trade_offer.status)}
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Badge
+                              variant="secondary"
+                              className={getStatusColor(
+                                data.trade_offer.status
+                              )}
                             >
-                              <ExternalLink className="h-3 w-3" />
-                            </Button>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          {format(
-                            data.trade_offer.created_at,
-                            "dd/MM/yyyy HH:mm"
-                          )}
-                        </p>
-                        {data.trade_offer.expires_in && (
-                          <p className="text-xs text-muted-foreground">
-                            {t("trades.expiresAt")}:{" "}
+                              {t(`trades.status.${data.trade_offer.status}`)}
+                            </Badge>
+                            {data.trade_offer.trade_offer_id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                disabled={
+                                  !(data.trade_offer.status === "pending")
+                                }
+                                onClick={() =>
+                                  window.open(
+                                    `https://steamcommunity.com/tradeoffer/${data.trade_offer.trade_offer_id}`,
+                                    "_blank"
+                                  )
+                                }
+                                className="h-6 px-2"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                              </Button>
+                            )}
+                          </div>
+                          <p className="gaming-text-secondary text-xs">
                             {format(
-                              data.trade_offer.expires_in,
+                              data.trade_offer.created_at,
                               "dd/MM/yyyy HH:mm"
                             )}
                           </p>
-                        )}
+                          {data.trade_offer.expires_in && (
+                            <p className="gaming-text-secondary text-xs">
+                              {t("trades.expiresAt")}:{" "}
+                              {format(
+                                data.trade_offer.expires_in,
+                                "dd/MM/yyyy HH:mm"
+                              )}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="gaming-text-accent text-sm font-medium">
+                          {t("trades.itemCount", {
+                            count: data.trade_offer_items.length,
+                          })}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">
-                        {t("trades.itemCount", {
-                          count: data.trade_offer_items.length,
-                        })}
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* Trade offer items */}
-                  {data.trade_offer_items.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-muted-foreground">
-                        {t("trades.items")}
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {data.trade_offer_items.map((item, index) => (
-                          <div
-                            key={`${data.trade_offer.id}-${item.steam_item.asset_id}-${index}`}
-                            className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg"
-                          >
-                            <div className="flex-shrink-0">
-                              {item.steam_item.image_url ? (
-                                <Image
-                                  src={item.steam_item.image_url}
-                                  alt={item.steam_item.market_hash_name}
-                                  width={32}
-                                  height={32}
-                                  className="object-contain rounded"
-                                  crossOrigin="anonymous"
-                                />
-                              ) : (
-                                <Package className="h-8 w-8 text-muted-foreground" />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium line-clamp-1">
-                                {item.steam_item.market_hash_name}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs h-4 px-1"
-                                >
-                                  {t(
-                                    `trades.action.${item.trade_offer_item.trade_action}`
-                                  )}
-                                </Badge>
+                    {/* Trade offer items */}
+                    {data.trade_offer_items.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="gaming-text-secondary text-sm font-medium">
+                          {t("trades.items")}
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                          {data.trade_offer_items.map((item, index) => (
+                            <div
+                              key={`${data.trade_offer.id}-${item.steam_item.asset_id}-${index}`}
+                              className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg"
+                            >
+                              <div className="flex-shrink-0">
+                                {item.steam_item.image_url ? (
+                                  <Image
+                                    src={item.steam_item.image_url}
+                                    alt={item.steam_item.market_hash_name}
+                                    width={32}
+                                    height={32}
+                                    className="object-contain rounded"
+                                    crossOrigin="anonymous"
+                                  />
+                                ) : (
+                                  <Package className="h-8 w-8 text-muted-foreground" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="gaming-text-accent text-xs font-medium line-clamp-1">
+                                  {item.steam_item.market_hash_name}
+                                </p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Badge
+                                    variant="outline"
+                                    className="text-xs h-4 px-1"
+                                  >
+                                    {t(
+                                      `trades.action.${item.trade_offer_item.trade_action}`
+                                    )}
+                                  </Badge>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </Card>
+                    )}
+                  </div>
+                </Card>
+              </div>
             ))}
           </div>
         </ScrollArea>
@@ -249,7 +257,7 @@ export function TradeHistory() {
 
       {pagination.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="text-sm text-muted-foreground">
+          <div className="gaming-text-secondary text-sm">
             {t("pagination.showing", {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(
@@ -263,6 +271,7 @@ export function TradeHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!pagination.hasPrev || isFetching}
             >
@@ -294,7 +303,7 @@ export function TradeHistory() {
                       size="sm"
                       onClick={() => handlePageChange(pageNumber)}
                       disabled={isFetching}
-                      className="w-8 h-8 p-0"
+                      className={`w-8 h-8 p-0 hover:scale-105 transition-transform ${currentPage === pageNumber ? "gaming-button text-foreground" : ""}`}
                     >
                       {pageNumber}
                     </Button>
@@ -306,6 +315,7 @@ export function TradeHistory() {
             <Button
               variant="outline"
               size="sm"
+              className="gaming-button text-foreground hover:scale-105 transition-transform"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!pagination.hasNext || isFetching}
             >

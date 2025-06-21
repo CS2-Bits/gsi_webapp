@@ -55,39 +55,64 @@ export function UserProfile() {
   return (
     <div className="container py-8">
       <div className="grid gap-8">
-        <div className="flex items-center gap-4">
-          <UserAvatar userData={userData.user} />
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold">{userData.user.username}</h2>
-            <p className="text-muted-foreground flex items-center gap-1">
-              {user_roles?.includes("Streamer") ? (
-                <>
-                  <Shield className="h-4 w-4" /> {t("userProfile.streamer")}
-                </>
-              ) : (
-                <>
-                  <User className="h-4 w-4" /> {t("userProfile.user")}
-                </>
-              )}
-            </p>
+        {/* Header with gaming animation */}
+        <div className="gaming-slide-up">
+          <div className="flex items-center gap-4">
+            <UserAvatar userData={userData.user} />
+            <div className="space-y-2">
+              <h2 className="gaming-text-primary text-3xl font-bold">
+                {userData.user.username}
+              </h2>
+              <p className="gaming-text-secondary flex items-center gap-1 text-lg">
+                {user_roles?.includes("Streamer") ? (
+                  <>
+                    <Shield className="h-4 w-4" /> {t("userProfile.streamer")}
+                  </>
+                ) : (
+                  <>
+                    <User className="h-4 w-4" /> {t("userProfile.user")}
+                  </>
+                )}
+              </p>
+            </div>
           </div>
         </div>
-        <div>
+
+        {/* Gaming divider */}
+        <div className="gaming-divider"></div>
+
+        {/* Tabs section with gaming animation */}
+        <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
           <Tabs defaultValue="inventory">
-            <TabsList className="grid grid-cols-5 mb-4">
-              <TabsTrigger value="inventory">
+            <TabsList className="grid grid-cols-5 mb-4 gaming-tabs-card ">
+              <TabsTrigger
+                value="inventory"
+                className="gaming-text-secondary hover:gaming-text-primary transition-colors"
+              >
                 {t("userProfile.tabs.inventory")}
               </TabsTrigger>
-              <TabsTrigger value="info">
+              <TabsTrigger
+                value="info"
+                className="gaming-text-secondary hover:gaming-text-primary transition-colors"
+              >
                 {t("userProfile.tabs.info")}
               </TabsTrigger>
-              <TabsTrigger value="history">
+              <TabsTrigger
+                value="history"
+                className="gaming-text-secondary hover:gaming-text-primary transition-colors"
+              >
                 {t("userProfile.tabs.history")}
               </TabsTrigger>
-              <TabsTrigger value="payments">
+              <TabsTrigger
+                value="payments"
+                className="gaming-text-secondary hover:gaming-text-primary transition-colors"
+              >
                 {t("userProfile.tabs.payments")}
               </TabsTrigger>
-              <TabsTrigger value="trades">
+              <TabsTrigger
+                value="trades"
+                className="gaming-text-secondary hover:gaming-text-primary transition-colors"
+              >
                 {t("userProfile.tabs.trades")}
               </TabsTrigger>
             </TabsList>
@@ -95,12 +120,12 @@ export function UserProfile() {
               <UserInventory />
             </TabsContent>
             <TabsContent value="info">
-              <Card>
+              <Card className="gaming-card">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="gaming-text-accent text-lg font-semibold">
                     {t("userProfile.info.title")}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="gaming-text-secondary">
                     {t("userProfile.info.description")}
                   </CardDescription>
                 </CardHeader>
@@ -140,44 +165,50 @@ export function UserProfileSkeleton() {
   return (
     <div className="container py-8">
       <div className="grid gap-8">
-        <div className="flex items-center gap-4">
-          <Skeleton className="h-24 w-24 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-48" />
-            <Skeleton className="h-4 w-32" />
+        <div className="gaming-slide-up">
+          <div className="flex items-center gap-4">
+            <Skeleton className="gaming-skeleton h-24 w-24 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="gaming-skeleton h-8 w-48" />
+              <Skeleton className="gaming-skeleton h-4 w-32" />
+            </div>
           </div>
         </div>
-        <div>
+
+        {/* Gaming divider */}
+        <div className="gaming-divider"></div>
+
+        <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
           <Tabs defaultValue="inventory">
-            <TabsList>
+            <TabsList className="gaming-card">
               <TabsTrigger value="inventory">
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="gaming-skeleton h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="trades">
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="gaming-skeleton h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="history">
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="gaming-skeleton h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="payments">
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="gaming-skeleton h-4 w-16" />
               </TabsTrigger>
               <TabsTrigger value="info">
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="gaming-skeleton h-4 w-16" />
               </TabsTrigger>
             </TabsList>
             <TabsContent value="info">
-              <Card>
+              <Card className="gaming-card">
                 <CardHeader>
-                  <Skeleton className="h-6 w-32 mb-2" />
-                  <Skeleton className="h-4 w-64" />
+                  <Skeleton className="gaming-skeleton h-6 w-32 mb-2" />
+                  <Skeleton className="gaming-skeleton h-4 w-64" />
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-4 w-1/2" />
+                      <Skeleton className="gaming-skeleton h-4 w-full" />
+                      <Skeleton className="gaming-skeleton h-4 w-3/4" />
+                      <Skeleton className="gaming-skeleton h-4 w-1/2" />
                     </div>
                   </div>
                 </CardContent>

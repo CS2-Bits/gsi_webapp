@@ -52,7 +52,7 @@ export function MatchHeader({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border bg-card/50 p-4 sm:p-6">
+      <div className="gaming-card rounded-lg border bg-card/50 p-4 sm:p-6">
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Streamer Info and Score */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -68,7 +68,7 @@ export function MatchHeader({
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-foreground">
+              <div className="text-xl sm:text-2xl font-bold gaming-text-accent">
                 {streamer.display_name || streamer.username_id}
               </div>
             </div>
@@ -85,7 +85,7 @@ export function MatchHeader({
                   {t("match.offline")}
                 </Badge>
               )}
-              <div className="text-3xl sm:text-4xl font-mono font-bold text-primary p-1">
+              <div className="text-3xl sm:text-4xl font-mono font-bold gaming-text-primary p-1">
                 {statsData ? (
                   <div className="flex items-center gap-2 relative justify-end">
                     <div
@@ -101,7 +101,7 @@ export function MatchHeader({
                         <div className="absolute inset-0 rounded-md border-2 border-chart-2 animate-pulse pointer-events-none" />
                       )}
                     </div>
-                    <span className="text-foreground">-</span>
+                    <span className="gaming-text-accent">-</span>
                     <div
                       className={cn(
                         "p-1 rounded-md",
@@ -118,9 +118,9 @@ export function MatchHeader({
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 justify-end">
-                    <Skeleton className="h-8 w-8 sm:h-10 sm:w-10" />
-                    <span className="text-foreground">-</span>
-                    <Skeleton className="h-8 w-8 sm:h-10 sm:w-10" />
+                    <Skeleton className="gaming-skeleton h-8 w-8 sm:h-10 sm:w-10" />
+                    <span className="gaming-text-accent">-</span>
+                    <Skeleton className="gaming-skeleton h-8 w-8 sm:h-10 sm:w-10" />
                   </div>
                 )}
               </div>
@@ -130,14 +130,14 @@ export function MatchHeader({
           {/* Stats Grid - Now 2 columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Combined KDA Stats */}
-            <div className="p-3 rounded-md border bg-muted/10">
+            <div className="gaming-card p-3 rounded-md border bg-muted/10">
               {statsData ? (
                 <div className="flex justify-around items-end">
                   <ItemMatchStats
                     icon={<Crosshair className="text-red-500 mb-1" size={23} />}
                     label={t("match.kills")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {statsData.kills || 0}
                       </span>
                     }
@@ -146,7 +146,7 @@ export function MatchHeader({
                     icon={<Skull className="text-gray-500 mb-1" size={23} />}
                     label={t("match.deaths")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {statsData.deaths || 0}
                       </span>
                     }
@@ -157,7 +157,7 @@ export function MatchHeader({
                     }
                     label={t("match.assists")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {statsData.assists || 0}
                       </span>
                     }
@@ -168,7 +168,7 @@ export function MatchHeader({
                     }
                     label={t("match.kda")}
                     value={
-                      <span className="font-medium font-mono">
+                      <span className="font-medium font-mono gaming-text-primary">
                         {calculateKDA()}
                       </span>
                     }
@@ -179,40 +179,40 @@ export function MatchHeader({
                   <ItemMatchStats
                     icon={<Crosshair className="text-red-500 mb-1" size={23} />}
                     label={t("match.kills")}
-                    value={<Skeleton className="h-6 w-10" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-10" />}
                   />
                   <ItemMatchStats
                     icon={<Skull className="text-gray-500 mb-1" size={23} />}
                     label={t("match.deaths")}
-                    value={<Skeleton className="h-6 w-10" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-10" />}
                   />
                   <ItemMatchStats
                     icon={
                       <Handshake className="text-blue-500 mb-1" size={23} />
                     }
                     label={t("match.assists")}
-                    value={<Skeleton className="h-6 w-10" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-10" />}
                   />
                   <ItemMatchStats
                     icon={
                       <BarChart className="text-green-500 mb-1" size={23} />
                     }
                     label={t("match.kda")}
-                    value={<Skeleton className="h-6 w-12" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-12" />}
                   />
                 </div>
               )}
             </div>
 
             {/* Combined Duration and Map */}
-            <div className="p-3 rounded-md border bg-muted/10">
+            <div className="gaming-card p-3 rounded-md border bg-muted/10">
               {matchData ? (
                 <div className="flex justify-around items-end">
                   <ItemMatchStats
                     icon={<Target className="text-purple-500" size={23} />}
                     label={t("match.map")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {formatMapName(matchData.map_name)}
                       </span>
                     }
@@ -221,7 +221,7 @@ export function MatchHeader({
                     icon={<Flame className="text-purple-500" size={23} />}
                     label={t("match.rounds_name")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {statsData?.round || 0}
                       </span>
                     }
@@ -230,7 +230,7 @@ export function MatchHeader({
                     icon={<Clock className="text-orange-500" size={23} />}
                     label={t("match.duration")}
                     value={
-                      <span className="font-medium">
+                      <span className="font-medium gaming-text-accent">
                         {formatDistance(
                           matchData.started_at,
                           matchData.ended_at || new Date(),
@@ -245,17 +245,17 @@ export function MatchHeader({
                   <ItemMatchStats
                     icon={<Target className="text-purple-500" size={23} />}
                     label={t("match.map")}
-                    value={<Skeleton className="h-6 w-20" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-20" />}
                   />
                   <ItemMatchStats
                     icon={<Flame className="text-purple-500" size={23} />}
                     label={t("match.rounds_name")}
-                    value={<Skeleton className="h-6 w-20" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-20" />}
                   />
                   <ItemMatchStats
                     icon={<Clock className="text-orange-500" size={23} />}
                     label={t("match.duration")}
-                    value={<Skeleton className="h-6 w-20" />}
+                    value={<Skeleton className="gaming-skeleton h-6 w-20" />}
                   />
                 </div>
               )}
