@@ -43,7 +43,7 @@ function StremersGuideHero() {
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="bg-primary w-3 h-3 rounded-full animate-pulse"></div>
-                      <span className="text-sm font-medium gaming-text-accent">
+                      <span className="text-base font-medium gaming-text-accent">
                         {t("hero.live")}
                       </span>
                     </div>

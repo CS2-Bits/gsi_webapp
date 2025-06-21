@@ -266,7 +266,7 @@ export function PredictionCard({
         <CardDescription className="gaming-text-secondary">
           {t(`predictions.select_description`)}
         </CardDescription>
-        <div className="flex items-center gap-2 text-xs gaming-text-secondary mt-1">
+        <div className="flex items-center gap-2 text-sm gaming-text-secondary mt-1">
           <Clock size={14} />
           <span>
             {formatDistance(prediction.created_at, new Date(), {
@@ -305,7 +305,7 @@ export function PredictionCard({
             ))}
           </div>
 
-          <div className="flex items-center justify-between text-xs gaming-text-secondary">
+          <div className="flex items-center justify-between text-sm gaming-text-secondary">
             <div className="flex items-center gap-1">
               <Users size={14} />
               <span>
@@ -394,7 +394,7 @@ export function PredictionCard({
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <p className="text-xs gaming-text-secondary">
+                  <p className="text-sm gaming-text-secondary">
                     {t("predictions.min_bet")}:{" "}
                     {Number(prediction.prediction_templates.min_bet_amount)}
                   </p>
@@ -405,7 +405,7 @@ export function PredictionCard({
 
           {userHasBet && (
             <div className="pt-2 border-t">
-              <p className="text-sm font-medium gaming-text-accent">
+              <p className="text-base font-medium gaming-text-accent">
                 {t("predictions.your_bets")}:{" "}
                 <span className="gaming-text-primary">
                   {predictionDetails.userTotalBets.toFixed(2)}
@@ -416,7 +416,7 @@ export function PredictionCard({
 
           {/* {isResolved && prediction.winning_option_label && (
             <div className="pt-2 border-t">
-              <p className="text-sm font-medium text-green-500">
+              <p className="text-base font-medium text-green-500">
                 {t("predictions.winner")}:{" "}
                 {
                   predictionDetails.options.find(
@@ -429,7 +429,7 @@ export function PredictionCard({
 
           {isCanceled && (
             <div className="pt-2 border-t">
-              <p className="text-sm font-medium gaming-text-secondary">
+              <p className="text-base font-medium gaming-text-secondary">
                 {t("predictions.canceled_description")}
               </p>
             </div>

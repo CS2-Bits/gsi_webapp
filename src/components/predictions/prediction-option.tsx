@@ -48,14 +48,14 @@ export function PredictionOption({
             <Trophy size={16} className="text-green-500 gaming-pop" />
           )}
         </div>
-        <div className="text-sm font-mono gaming-text-primary">
+        <div className="text-base font-mono gaming-text-primary">
           {formattedPercentage}%
         </div>
       </div>
 
       <Progress value={percentage} className="h-2 mb-2" />
 
-      <div className="flex justify-between items-center text-xs gaming-text-secondary">
+      <div className="flex justify-between items-center text-sm gaming-text-secondary">
         <div>
           {option.betCount} {t("predictions.bets")}
         </div>
@@ -63,7 +63,7 @@ export function PredictionOption({
       </div>
 
       {option.userAmount > 0 && (
-        <div className="mt-1 text-xs gaming-text-primary font-medium">
+        <div className="mt-1 text-sm gaming-text-primary font-medium">
           You bet: {option.userAmount.toFixed(2)}
         </div>
       )}

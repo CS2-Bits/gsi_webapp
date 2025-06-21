@@ -33,7 +33,7 @@ export default function LegalLayout({
               <h1 className="gaming-text-primary text-2xl font-bold">
                 {t("legalLayout.headerTitle")}
               </h1>
-              <p className="gaming-text-secondary text-sm">
+              <p className="gaming-text-secondary text-base">
                 {t("legalLayout.headerSubtitle")}
               </p>
             </div>

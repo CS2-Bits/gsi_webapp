@@ -16,7 +16,7 @@ export default function TermsOfUsePage() {
             <h1 className="gaming-text-primary text-3xl font-bold mb-2">
               {t("terms.title")}
             </h1>
-            <p className="text-sm text-foreground/60 mb-6">
+            <p className="text-base text-foreground/60 mb-6">
               {t("terms.lastUpdated")}
             </p>
 

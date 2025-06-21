@@ -42,20 +42,20 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
 
           {/* Item Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="gaming-text-accent font-medium text-sm mb-1 truncate">
+            <h3 className="gaming-text-accent font-medium text-base mb-1 truncate">
               {raffle.steam_item.market_hash_name}
             </h3>
-            <p className="gaming-text-secondary text-xs mb-1">
+            <p className="gaming-text-secondary text-sm mb-1">
               {t("raffle.drawn_on", {
                 date: format(new Date(raffle.drawn_at!), "dd/MM/yyyy", {
                   locale: ptBR,
                 }),
               })}
             </p>
-            <div className="flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-sm">
               <Badge
                 variant="secondary"
-                className="gaming-badge text-xs px-2 py-0.5"
+                className="gaming-badge text-sm px-2 py-0.5"
               >
                 {raffle.steam_item.item_type}
               </Badge>
@@ -64,10 +64,10 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
 
           {/* Winner Info */}
           <div className="text-right flex-shrink-0">
-            <p className="gaming-text-secondary text-xs mb-1">
+            <p className="gaming-text-secondary text-sm mb-1">
               {t("raffle.winner")}
             </p>
-            <div className="gaming-text-primary font-semibold text-sm">
+            <div className="gaming-text-primary font-semibold text-base">
               {raffle.winner?.username || t("raffle.unknown_winner")}
             </div>
           </div>

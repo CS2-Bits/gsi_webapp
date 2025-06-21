@@ -84,7 +84,7 @@ export function SteamSignIn() {
       </CardFooter>
 
       <div
-        className="px-6 pb-6 text-center text-sm gaming-text-secondary gaming-slide-in"
+        className="px-6 pb-6 text-center text-base gaming-text-secondary gaming-slide-in"
         style={{ animationDelay: "0.5s" }}
       >
         <Trans

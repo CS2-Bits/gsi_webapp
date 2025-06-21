@@ -155,12 +155,12 @@ export function RaffleCard({
 
         {/* Info Section - Fixed content that doesn't expand */}
         <div className="p-3 flex-1 flex flex-col">
-          <h3 className="gaming-text-accent font-medium text-sm mb-1 line-clamp-1">
+          <h3 className="gaming-text-accent font-medium text-base mb-1 line-clamp-1">
             {raffle.steam_item.market_hash_name}
           </h3>
 
           <div className="mt-auto space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="gaming-text-secondary text-base">
                 {t("raffle.ticket_price")}
               </span>
@@ -215,7 +215,7 @@ export function RaffleCard({
 
           {/* Balance and Price Info */}
           <div className="gaming-card bg-muted/30 backdrop-blur-sm rounded-lg p-2.5 mb-3 space-y-1.5 border border-border/50">
-            <div className="flex justify-between text-xs">
+            <div className="flex justify-between text-sm">
               <span className="gaming-text-secondary">
                 {t("purchase.ticket_price")}
               </span>
@@ -223,7 +223,7 @@ export function RaffleCard({
                 {ticketPrice} {t("common.points")}
               </span>
             </div>
-            <div className="flex justify-between text-xs">
+            <div className="flex justify-between text-sm">
               <span className="gaming-text-secondary">
                 {t("purchase.balance")}
               </span>
@@ -235,7 +235,7 @@ export function RaffleCard({
 
           {/* Quantity Selector */}
           <div className="mb-3">
-            <label className="gaming-text-accent text-xs font-medium mb-1.5 block">
+            <label className="gaming-text-accent text-sm font-medium mb-1.5 block">
               {t("purchase.quantity")}
             </label>
             <div className="flex items-center justify-center gap-3">
@@ -250,7 +250,7 @@ export function RaffleCard({
                 <Minus className="h-3 w-3" />
               </Button>
 
-              <div className="gaming-card bg-background border rounded-lg px-3 py-1.5 min-w-[2.5rem] text-center font-semibold text-sm shadow-sm">
+              <div className="gaming-card bg-background border rounded-lg px-3 py-1.5 min-w-[2.5rem] text-center font-semibold text-base shadow-sm">
                 {quantity}
               </div>
 
@@ -269,7 +269,7 @@ export function RaffleCard({
           {/* Total Cost */}
           <div className="gaming-card bg-primary/5 border border-primary/20 rounded-lg p-2.5 mb-3 backdrop-blur-sm">
             <div className="flex justify-between items-center">
-              <span className="gaming-text-secondary text-xs font-medium">
+              <span className="gaming-text-secondary text-sm font-medium">
                 {t("purchase.total")}
               </span>
               <span className="gaming-text-primary text-base font-bold">
@@ -281,7 +281,7 @@ export function RaffleCard({
           {/* Insufficient Balance Warning */}
           {!canPurchase && currentBalance < totalPrice && (
             <div className="gaming-card bg-destructive/10 border border-destructive/20 rounded-lg p-2.5 mb-3 backdrop-blur-sm">
-              <p className="text-xs text-destructive font-medium">
+              <p className="text-sm text-destructive font-medium">
                 {t("purchase.insufficient_balance")}
               </p>
             </div>
@@ -291,13 +291,13 @@ export function RaffleCard({
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="flex-1 text-xs py-2 transition-all duration-200 hover:bg-muted"
+              className="flex-1 text-sm py-2 transition-all duration-200 hover:bg-muted"
               onClick={handleToggle}
             >
               {t("common.cancel")}
             </Button>
             <Button
-              className="flex-1 text-xs py-2 gaming-button text-foreground transition-all duration-200 hover:shadow-md"
+              className="flex-1 text-sm py-2 gaming-button text-foreground transition-all duration-200 hover:shadow-md"
               onClick={handlePurchase}
               disabled={!canPurchase || purchaseMutation.isPending}
               aria-busy={purchaseMutation.isPending}

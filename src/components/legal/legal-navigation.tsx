@@ -14,7 +14,7 @@ export function LegalNavigation() {
         <div className="flex flex-wrap gap-4 py-3">
           <Link
             href="/legal/terms-of-use"
-            className={`text-sm font-medium ${
+            className={`text-base font-medium ${
               pathname === "/legal/terms-of-use"
                 ? "text-primary border-b-2 border-primary"
                 : "text-foreground/60 hover:text-foreground"
@@ -24,7 +24,7 @@ export function LegalNavigation() {
           </Link>
           <Link
             href="/legal/privacy"
-            className={`text-sm font-medium ${
+            className={`text-base font-medium ${
               pathname === "/legal/privacy"
                 ? "text-primary border-b-2 border-primary"
                 : "text-foreground/60 hover:text-foreground"
@@ -34,7 +34,7 @@ export function LegalNavigation() {
           </Link>
           <Link
             href="/legal/cookies"
-            className={`text-sm font-medium ${
+            className={`text-base font-medium ${
               pathname === "/legal/cookies"
                 ? "text-primary border-b-2 border-primary"
                 : "text-foreground/60 hover:text-foreground"

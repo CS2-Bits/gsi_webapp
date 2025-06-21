@@ -203,7 +203,7 @@ export function StreamMatchFilters({
 
         {/* Streamers Filter */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">
+          <Label className="text-base font-medium">
             {t("matches.filters.streamers")}
           </Label>
           <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2 bg-muted/20">
@@ -231,7 +231,7 @@ export function StreamMatchFilters({
                       {streamer.username_id.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm">{streamer.username_id}</span>
+                  <span className="text-base">{streamer.username_id}</span>
                 </Label>
               </div>
             ))}
@@ -244,7 +244,7 @@ export function StreamMatchFilters({
                   <Badge
                     key={streamerId}
                     variant="secondary"
-                    className="text-xs"
+                    className="text-sm"
                   >
                     {streamer.username_id}
                   </Badge>
@@ -256,7 +256,7 @@ export function StreamMatchFilters({
 
         {/* Maps Filter */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">
+          <Label className="text-base font-medium">
             {t("matches.filters.maps")}
           </Label>
           <div className="space-y-2 max-h-32 overflow-y-auto border rounded-md p-2 bg-muted/20">
@@ -273,7 +273,7 @@ export function StreamMatchFilters({
                 />
                 <Label
                   htmlFor={`map-${map}`}
-                  className="cursor-pointer text-sm flex-1"
+                  className="cursor-pointer text-base flex-1"
                 >
                   {formatMapName(map)}
                 </Label>
@@ -285,7 +285,7 @@ export function StreamMatchFilters({
               {selectedMaps.map((mapId) => {
                 const map = maps.find((m) => m === mapId);
                 return map ? (
-                  <Badge key={mapId} variant="secondary" className="text-xs">
+                  <Badge key={mapId} variant="secondary" className="text-sm">
                     {formatMapName(map)}
                   </Badge>
                 ) : null;

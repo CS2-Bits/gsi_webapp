@@ -257,6 +257,7 @@
 
 .gaming-tabs-card {
   background: linear-gradient(145deg, #252a3d 0%, #1a1d29 100%);
+  padding: 1px;
   border: 1px solid #3d4757;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -366,7 +367,7 @@
   border-radius: 20px;
   padding: 4px 12px;
   font-family: "Teko", monospace;
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;

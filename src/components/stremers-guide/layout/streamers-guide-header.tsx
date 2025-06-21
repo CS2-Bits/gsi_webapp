@@ -11,7 +11,7 @@ function StreamersGuideHeader() {
         <div className="flex flex-col gap-2 gaming-slide-in">
           <Link
             href="/"
-            className="gaming-text-primary hover:text-primary/80 flex items-center gap-1 text-sm mb-2 transition-colors duration-200"
+            className="gaming-text-primary hover:text-primary/80 flex items-center gap-1 text-base mb-2 transition-colors duration-200"
           >
             <ChevronRight className="h-3 w-3 rotate-180" />
             <span> {t("header.back_home")}</span>

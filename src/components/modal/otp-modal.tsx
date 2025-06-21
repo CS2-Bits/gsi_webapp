@@ -94,7 +94,7 @@ export function OtpModal({
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-base text-red-600">{error}</p>}
         </div>
 
         <DialogFooter className="flex justify-end space-x-2">

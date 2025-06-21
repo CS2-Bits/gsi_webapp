@@ -82,7 +82,7 @@ export function UserProfile() {
         <div className="gaming-divider"></div>
 
         {/* Tabs section with gaming animation */}
-        <div className="gaming-slide-up" style={{ animationDelay: "0.1s" }}>
+        <div className="gaming-slide-up " style={{ animationDelay: "0.1s" }}>
           <Tabs defaultValue="inventory">
             <TabsList className="grid grid-cols-5 mb-4 gaming-tabs-card ">
               <TabsTrigger

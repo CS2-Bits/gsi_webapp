@@ -38,7 +38,7 @@ export function MatchCardList({ matchesData, isLoading }: MatchCardListProps) {
         <p className="gaming-text-secondary">
           {t("matches.empty.description")}
         </p>
-        <p className="gaming-text-secondary text-sm">
+        <p className="gaming-text-secondary text-base">
           {t("matches.empty.suggestion")}
         </p>
       </div>
@@ -92,7 +92,7 @@ export function LoadingSkeleton() {
               </div>
 
               {/* Map skeleton */}
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 text-base">
                 <Skeleton className="gaming-skeleton h-4 w-4" />
                 <Skeleton className="gaming-skeleton h-4 w-24" />
               </div>
@@ -140,7 +140,7 @@ export function LoadingSkeleton() {
               )}
 
               {/* Time skeleton */}
-              <div className="flex items-center gap-2 text-xs bg-muted/30 px-2 py-1 rounded">
+              <div className="flex items-center gap-2 text-sm bg-muted/30 px-2 py-1 rounded">
                 <Skeleton className="gaming-skeleton h-3 w-3" />
                 <Skeleton className="gaming-skeleton h-3 w-20" />
               </div>

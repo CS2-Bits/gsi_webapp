@@ -54,10 +54,10 @@ function HomeHeroSection() {
 
             {/* Live Overlay */}
             <div className="absolute top-2 md:top-4 left-2 md:left-4 flex items-center gap-2">
-              <Badge className="bg-primary text-foreground text-xs md:text-sm">
+              <Badge className="bg-primary text-foreground text-sm md:text-base">
                 {t("hero.live")}
               </Badge>
-              <span className="bg-card/50 px-2 py-1 rounded text-xs md:text-sm">
+              <span className="bg-card/50 px-2 py-1 rounded text-sm md:text-base">
                 0:23
               </span>
             </div>
@@ -65,8 +65,8 @@ function HomeHeroSection() {
             {/* Game Info */}
             <div className="absolute top-2 md:top-4 left-2 md:left-4 mt-8 md:mt-12">
               <div className="bg-card/50 px-2 md:px-3 py-1 md:py-2 rounded">
-                <div className="text-xs md:text-sm">DUST2</div>
-                <div className="font-bold text-xs md:text-base">K/D 0.8</div>
+                <div className="text-sm md:text-base">DUST2</div>
+                <div className="font-bold text-sm md:text-base">K/D 0.8</div>
               </div>
             </div>
 
@@ -78,14 +78,14 @@ function HomeHeroSection() {
                 <CardContent className="p-2 md:px-4">
                   <div className="flex items-center gap-2 md:gap-2 mb-1 md:mb-2">
                     <CS2BitsIcon />
-                    <span className="gaming-text-secondary font-medium text-xs md:text-base">
+                    <span className="gaming-text-secondary font-medium text-sm md:text-base">
                       Desafio
                     </span>
                   </div>
-                  <p className="gaming-text-primary text-sm md:text-lg font-bold mb-2 md:mb-4">
+                  <p className="gaming-text-primary text-base md:text-lg font-bold mb-2 md:mb-4">
                     Matar + de 30.5
                   </p>
-                  <Button className="gaming-button w-full text-xs md:text-sm h-7 md:h-9">
+                  <Button className="gaming-button w-full text-sm md:text-base h-7 md:h-9">
                     Enviar
                   </Button>
                 </CardContent>
@@ -100,11 +100,11 @@ function HomeHeroSection() {
                 <CardContent className="p-2 md:px-4">
                   <div className="flex items-center gap-2 md:gap-2 mb-1 md:mb-2">
                     <CS2BitsIcon />
-                    <span className="gaming-text-secondary font-medium text-xs md:text-base">
+                    <span className="gaming-text-secondary font-medium text-sm md:text-base">
                       Quem vai vencer?
                     </span>
                   </div>
-                  <div className="space-y-1 md:space-y-2 mb-2 md:mb-4 text-xs md:text-base">
+                  <div className="space-y-1 md:space-y-2 mb-2 md:mb-4 text-sm md:text-base">
                     <div className="flex justify-between gaming-text-accent">
                       <span>Streamer</span>
                       <span className="gaming-text-primary font-bold">
@@ -118,7 +118,7 @@ function HomeHeroSection() {
                       </span>
                     </div>
                   </div>
-                  <Button className="gaming-button w-full text-xs md:text-sm h-7 md:h-9">
+                  <Button className="gaming-button w-full text-sm md:text-base h-7 md:h-9">
                     Prever
                   </Button>
                 </CardContent>

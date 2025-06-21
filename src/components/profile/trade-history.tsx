@@ -109,7 +109,7 @@ export function TradeHistory() {
           <h3 className="gaming-text-primary text-lg font-medium">
             {t("userProfile.trades.title")}
           </h3>
-          <p className="gaming-text-secondary text-sm">
+          <p className="gaming-text-secondary text-base">
             {t("userProfile.trades.total", { count: pagination.total })}
           </p>
         </div>
@@ -175,14 +175,14 @@ export function TradeHistory() {
                               </Button>
                             )}
                           </div>
-                          <p className="gaming-text-secondary text-xs">
+                          <p className="gaming-text-secondary text-sm">
                             {format(
                               data.trade_offer.created_at,
                               "dd/MM/yyyy HH:mm"
                             )}
                           </p>
                           {data.trade_offer.expires_in && (
-                            <p className="gaming-text-secondary text-xs">
+                            <p className="gaming-text-secondary text-sm">
                               {t("trades.expiresAt")}:{" "}
                               {format(
                                 data.trade_offer.expires_in,
@@ -193,7 +193,7 @@ export function TradeHistory() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="gaming-text-accent text-sm font-medium">
+                        <p className="gaming-text-accent text-base font-medium">
                           {t("trades.itemCount", {
                             count: data.trade_offer_items.length,
                           })}
@@ -204,7 +204,7 @@ export function TradeHistory() {
                     {/* Trade offer items */}
                     {data.trade_offer_items.length > 0 && (
                       <div className="space-y-2">
-                        <h4 className="gaming-text-secondary text-sm font-medium">
+                        <h4 className="gaming-text-secondary text-base font-medium">
                           {t("trades.items")}
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -228,13 +228,13 @@ export function TradeHistory() {
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="gaming-text-accent text-xs font-medium line-clamp-1">
+                                <p className="gaming-text-accent text-sm font-medium line-clamp-1">
                                   {item.steam_item.market_hash_name}
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
                                   <Badge
                                     variant="outline"
-                                    className="text-xs h-4 px-1"
+                                    className="text-sm h-4 px-1"
                                   >
                                     {t(
                                       `trades.action.${item.trade_offer_item.trade_action}`
@@ -257,7 +257,7 @@ export function TradeHistory() {
 
       {pagination.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="gaming-text-secondary text-sm">
+          <div className="gaming-text-secondary text-base">
             {t("pagination.showing", {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(

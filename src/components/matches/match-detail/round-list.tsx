@@ -117,7 +117,7 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
               }`}
             >
               {/* Time display */}
-              <div className="absolute top-3 right-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <div className="absolute top-3 right-3 flex items-center gap-1.5 text-sm text-muted-foreground">
                 <Clock size={14} />
                 {formatDuration(
                   intervalToDuration({
@@ -156,8 +156,8 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                 <div className="flex items-center gap-2 bg-background/80 p-2 rounded-md">
                   <Skull className="h-4 w-4 text-red-500" />
                   <div>
-                    <p className="text-sm font-medium">{round.kills}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base font-medium">{round.kills}</p>
+                    <p className="text-sm text-muted-foreground">
                       {t("match.kills")}
                     </p>
                   </div>
@@ -166,8 +166,8 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                 <div className="flex items-center gap-2 bg-background/80 p-2 rounded-md">
                   <Target className="h-4 w-4 text-yellow-500" />
                   <div>
-                    <p className="text-sm font-medium">{round.hs_kills}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base font-medium">{round.hs_kills}</p>
+                    <p className="text-sm text-muted-foreground">
                       {t("match.rounds.headshots")}
                     </p>
                   </div>
@@ -176,8 +176,8 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                 <div className="flex items-center gap-2 bg-background/80 p-2 rounded-md">
                   <Heart className="h-4 w-4 text-green-500" />
                   <div>
-                    <p className="text-sm font-medium">{round.health}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base font-medium">{round.health}</p>
+                    <p className="text-sm text-muted-foreground">
                       {t("match.rounds.round_health")}
                     </p>
                   </div>
@@ -185,10 +185,10 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                 <div className="flex items-center gap-2 bg-background/80 p-2 rounded-md">
                   <DollarSign className="h-4 w-4 text-emerald-500" />
                   <div>
-                    <p className="text-sm font-medium">
+                    <p className="text-base font-medium">
                       ${round.equipment_val}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {t("match.rounds.round_equipment")}
                     </p>
                   </div>
@@ -202,12 +202,12 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                 round.health < 30 ||
                 round.round_conclusion_name) && (
                 <div className="mt-2 pt-2 border-t border-border/50">
-                  <p className="text-xs font-medium mb-1.5">
+                  <p className="text-sm font-medium mb-1.5">
                     {t("match.rounds.round_events")}
                   </p>
                   <div className="space-y-1.5">
                     {round.hs_kills > 0 && (
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-sm">
                         <Target className="h-3.5 w-3.5 text-yellow-500" />
                         <span className="text-muted-foreground">
                           {round.hs_kills}{" "}
@@ -220,7 +220,7 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                     )}
 
                     {round.equipment_val > 3000 && (
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-sm">
                         <DollarSign className="h-3.5 w-3.5 text-emerald-500" />
                         <span className="text-muted-foreground">
                           {t("match.rounds.round_high_equipment")} ($
@@ -230,7 +230,7 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                     )}
 
                     {round.health < 30 && round.health > 0 && (
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-sm">
                         <Heart className="h-3.5 w-3.5 text-red-500" />
                         <span className="text-muted-foreground">
                           {t("match.rounds.round_survived", {
@@ -241,7 +241,7 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
                     )}
 
                     {round.round_conclusion_name && (
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-sm">
                         <ConclusionIcon className={`h-3.5 w-3.5 ${color}`} />
                         <span className="text-muted-foreground">
                           {t("match.rounds.round_finished", {
@@ -263,7 +263,7 @@ export function RoundList({ rounds, streamer, t }: RoundListProps) {
             <p className="text-muted-foreground">
               {t("match.rounds.rounds_waiting")}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {t("match.rounds.rounds_waiting_description")}
             </p>
           </div>

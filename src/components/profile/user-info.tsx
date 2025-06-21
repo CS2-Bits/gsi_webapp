@@ -125,7 +125,7 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
                   />
                 </FormControl>
                 {form.formState.errors.email && (
-                  <p className="absolute text-red-500 text-sm left-0 top-full">
+                  <p className="absolute text-red-500 text-base left-0 top-full">
                     {form.formState.errors.email.message}
                   </p>
                 )}
@@ -184,7 +184,7 @@ export function UserInfo({ userData, onUserDataUpdate }: UserInfoProps) {
                   />
                 </FormControl>
                 {form.formState.errors.trade_link && (
-                  <p className="absolute text-red-500 text-sm left-0 top-full">
+                  <p className="absolute text-red-500 text-base left-0 top-full">
                     {form.formState.errors.trade_link.message}
                   </p>
                 )}

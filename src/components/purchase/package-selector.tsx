@@ -80,14 +80,14 @@ export function PackageSelector({
                         </Badge>
                       )}
                     </div>
-                    <div className="text-sm gaming-text-secondary mb-2">
+                    <div className="text-base gaming-text-secondary mb-2">
                       {pkg.points_amount} {t("purchase.points")}
                     </div>
                     <div className="mt-auto gaming-text-accent font-semibold">
                       {formatPrice(pkg.price, pkg.currency)}
                     </div>
                     {pkg.bonus_points > 0 && (
-                      <div className="text-xs text-green-500 mt-1">
+                      <div className="text-sm text-green-500 mt-1">
                         +{formatCurrency(pkg.bonus_points)}{" "}
                         {t("purchase.bonus")}
                       </div>

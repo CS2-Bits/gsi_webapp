@@ -120,7 +120,7 @@ export default function MatchesPage() {
               <h2 className="gaming-text-accent text-lg font-semibold">
                 {t("matches.results.title")}
               </h2>
-              <span className="gaming-text-secondary text-sm">
+              <span className="gaming-text-secondary text-base">
                 {t("matches.table.showing", {
                   start:
                     (pageData.pagination.page - 1) * pageData.pagination.limit +
@@ -147,7 +147,7 @@ export default function MatchesPage() {
             pageData.matchesData.length > 0 &&
             pageData.pagination.totalPages > 1 && (
               <div className="flex items-center justify-between">
-                <div className="gaming-text-secondary text-sm">
+                <div className="gaming-text-secondary text-base">
                   {t("matches.pagination.page", {
                     current: pageData.pagination.page,
                     total: pageData.pagination.totalPages,

@@ -20,7 +20,7 @@ export default function LegalHeader({ name, lastUpdate }: PolicyHeaderProps) {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">{name}</h1>
-            <p className="text-sm text-foreground/60">{lastUpdate}</p>
+            <p className="text-base text-foreground/60">{lastUpdate}</p>
           </div>
         </div>
       </div>

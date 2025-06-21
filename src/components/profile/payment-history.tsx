@@ -101,7 +101,7 @@ export function PaymentHistory() {
           <h3 className="gaming-text-primary text-lg font-medium">
             {t("userProfile.payments.title")}
           </h3>
-          <p className="gaming-text-secondary text-sm">
+          <p className="gaming-text-secondary text-base">
             {t("userProfile.payments.total", { count: pagination.total })}
           </p>
         </div>
@@ -145,10 +145,10 @@ export function PaymentHistory() {
                             ID: {data.user_payment.id}
                           </Badge>
                         </div>
-                        <p className="gaming-text-secondary text-sm">
+                        <p className="gaming-text-secondary text-base">
                           {t(`payment.status.${data.user_payment.status}`)}
                         </p>
-                        <p className="gaming-text-secondary text-xs">
+                        <p className="gaming-text-secondary text-sm">
                           {format(
                             data.user_payment.created_at,
                             "dd/MM/yyyy HH:mm"
@@ -176,7 +176,7 @@ export function PaymentHistory() {
 
       {pagination.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="gaming-text-secondary text-sm">
+          <div className="gaming-text-secondary text-base">
             {t("pagination.showing", {
               start: (pagination.page - 1) * pagination.limit + 1,
               end: Math.min(

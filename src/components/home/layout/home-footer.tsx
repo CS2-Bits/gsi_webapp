@@ -119,7 +119,7 @@ function HomeFooter() {
 
         {/* Bottom section with Steam branding */}
         <div
-          className="gaming-slide-up flex flex-col sm:flex-row items-center justify-center gap-4 text-sm"
+          className="gaming-slide-up flex flex-col sm:flex-row items-center justify-center gap-4 text-base"
           style={{ animationDelay: "0.5s" }}
         >
           <div className="flex items-center gap-2">

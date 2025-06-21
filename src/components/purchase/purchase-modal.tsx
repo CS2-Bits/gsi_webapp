@@ -227,7 +227,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                             <span className="gaming-text-primary font-bold">
                               {formatCurrency(pkg.points_amount)}
                             </span>
-                            <span className="text-sm gaming-text-secondary">
+                            <span className="text-base gaming-text-secondary">
                               {pkg.points_amount} {t("purchase.points_label")}
                             </span>
                           </div>
@@ -238,7 +238,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                               <Badge className="gaming-badge w-fit bg-green-500 mb-1">
                                 +{bonusPercentage}%
                               </Badge>
-                              <span className="text-sm text-green-500">
+                              <span className="text-base text-green-500">
                                 +{pkg.bonus_points} {t("purchase.bonus_points")}
                               </span>
                             </div>

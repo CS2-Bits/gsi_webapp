@@ -155,13 +155,13 @@ export function ContactModal({ open, onOpenChange }: ContactModalProps) {
             />
 
             {submitResult?.error_message && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+              <div className="text-base text-red-600 bg-red-50 p-3 rounded-md">
                 {t(submitResult.error_message)}
               </div>
             )}
 
             {submitResult?.success && (
-              <div className="text-sm text-green-600 bg-green-50 p-3 rounded-md">
+              <div className="text-base text-green-600 bg-green-50 p-3 rounded-md">
                 {t("contact.success")}
               </div>
             )}

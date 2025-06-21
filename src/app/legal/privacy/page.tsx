@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
             <h1 className="gaming-text-primary text-3xl font-bold mb-2">
               {t("privacyPolicy.title")}
             </h1>
-            <p className="text-sm text-foreground/60 mb-6">
+            <p className="text-base text-foreground/60 mb-6">
               {t("privacyPolicy.lastUpdated")}
             </p>
 

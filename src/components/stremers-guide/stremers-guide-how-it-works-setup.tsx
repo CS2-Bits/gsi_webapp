@@ -67,7 +67,7 @@ export default function StreamerGuideHowItWorksSetup() {
               <span className="font-medium gaming-text-accent">
                 {t("howItWorks.setup.requirements.items.cs2Game.name")}
               </span>
-              <p className="text-sm gaming-text-secondary">
+              <p className="text-base gaming-text-secondary">
                 {t("howItWorks.setup.requirements.items.cs2Game.description")}
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function StreamerGuideHowItWorksSetup() {
               <span className="font-medium gaming-text-accent">
                 {t("howItWorks.setup.requirements.items.competitiveMode.name")}
               </span>
-              <p className="text-sm gaming-text-secondary">
+              <p className="text-base gaming-text-secondary">
                 {t(
                   "howItWorks.setup.requirements.items.competitiveMode.description"
                 )}
@@ -95,7 +95,7 @@ export default function StreamerGuideHowItWorksSetup() {
                   "howItWorks.setup.requirements.items.streamingPlatform.name"
                 )}
               </span>
-              <p className="text-sm gaming-text-secondary">
+              <p className="text-base gaming-text-secondary">
                 {t(
                   "howItWorks.setup.requirements.items.streamingPlatform.description"
                 )}
@@ -111,7 +111,7 @@ export default function StreamerGuideHowItWorksSetup() {
                   "howItWorks.setup.requirements.items.gameStateIntegration.name"
                 )}
               </span>
-              <p className="text-sm gaming-text-secondary">
+              <p className="text-base gaming-text-secondary">
                 {t(
                   "howItWorks.setup.requirements.items.gameStateIntegration.description"
                 )}
