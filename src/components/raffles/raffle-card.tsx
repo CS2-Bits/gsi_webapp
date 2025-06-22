@@ -50,7 +50,9 @@ export function RaffleCard({
         setQuantity(1);
       } else {
         toast.error(t("purchase.failed"), {
-          description: response.error_message || t("purchase.unknown_error"),
+          description: response.error_message
+            ? t(response.error_message)
+            : t("purchase.unknown_error"),
         });
       }
     },
