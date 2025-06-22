@@ -545,7 +545,7 @@
     "error_sending_otp": "Erro ao enviar OTP",
     "error_confirming_otp": "Erro ao confirmar OTP",
     "email_already_confirmed": "E-mail já confirmado",
-    "otp_already_sent": "Tentativa de troca de e-mail já realizada, tente novamente em 5 minutos",
+    "otp_already_sent": "Tentativa de troca de e-mail já realizada, tente novamente em 1 minuto",
     "trade_link_updated": "Link de troca atualizado com sucesso",
     "trade_link_incorrect": "Link de troca incorreto",
     "invalid_trade_not_owner": "Link de troca não pertence ao usuário",

@@ -25,12 +25,12 @@ export async function submitContactFormAction(
     // Verificar rate limiting no Redis
     const emailKey = `contact:${user.email}`;
     const lastSent = await redis.get(emailKey);
+    const oneMinute = 60 * 1000;
 
     if (lastSent) {
       const timeDiff = Date.now() - Number.parseInt(lastSent);
-      const fiveMinutes = 60 * 5 * 1000;
 
-      if (timeDiff < fiveMinutes) {
+      if (timeDiff < oneMinute) {
         return {
           success: false,
           error_message: "error.rate_limit_exceeded",
@@ -93,7 +93,7 @@ export async function submitContactFormAction(
       html: confirmationHtml,
     });
 
-    await redis.setex(emailKey, 3600, Date.now().toString());
+    await redis.setex(emailKey, oneMinute, Date.now().toString());
 
     return {
       success: true,
