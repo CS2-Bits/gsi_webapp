@@ -10,8 +10,8 @@ import { QueryProvider } from "@/components/providers/query-provider";
 import { Teko } from "next/font/google";
 import HomeHeader from "@/components/home/layout/home-header";
 import { cookies } from "next/headers";
-import { Toaster } from "sonner";
 import HomeFooter from "@/components/home/layout/home-footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "CS2 Bits",
