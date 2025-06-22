@@ -45,7 +45,7 @@ export default async function RootLayout({
               <QueryProvider>
                 <HomeHeader />
                 {children}
-                <Toaster />
+                <Toaster richColors={true} />
                 <HomeFooter />
               </QueryProvider>
             </I18nProvider>
