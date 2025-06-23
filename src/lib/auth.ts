@@ -16,7 +16,7 @@ export function authOptions(
       }),
     ],
     callbacks: {
-      async jwt({ token, user }) {
+      jwt({ token, user }) {
         if (user) {
           token.sub = user.id;
           (token as JWT & { steamToken: string }).steamToken = sign(
