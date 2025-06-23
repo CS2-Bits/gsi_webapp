@@ -35,7 +35,7 @@ export default function HomeUserHeader() {
   const userData = userResponse?.data?.user;
 
   const { data: balanceResponse, isLoading } = useQuery({
-    queryKey: ["userBalance", userData?.id],
+    queryKey: ["userBalance"],
     queryFn: getUserBalanceAction,
     enabled: !!userData,
     refetchOnWindowFocus: true,
