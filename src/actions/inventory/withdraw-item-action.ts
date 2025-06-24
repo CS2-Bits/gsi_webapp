@@ -43,7 +43,7 @@ export async function withdrawItemAction(
         },
       });
 
-    const expires_in = new Date(Date.now() + 60 * 60 * 1000);
+    const expires_in = new Date(Date.now() + 10 * 60 * 1000);
 
     await prisma.$transaction(async (tx) => {
       await tx.user_inventory_items.update({

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import "@/lib/i18n/i18n-provider";
 import { I18nProvider } from "@/lib/i18n/i18n-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
-import { Teko } from "next/font/google";
+import { Tektur } from "next/font/google";
 import HomeHeader from "@/components/home/layout/home-header";
 import { cookies } from "next/headers";
 import HomeFooter from "@/components/home/layout/home-footer";
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "Uma nova forma de assistir Counter Strike. Desafie seu streamer favorito.",
 };
 
-const dFont = Teko({
+const dFont = Tektur({
   subsets: ["latin"],
   variable: "--font-gaming",
 });

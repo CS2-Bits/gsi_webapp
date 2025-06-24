@@ -109,8 +109,8 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
         data: {
           user_id: user.id,
           amount: cs2bits_received,
-          description: `Exchange items for CS2Bits`,
-          type: "Reward",
+          description: `Deposit items for CS2Bits`,
+          type: "DepositSteamItem",
         },
       });
       // Create user balance transaction relationship

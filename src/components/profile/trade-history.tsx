@@ -181,15 +181,17 @@ export function TradeHistory() {
                               "dd/MM/yyyy HH:mm"
                             )}
                           </p>
-                          {data.trade_offer.expires_in && (
-                            <p className="gaming-text-secondary text-sm">
-                              {t("trades.expiresAt")}:{" "}
-                              {format(
-                                data.trade_offer.expires_in,
-                                "dd/MM/yyyy HH:mm"
-                              )}
-                            </p>
-                          )}
+                          {data.trade_offer.expires_in &&
+                            (data.trade_offer.status == "new" ||
+                              data.trade_offer.status == "pending") && (
+                              <p className="gaming-text-secondary text-sm">
+                                {t("trades.expiresAt")}:{" "}
+                                {format(
+                                  data.trade_offer.expires_in,
+                                  "dd/MM/yyyy HH:mm"
+                                )}
+                              </p>
+                            )}
                         </div>
                       </div>
                       <div className="text-right">

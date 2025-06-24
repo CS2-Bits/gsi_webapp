@@ -473,7 +473,9 @@
       "title": "Histórico de Trocas",
       "noTrades": "Nenhuma troca encontrada",
       "noTradesDescription": "Suas trocas de itens Steam aparecerão aqui quando você começar a interagir com o CS2 Bits.",
-      "total": "Total de Trocas: {{count}}"
+      "total": "Total de Trocas: {{count}}",
+      "noActivity": "Nenhuma atividade recente",
+      "noActivityDescription": "Suas atividades aparecerão aqui quando você fizer alguma troca."
     }
   },
   "pagination": {
@@ -486,7 +488,7 @@
       "reward": "Recompesa",
       "predict": "Previsão",
       "deposit": "Compra de CS2Bits",
-      "depositSteamItem": "Troca de Item Steam",
+      "depositsteamitem": "Troca de Item Steam",
       "exchange": "Troca na loja",
       "raffleticket": "Bilhete de Sorteio",
       "refund": "Reembolso"
@@ -830,7 +832,7 @@
       "refresh": "Atualizar"
     },
     "expiration": {
-      "in": "Troca automatica",
+      "in": "Troca automática",
       "in_trade": "Troca expira",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",

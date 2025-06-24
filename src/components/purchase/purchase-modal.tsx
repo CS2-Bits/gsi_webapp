@@ -288,7 +288,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                     <h4 className="gaming-text-accent font-medium mb-2">
                       {t("purchase.summary")}
                     </h4>
-                    <div className="flex justify-between mb-1">
+                    <div className="flex justify-between mb-1 text-sm">
                       <span className="gaming-text-secondary">
                         {t("purchase.selected_package")}:
                       </span>
@@ -298,7 +298,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                     </div>
 
                     {selectedPackage.bonus_points > 0 && (
-                      <div className="flex justify-between mb-1 text-green-500">
+                      <div className="flex justify-between mb-1 text-sm text-green-500">
                         <span>{t("purchase.package_bonus")}:</span>
                         <span>
                           +{formatCurrency(selectedPackage.bonus_points)}
@@ -322,7 +322,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
 
                 <Button
                   onClick={handlePurchase}
-                  className="gaming-button w-full mt-6 py-6 text-lg text-foreground font-semibold hover:scale-105 transition-transform gaming-slide-up"
+                  className="gaming-button w-full mt-6 py-6 text-base text-foreground font-semibold hover:scale-105 transition-transform gaming-slide-up"
                   style={{ animationDelay: "0.5s" }}
                   disabled={isLoading || !selectedPackage}
                 >

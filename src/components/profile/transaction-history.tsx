@@ -38,6 +38,7 @@ import {
   user_payments,
   user_predictions,
 } from "@prisma-zod/generated/zod.schema";
+import { formatCurrency } from "@/lib/utils";
 
 const getTransactionIcon = (type: transaction_type) => {
   switch (type) {
@@ -114,7 +115,7 @@ export function TransactionHistory() {
 
   const formatAmount = (amount: number, type: transaction_type) => {
     const sign = type === "Predict" || type === "RaffleTicket" ? "" : "+";
-    return `${sign}${amount.toLocaleString("pt-BR")} ${t("common.points")}`;
+    return `${sign}${formatCurrency(amount)}`;
   };
 
   const getTransactionDescription = (

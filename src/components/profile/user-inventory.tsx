@@ -36,6 +36,7 @@ import type {
   user_inventory_items,
 } from "@prisma-zod/generated/zod.schema";
 import { formatCurrency } from "@/lib/utils";
+import { GamingCountdown } from "../ui/gaming-countdown";
 
 export default function UserInventory() {
   const { t } = useTranslation();
@@ -358,7 +359,7 @@ export default function UserInventory() {
                 <div className="absolute inset-0 flex items-center justify-center p-3 z-10">
                   {steamItem.image_url ? (
                     <Image
-                      src={steamItem.image_url}
+                      src={steamItem.image_url || "/placeholder.svg"}
                       alt={steamItem.market_hash_name}
                       width={100}
                       height={80}
@@ -372,7 +373,7 @@ export default function UserInventory() {
 
                 {/* Item name positioned at bottom left of image */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 z-20">
-                  <h3 className="font-bold text-base line-clamp-2 leading-tight text-white drop-shadow-lg">
+                  <h3 className="font-bold text-sm line-clamp-2 leading-tight text-white drop-shadow-lg">
                     {steamItem.market_hash_name}
                   </h3>
                 </div>
@@ -382,7 +383,7 @@ export default function UserInventory() {
                   <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-30">
                     <div className="text-center">
                       <AlertTriangle className="h-8 w-8 text-red-400 mx-auto mb-1" />
-                      <span className="text-red-400 font-bold text-base">
+                      <span className="text-red-400 font-bold text-sm">
                         {t("inventory.expiration.expired")}
                       </span>
                     </div>
@@ -394,22 +395,40 @@ export default function UserInventory() {
               <div className="p-2 flex-1 flex flex-col bg-gradient-to-b from-background to-background/95">
                 {/* Enhanced status section */}
                 <div className="space-y-2">
-                  {/* Expiration status with enhanced styling */}
+                  {/* Expiration status with enhanced styling or countdown */}
                   <div
                     className={`flex items-start gap-2 p-2 rounded-lg ${expirationStatus.bgColor}`}
                   >
-                    <expirationStatus.icon
-                      className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mt-0.5`}
-                    />
                     <div className="flex-1 min-w-0">
-                      <div
-                        className={`font-bold text-sm ${expirationStatus.textColor}`}
-                      >
-                        {expirationStatus.text}
-                      </div>
-                      <div className="text-sm text-muted-foreground break-words">
-                        {expirationStatus.timeText}
-                      </div>
+                      {item.in_trade && trade_offer ? (
+                        <div className="flex items-stretch justify-between">
+                          <expirationStatus.icon
+                            className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mr-1`}
+                          />
+                          <div
+                            className={`font-bold text-xs ${expirationStatus.textColor}`}
+                          >
+                            {expirationStatus.text}
+                          </div>
+                          <GamingCountdown
+                            targetDate={trade_offer.expires_in}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-stretch justify-between">
+                          <expirationStatus.icon
+                            className={`h-4 w-4 ${expirationStatus.textColor} flex-shrink-0 mr-1`}
+                          />
+                          <div
+                            className={`font-bold text-xs ${expirationStatus.textColor}`}
+                          >
+                            {expirationStatus.text}
+                          </div>
+                          <div className="text-sm text-muted-foreground break-words">
+                            {expirationStatus.timeText}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -417,7 +436,7 @@ export default function UserInventory() {
                   {item.in_trade && trade_offer && (
                     <Badge
                       variant="secondary"
-                      className="w-full justify-center text-sm py-1"
+                      className="w-full justify-center text-xs py-1"
                     >
                       {t(`inventory.badges.${trade_offer.status}`)}
                     </Badge>
@@ -434,7 +453,7 @@ export default function UserInventory() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full text-base h-10 transition-all duration-200 hover:scale-105"
+                    className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
                     disabled={isDisabled || withdrawMutation.isPending}
                     onClick={() => withdrawMutation.mutate(item.steam_item_id)}
                   >
@@ -445,7 +464,7 @@ export default function UserInventory() {
                   <Button
                     size="lg"
                     variant="default"
-                    className="w-full text-base h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                    className="w-full text-sm h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                     disabled={isDisabled || exchangeItemMutation.isPending}
                     onClick={() =>
                       exchangeItemMutation.mutate(item.steam_item_id)
@@ -458,7 +477,7 @@ export default function UserInventory() {
                           {t("inventory.actions.exchange")}
                         </span>
                       </div>
-                      <span className="text-base font-semibold break-words text-center leading-tight">
+                      <span className="text-sm font-semibold break-words text-center leading-tight">
                         {formatCurrency(cs2bits_value)}
                       </span>
                     </div>
@@ -469,7 +488,7 @@ export default function UserInventory() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full text-base h-10 transition-all duration-200 hover:scale-105"
+                    className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
                     disabled={!trade_offer?.trade_offer_id}
                     onClick={() =>
                       window.open(
@@ -601,13 +620,13 @@ export default function UserInventory() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               {/* Enhanced stats display */}
               <div className="text-right space-y-1">
-                <div className="text-base font-bold text-muted-foreground">
+                <div className="text-sm font-bold text-muted-foreground">
                   {t("inventory.itemCount", {
                     count: inventoryResponse.data.item_data.length,
                   })}
                 </div>
                 {/* <div className="font-bold text-xl text-primary flex items-center gap-2">
-                  <span className="text-base text-muted-foreground font-normal">
+                  <span className="text-sm text-muted-foreground font-normal">
                     {t("inventory.totalValue")}
                   </span>
                   <Coins className="h-5 w-5" />
@@ -630,7 +649,7 @@ export default function UserInventory() {
                         {t("inventory.actions.exchangeAll")}
                       </span>
                     </div>
-                    <span className="text-base font-semibold break-words text-center">
+                    <span className="text-sm font-semibold break-words text-center">
                       {formatCurrency(
                         inventoryResponse.data.total_cs2bits_value
                       )}
