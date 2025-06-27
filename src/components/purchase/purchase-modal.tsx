@@ -29,7 +29,12 @@ import { StripePaymentForm } from "./stripe-payment-form";
 import { PaymentMethodSelector } from "./payment-method-selector";
 import cancelUserPaymentAction from "@/actions/payments/cancel-user-payment-action";
 import { useQueryClient } from "@tanstack/react-query";
-import { point_packages, users } from "@prisma-zod/generated/zod.schema";
+import {
+  payment_provider,
+  point_packages,
+  users,
+} from "@prisma-zod/generated/zod.schema";
+import { MercadoPagoPaymentForm } from "./mercadopago-payment-form";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -48,15 +53,18 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
   const [selectedPackage, setSelectedPackage] = useState<point_packages | null>(
     null
   );
-  const [paymentMethod, setPaymentMethod] = useState<"Stripe" | "Coinbase">(
-    "Stripe"
-  );
+  const [paymentMethod, setPaymentMethod] =
+    useState<payment_provider>("Stripe");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(
     null
   );
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [showStripeForm, setShowStripeForm] = useState(false);
+  const [showMercadoPagoForm, setShowMercadoPagoForm] = useState(false);
+  const [mercadoPagoPreferenceId, setMercadoPagoPreferenceId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -76,6 +84,8 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
     if (selectedPackage) {
       if (selectedPackage.currency === "USDC") {
         setPaymentMethod("Coinbase");
+      } else if (selectedPackage.currency === "BRL") {
+        setPaymentMethod("MercadoPago");
       }
     }
   }, [selectedPackage]);
@@ -111,6 +121,15 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
           setPaymentId(result.data.paymentId);
           setShowStripeForm(true);
         }
+
+        if (
+          result.data.provider === "MercadoPago" &&
+          result.data.clientSecret
+        ) {
+          setMercadoPagoPreferenceId(result.data.clientSecret);
+          setPaymentId(result.data.paymentId);
+          setShowMercadoPagoForm(true);
+        }
       } else {
         toast.error(
           result.error_message
@@ -142,6 +161,22 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
     setPaymentId(null);
   };
 
+  const handleMercadoPagoSuccess = () => {
+    onClose();
+    setSelectedPackage(null);
+    setPaymentMethod("MercadoPago");
+    setMercadoPagoPreferenceId(null);
+    setPaymentId(null);
+    setShowMercadoPagoForm(false);
+    qc.invalidateQueries({ queryKey: ["userBalance"] });
+  };
+
+  const handleMercadoPagoCancel = () => {
+    setShowMercadoPagoForm(false);
+    setMercadoPagoPreferenceId(null);
+    setPaymentId(null);
+  };
+
   const onOpenChange = async (open: boolean) => {
     if (!open) {
       if (paymentId) {
@@ -160,6 +195,8 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
       setStripeClientSecret(null);
       setPaymentId(null);
       setShowStripeForm(false);
+      setShowMercadoPagoForm(false);
+      setMercadoPagoPreferenceId(null);
     }
   };
 
@@ -262,7 +299,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
             className="md:w-2/5 p-6 overflow-y-auto gaming-slide-up"
             style={{ animationDelay: "0.2s" }}
           >
-            {!showStripeForm ? (
+            {!showStripeForm && !showMercadoPagoForm ? (
               <>
                 <div
                   className="gaming-slide-up"
@@ -270,11 +307,18 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                 >
                   <PaymentMethodSelector
                     selected={
-                      paymentMethod.toLowerCase() as "stripe" | "coinbase"
+                      paymentMethod.toLowerCase() as
+                        | "stripe"
+                        | "coinbase"
+                        | "mercadopago"
                     }
                     onSelect={(method) =>
                       setPaymentMethod(
-                        method === "stripe" ? "Stripe" : "Coinbase"
+                        method === "stripe"
+                          ? "Stripe"
+                          : method === "mercadopago"
+                            ? "MercadoPago"
+                            : "Coinbase"
                       )
                     }
                   />
@@ -339,7 +383,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                   )}
                 </Button>
               </>
-            ) : (
+            ) : showStripeForm ? (
               <>
                 <div className="gaming-slide-up">
                   <h3 className="gaming-text-accent text-lg font-medium mb-4">
@@ -405,7 +449,64 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                   </div>
                 )}
               </>
-            )}
+            ) : showMercadoPagoForm ? (
+              <>
+                <div className="gaming-slide-up">
+                  <h3 className="gaming-text-accent text-lg font-medium mb-4">
+                    {t("purchase.complete_payment_pix")}
+                  </h3>
+                </div>
+
+                {selectedPackage && (
+                  <div
+                    className="mb-6 p-4 gaming-card bg-muted/30 rounded-lg gaming-slide-up"
+                    style={{ animationDelay: "0.1s" }}
+                  >
+                    <div className="flex justify-between mb-1">
+                      <span className="gaming-text-secondary">
+                        {t("purchase.total_points")}:
+                      </span>
+                      <span className="gaming-text-primary font-bold">
+                        {formatPoints(
+                          selectedPackage.points_amount +
+                            selectedPackage.bonus_points
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between font-bold">
+                      <span className="gaming-text-accent">
+                        {t("purchase.total")}:
+                      </span>
+                      <span className="gaming-text-primary">
+                        {formatPrice(
+                          selectedPackage.price,
+                          selectedPackage.currency
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {mercadoPagoPreferenceId &&
+                  user &&
+                  selectedPackage &&
+                  paymentId && (
+                    <div
+                      className="gaming-slide-up"
+                      style={{ animationDelay: "0.2s" }}
+                    >
+                      <MercadoPagoPaymentForm
+                        paymentId={paymentId}
+                        preferenceId={mercadoPagoPreferenceId}
+                        pointPackage={selectedPackage}
+                        user={user}
+                        onSuccess={handleMercadoPagoSuccess}
+                        onCancel={handleMercadoPagoCancel}
+                      />
+                    </div>
+                  )}
+              </>
+            ) : null}
           </div>
         </div>
       </DialogContent>

@@ -5,6 +5,9 @@ import { ActionError } from "@/types/action-error";
 import { stripe } from "@/lib/stripe";
 import { getCurrentUser } from "../user/get-current-user";
 import { prisma } from "@/lib/prisma";
+import { payment_provider } from "@prisma/client";
+import { Payment } from "mercadopago";
+import { mercadopagoClient } from "@/lib/mercadopago";
 
 export default async function cancelUserPaymentAction(
   paymentId: string
@@ -44,25 +47,15 @@ export default async function cancelUserPaymentAction(
         error_message: "error.internal_error",
       };
     }
-    const session = await stripe.paymentIntents.retrieve(
-      payment.provider_transaction_id
-    );
-    if (!session) {
-      return {
-        success: false,
-        error_message: "error.payment_not_found",
-      };
-    }
-    if (session.status === "processing") {
-      const stripe_res = await stripe.paymentIntents.cancel(
-        payment.provider_transaction_id
-      );
-      if (!stripe_res) {
-        return {
-          success: false,
-          error_message: "error.internal_error",
-        };
-      }
+    switch (payment.provider) {
+      case payment_provider.Stripe:
+        await cancelUserPaymentStripe(payment.provider_transaction_id);
+        break;
+      case payment_provider.MercadoPago:
+        await cancelUserPaymentMercadoPago(payment.provider_transaction_id);
+        break;
+      default:
+        throw new ActionError("error.payment_provider_not_supported");
     }
     console.log(`Payment with ID: ${paymentId} cancelled successfully.`);
     return { success: true, data: true };
@@ -78,5 +71,44 @@ export default async function cancelUserPaymentAction(
       success: false,
       error_message: "error.internal_error",
     };
+  }
+}
+
+async function cancelUserPaymentStripe(paymentId: string) {
+  const session = await stripe.paymentIntents.retrieve(paymentId);
+  if (!session) {
+    return {
+      success: false,
+      error_message: "error.payment_not_found",
+    };
+  }
+  if (session.status === "processing") {
+    const stripe_res = await stripe.paymentIntents.cancel(paymentId);
+    if (!stripe_res) {
+      return {
+        success: false,
+        error_message: "error.internal_error",
+      };
+    }
+  }
+}
+
+async function cancelUserPaymentMercadoPago(paymentId: string) {
+  const mercadoPagoPayment = new Payment(mercadopagoClient);
+  const payment = await mercadoPagoPayment.cancel({ id: paymentId });
+  if (!payment) {
+    return {
+      success: false,
+      error_message: "error.payment_not_found",
+    };
+  }
+  if (payment.status === "processing") {
+    const stripe_res = await stripe.paymentIntents.cancel(paymentId);
+    if (!stripe_res) {
+      return {
+        success: false,
+        error_message: "error.internal_error",
+      };
+    }
   }
 }

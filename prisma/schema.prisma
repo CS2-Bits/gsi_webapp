@@ -495,6 +495,7 @@ enum option_label {
 enum payment_provider {
   Coinbase
   Stripe
+  MercadoPago
 }
 
 enum payment_status {

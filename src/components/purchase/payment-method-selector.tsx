@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
-import { SiVisa } from "react-icons/si";
+import { SiVisa, SiPix } from "react-icons/si";
 import {
   FaBitcoin,
   FaCcApplePay,
@@ -11,9 +11,10 @@ import {
   FaGooglePay,
 } from "react-icons/fa";
 import { TokenETH, TokenUSDC, TokenUSDT } from "@web3icons/react";
+
 interface PaymentMethodSelectorProps {
-  selected: "stripe" | "coinbase";
-  onSelect: (method: "stripe" | "coinbase") => void;
+  selected: "stripe" | "coinbase" | "mercadopago";
+  onSelect: (method: "stripe" | "coinbase" | "mercadopago") => void;
   showStripeForm?: boolean;
   stripeFormContent?: React.ReactNode;
 }
@@ -33,12 +34,17 @@ export function PaymentMethodSelector({
       </h3>
       <Tabs
         defaultValue={selected}
-        onValueChange={(value) => onSelect(value as "stripe" | "coinbase")}
+        onValueChange={(value) =>
+          onSelect(value as "stripe" | "coinbase" | "mercadopago")
+        }
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-2 gaming-tabs-card">
+        <TabsList className="grid w-full grid-cols-3 gaming-tabs-card">
           <TabsTrigger value="stripe" className="gaming-text-secondary">
-            {t("purchase.pay_with_card_or_pix")}
+            {t("purchase.pay_with_card")}
+          </TabsTrigger>
+          <TabsTrigger value="mercadopago" className="gaming-text-secondary">
+            {t("purchase.pix")}
           </TabsTrigger>
           <TabsTrigger value="coinbase" className="gaming-text-secondary">
             {t("purchase.crypto_usdc")}
@@ -58,6 +64,18 @@ export function PaymentMethodSelector({
               {showStripeForm && stripeFormContent && (
                 <div className="mt-4 gaming-slide-up">{stripeFormContent}</div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="mercadopago">
+          <Card className="gaming-card">
+            <CardContent className="space-y-4">
+              <div className="flex items-center w-full max-h-9 justify-center">
+                <SiPix className="h-full text-primary text-4xl" />
+              </div>
+              <p className="text-sm text-muted-foreground text-center">
+                {t("purchase.pix_description")}
+              </p>
             </CardContent>
           </Card>
         </TabsContent>

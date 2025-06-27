@@ -1,9 +1,9 @@
-import { payment_provider, payment_status } from "@prisma/client";
+import { payment_status } from "@prisma/client";
 import { z } from "zod";
 
 export const CreatePaymentSchema = z.object({
   packageId: z.number(),
-  provider: z.nativeEnum(payment_provider),
+  provider: z.enum(["Stripe", "Coinbase", "MercadoPago"]),
 });
 
 export type CreatePayment = z.infer<typeof CreatePaymentSchema>;
@@ -11,7 +11,7 @@ export type CreatePayment = z.infer<typeof CreatePaymentSchema>;
 export const CreatePaymentResponseSchema = z.object({
   url: z.string().optional(),
   clientSecret: z.string().optional(),
-  provider: z.nativeEnum(payment_provider),
+  provider: z.enum(["Stripe", "Coinbase", "MercadoPago"]),
   paymentId: z.string(),
 });
 

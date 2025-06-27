@@ -28,7 +28,7 @@ export type match_tracking_status = z.infer<typeof match_tracking_status_schema>
 export const option_label_schema = z.enum(["yes", "no"]);
 export type option_label = z.infer<typeof option_label_schema>;
 
-export const payment_provider_schema = z.enum(["Coinbase", "Stripe"]);
+export const payment_provider_schema = z.enum(["Coinbase", "Stripe", "MercadoPago"]);
 export type payment_provider = z.infer<typeof payment_provider_schema>;
 
 export const payment_status_schema = z.enum(["Pending", "Processing", "Completed", "Failed", "Canceled", "Refunded"]);

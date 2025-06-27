@@ -15,6 +15,8 @@ import { ActionResponse } from "@/types/action-response";
 import { ProcessPaymentResponse } from "@/schemas/handle-payment.schema";
 import { ActionError } from "@/types/action-error";
 import { getCurrentUser } from "../user/get-current-user";
+import { Payment } from "mercadopago";
+import { mercadopagoClient } from "@/lib/mercadopago";
 
 export async function processUserPaymentSuccessAction(
   paymentId: string
@@ -51,7 +53,7 @@ export async function processUserPaymentSuccessAction(
       };
     }
 
-    let paymentStatus: payment_status;
+    let paymentStatus: payment_status | null = null;
 
     switch (payment.provider) {
       case payment_provider.Stripe:
@@ -62,6 +64,10 @@ export async function processUserPaymentSuccessAction(
       case payment_provider.Coinbase:
         paymentStatus = await processCoinbasePaymentSuccessAction(payment);
         break;
+      case payment_provider.MercadoPago:
+        paymentStatus = await processMercadoPagoPayment(
+          payment.provider_transaction_id
+        );
     }
 
     if (!paymentStatus) {
@@ -92,6 +98,54 @@ export async function processUserPaymentSuccessAction(
       error_message: "error.failed_to_process_payment",
     };
   }
+}
+
+async function processMercadoPagoPayment(paymentId: string) {
+  const mercadoPagoPayment = new Payment(mercadopagoClient);
+  const mpPayment = await mercadoPagoPayment.get({ id: paymentId });
+
+  if (!mpPayment.id) {
+    throw new Error(`External reference not found for payment: ${paymentId}`);
+  }
+
+  const payment = await prisma.user_payments.findFirst({
+    where: { provider_transaction_id: mpPayment.id.toString() },
+  });
+
+  if (!payment) {
+    throw new Error(`Payment id: ${mpPayment.id} not found`);
+  }
+
+  let newStatus: payment_status | null = null;
+
+  switch (mpPayment.status) {
+    case "approved":
+      newStatus = "Completed";
+      break;
+    case "cancelled":
+    case "rejected":
+      newStatus = "Failed";
+      break;
+    case "refunded":
+    case "charged_back":
+      newStatus = "Refunded";
+      break;
+    default:
+      newStatus = null;
+  }
+
+  if (!newStatus) {
+    return payment.status;
+  }
+
+  if (
+    payment.status === newStatus ||
+    (payment.status === "Canceled" && newStatus === "Completed")
+  ) {
+    return payment.status;
+  }
+
+  return newStatus === "Completed" ? "Processing" : newStatus;
 }
 
 async function processStripePaymentSuccessAction(sessionID: string) {

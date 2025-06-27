@@ -10,6 +10,7 @@ import {
 } from "@/schemas/handle-payment.schema";
 import { createCoinbasePayment } from "./create-coinbase-payment";
 import { createStripePayment } from "./create-stripe-payment";
+import { createMercadoPagoPayment } from "./create-mercadopago-payment";
 import { getCurrentUser } from "../user/get-current-user";
 
 export default async function createPaymentAction(
@@ -75,6 +76,18 @@ export default async function createPaymentAction(
         error_message: "error.payment_creation_failed",
       };
     }
+
+    if (
+      point_package.currency === currency.BRL &&
+      dataParsed.provider !== payment_provider.MercadoPago &&
+      dataParsed.provider !== payment_provider.Stripe
+    ) {
+      return {
+        success: false,
+        error_message: "error.payment_creation_failed",
+      };
+    }
+
     let result: CreatePaymentResponse | null = null;
     switch (dataParsed.provider) {
       case payment_provider.Stripe:
@@ -82,6 +95,9 @@ export default async function createPaymentAction(
         break;
       case payment_provider.Coinbase:
         result = await createCoinbasePayment(user, dataParsed);
+        break;
+      case payment_provider.MercadoPago:
+        result = await createMercadoPagoPayment(user, dataParsed);
         break;
       default:
         return {
