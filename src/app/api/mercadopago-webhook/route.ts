@@ -16,21 +16,22 @@ const MercadoPagoWebhookSchema = z.object({
 export async function POST(request: NextRequest) {
   const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET;
   if (!secret) {
-    console.error("Missing COINBASE_WEBHOOK_SECRET");
+    console.error("Missing MERCADOPAGO_WEBHOOK_SECRET");
     return NextResponse.json(
       { error: "Server misconfiguration" },
       { status: 500 }
     );
   }
 
-  const urlParams = new URLSearchParams(request.url);
-  const dataID = urlParams.get("data.id");
+  const url = new URL(request.url);
+  const dataID = url.searchParams.get("data.id");
 
   const xSignature = request.headers.get("x-signature");
   const xRequestId = request.headers.get("x-request-id");
   if (!xSignature || !xRequestId || !dataID) {
     console.warn(
       " ⚠️ [MercadoPagoWebhook] Missing headers or data ID:",
+      url,
       xSignature,
       xRequestId,
       dataID
