@@ -488,7 +488,7 @@ export default function UserInventory() {
                     </div>
                   </Button>
                 </div>
-              ) : (
+              ) : item.in_trade ? (
                 <div className="flex flex-col items-start gap-2 w-full">
                   <Button
                     size="lg"
@@ -509,7 +509,7 @@ export default function UserInventory() {
                     {t("inventory.actions.accept_trade")}
                   </Button>
                 </div>
-              )}
+              ) : null}
             </CardFooter>
           </div>
         </Card>

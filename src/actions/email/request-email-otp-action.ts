@@ -52,7 +52,7 @@ export async function requestEmailOtpAction(
   await transporter.sendMail({
     from: process.env.EMAIL_FROM!,
     to: email.toLowerCase(),
-    subject: "CS2Bits Email OTP Verification",
+    subject: "CS2 Bits Email OTP Verification",
     text: `Your email OTP is <b>${otp}</b>`,
     html: `<p>Your email OTP is <b>${otp}</b></p>`,
   });

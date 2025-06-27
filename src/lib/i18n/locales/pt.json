@@ -835,13 +835,13 @@
       "refresh": "Atualizar"
     },
     "expiration": {
-      "in": "Troca automática",
+      "in": "Venda automática",
       "in_trade": "Troca expira",
       "expired": "Expirado",
       "expiringSoon": "Expira em breve",
       "active": "Pronto para trocar",
       "expiredTime": "Expirou {{time}}",
-      "expired_message": "Esse item expirou",
+      "expired_message": "Esse item será vendido automaticamente em breve",
       "expired_trade": "Troca expirou"
     },
     "badges": {
