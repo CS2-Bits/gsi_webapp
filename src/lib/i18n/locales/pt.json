@@ -947,6 +947,7 @@
       "actions": "Ações",
       "updating": "Atualizando Streamer...",
       "updateStreamer": "Atualizar Streamer",
+      "streamerUpdated": "Streamer atualizado com sucesso",
       "status": {
         "Active": "Ativo",
         "Inactive": "Inativo",
