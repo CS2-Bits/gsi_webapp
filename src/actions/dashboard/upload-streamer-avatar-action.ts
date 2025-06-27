@@ -1,12 +1,11 @@
 "use server";
 import { ActionResponse } from "@/types/action-response";
+import { storageClient } from "@/lib/supabase";
 
 export async function uploadStreamerAvatarAction(
   id: string,
   file: File
 ): Promise<ActionResponse<string>> {
-  const { storageClient } = await import("@/lib/supabase");
-
   // Ensure the file is valid
   if (!file || !file.type.match(/^image\/(jpeg|jpg|png)$/)) {
     throw new Error("Invalid file provided for upload.");
