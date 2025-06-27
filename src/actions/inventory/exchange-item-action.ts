@@ -28,8 +28,10 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
       {
         where: {
           user_id: user.id,
-          steam_item_id: {
-            in: steam_items,
+          steam_bot_inventory_items: {
+            steam_item_id: {
+              in: steam_items,
+            },
           },
           in_trade: false,
           expires_in: {
@@ -37,7 +39,11 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
           },
         },
         include: {
-          steam_items: true,
+          steam_bot_inventory_items: {
+            include: {
+              steam_items: true,
+            },
+          },
         },
       }
     );
@@ -52,15 +58,21 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
       .rate;
     let fiat_value = new Decimal(0);
     for (const item of user_inventory_item_list) {
-      if (item.steam_items.currency === currency.BRL) {
+      if (
+        item.steam_bot_inventory_items.steam_items.currency === currency.BRL
+      ) {
         fiat_value = fiat_value.plus(
-          item.steam_items.estimated_fiat_value.mul(brl_to_usd_rate)
+          item.steam_bot_inventory_items.steam_items.estimated_fiat_value.mul(
+            brl_to_usd_rate
+          )
         );
       } else if (
-        item.steam_items.currency === currency.USD ||
-        item.steam_items.currency === currency.USDC
+        item.steam_bot_inventory_items.steam_items.currency === currency.USD ||
+        item.steam_bot_inventory_items.steam_items.currency === currency.USDC
       ) {
-        fiat_value = fiat_value.plus(item.steam_items.estimated_fiat_value);
+        fiat_value = fiat_value.plus(
+          item.steam_bot_inventory_items.steam_items.estimated_fiat_value
+        );
       } else {
         throw new ActionError("error.unsupported_currency");
       }
@@ -79,8 +91,12 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
       const del_res = await tx.user_inventory_items.deleteMany({
         where: {
           user_id: user.id,
-          steam_item_id: {
-            in: user_inventory_item_list.map((i) => i.steam_item_id),
+          steam_bot_inventory_items: {
+            steam_item_id: {
+              in: user_inventory_item_list.map(
+                (i) => i.steam_bot_inventory_items.steam_item_id
+              ),
+            },
           },
           in_trade: false,
           expires_in: {
@@ -91,20 +107,20 @@ export async function exchangeItemsAction(steam_items: string[]): Promise<
       if (del_res.count !== user_inventory_item_list.length) {
         throw new Error("Failed to delete all specified items.");
       }
-      const update_res = await tx.steam_bot_inventory_items.updateMany({
-        where: {
-          steam_item_id: {
-            in: user_inventory_item_list.map((i) => i.steam_item_id),
-          },
-          available: false,
-        },
-        data: {
-          available: true,
-        },
-      });
-      if (update_res.count !== user_inventory_item_list.length) {
-        throw new Error("Failed to save all specified items.");
-      }
+      // const update_res = await tx.steam_bot_inventory_items.updateMany({
+      //   where: {
+      //     steam_item_id: {
+      //       in: user_inventory_item_list.map((i) => i.steam_item_id),
+      //     },
+      //     available: false,
+      //   },
+      //   data: {
+      //     available: true,
+      //   },
+      // });
+      // if (update_res.count !== user_inventory_item_list.length) {
+      //   throw new Error("Failed to save all specified items.");
+      // }
       const transaction = await tx.user_transactions.create({
         data: {
           user_id: user.id,

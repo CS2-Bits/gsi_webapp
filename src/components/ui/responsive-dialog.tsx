@@ -16,8 +16,8 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponsiveDialogProps {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ export function ResponsiveDialog({
   description,
   isDrawer = false,
 }: ResponsiveDialogProps) {
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const { t } = useTranslation();
 
   if (isMobile || isDrawer) {

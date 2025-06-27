@@ -68,7 +68,7 @@ export function ClosedRaffleItem({ raffle }: ClosedRaffleItemProps) {
               {t("raffle.winner")}
             </p>
             <div className="gaming-text-primary font-semibold text-base">
-              {raffle.winner?.username || t("raffle.unknown_winner")}
+              {raffle.winner?.username || t("raffle.drawing_winner")}
             </div>
           </div>
         </div>

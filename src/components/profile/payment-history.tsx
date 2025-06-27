@@ -22,8 +22,8 @@ import {
   getUserPaymentsAction,
   GetUserPaymentsActionResponse,
 } from "@/actions/user/get-user-payments";
-import { formatCurrency } from "@/lib/utils";
 import { payment_status } from "@prisma-zod/generated/zod.schema";
+import { formatPoints } from "@/lib/utils";
 
 export function PaymentHistory() {
   // Estados apenas para filtro e página
@@ -158,7 +158,7 @@ export function PaymentHistory() {
                     </div>
                     <div className="text-right">
                       <p className={`font-medium $gaming-text-primary`}>
-                        {formatCurrency(
+                        {formatPoints(
                           Number(
                             data.point_packages.points_amount +
                               data.point_packages.bonus_points

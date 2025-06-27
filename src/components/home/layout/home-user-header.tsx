@@ -15,7 +15,7 @@ import { Skeleton } from "../../ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { getUserBalanceAction } from "@/actions/user/get-user-balance-action";
-import { formatCurrency } from "@/lib/utils";
+import { formatPoints } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PurchaseModal } from "@/components/purchase/purchase-modal";
 import { useQuery } from "@tanstack/react-query";
@@ -59,7 +59,7 @@ export default function HomeUserHeader() {
             {!balanceResponse || isLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatCurrency(Number(balanceResponse.balance))
+              formatPoints(Number(balanceResponse.balance))
             )}
           </span>
         </div>
@@ -71,7 +71,7 @@ export default function HomeUserHeader() {
             {!userBalance ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatCurrency(Number(userBalance.event_balance))
+              formatPoints(Number(userBalance.event_balance))
             )}
           </span>
         </div> */}
@@ -135,7 +135,7 @@ export default function HomeUserHeader() {
                 {!balanceResponse ? (
                   <Skeleton className="h-4 w-16" />
                 ) : (
-                  formatCurrency(Number(balanceResponse.balance))
+                  formatPoints(Number(balanceResponse.balance))
                 )}
               </span>
             </div>
@@ -147,7 +147,7 @@ export default function HomeUserHeader() {
                 {!userBalance ? (
                   <Skeleton className="h-4 w-16" />
                 ) : (
-                  formatCurrency(Number(userBalance.event_balance))
+                  formatPoints(Number(userBalance.event_balance))
                 )}
               </span>
             </div> */}

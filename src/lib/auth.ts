@@ -1,8 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
-import { JWT } from "next-auth/jwt";
-import { sign } from "jsonwebtoken";
-import Steam from "next-auth-steam";
+import Steam, { STEAM_PROVIDER_ID } from "next-auth-steam";
 import { NextRequest } from "next/server";
 import { NextApiRequest } from "next";
 
@@ -16,18 +14,9 @@ export function authOptions(
       }),
     ],
     callbacks: {
-      jwt({ token, user }) {
-        if (user) {
+      jwt({ token, account, user }) {
+        if (account?.provider === STEAM_PROVIDER_ID) {
           token.sub = user.id;
-          (token as JWT & { steamToken: string }).steamToken = sign(
-            {
-              id: user.id,
-              name: user.name,
-              avatar: user.image,
-            },
-            process.env.NEXTAUTH_SECRET!,
-            { expiresIn: "30d" }
-          );
         }
         return token;
       },

@@ -14,6 +14,7 @@ import {
 } from "@/components/raffles/raffle-skeleton";
 import { getUserBalanceAction } from "@/actions/user/get-user-balance-action";
 import { CheckUserProfile } from "@/components/profile/check-user-profile";
+import { raffle_status_schema } from "@prisma-zod/generated/zod.schema";
 
 export default function RafflesPage() {
   const { t } = useTranslation();
@@ -56,10 +57,14 @@ export default function RafflesPage() {
 
   const raffles = response?.data || [];
   const activeRaffles = raffles
-    .filter((raffle) => raffle.status === "active")
+    .filter((raffle) => raffle.status === raffle_status_schema.Enum.active)
     .slice(0, 3);
   const closedRaffles = raffles
-    .filter((raffle) => raffle.status === "closed")
+    .filter(
+      (raffle) =>
+        raffle.status === raffle_status_schema.Enum.closed ||
+        raffle.status === raffle_status_schema.Enum.delivered
+    )
     .sort(
       (a, b) =>
         new Date(b.drawn_at!).getTime() - new Date(a.drawn_at!).getTime()

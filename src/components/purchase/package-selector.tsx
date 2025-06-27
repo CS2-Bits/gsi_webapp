@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency, formatPrice } from "@/lib/utils";
+import { formatPoints, formatPrice } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { point_packages } from "@prisma-zod/generated/zod.schema";
 
@@ -72,7 +72,7 @@ export function PackageSelector({
                   <CardContent className="p-4 flex flex-col h-full">
                     <div className="flex justify-between items-start mb-1">
                       <span className="gaming-text-primary font-bold text-lg">
-                        {formatCurrency(pkg.points_amount)}
+                        {formatPoints(pkg.points_amount)}
                       </span>
                       {bonusPercentage > 0 && (
                         <Badge className="gaming-badge bg-green-500">
@@ -88,8 +88,7 @@ export function PackageSelector({
                     </div>
                     {pkg.bonus_points > 0 && (
                       <div className="text-sm text-green-500 mt-1">
-                        +{formatCurrency(pkg.bonus_points)}{" "}
-                        {t("purchase.bonus")}
+                        +{formatPoints(pkg.bonus_points)} {t("purchase.bonus")}
                       </div>
                     )}
                   </CardContent>

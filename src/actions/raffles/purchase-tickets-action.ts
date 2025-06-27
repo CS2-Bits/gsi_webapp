@@ -37,6 +37,9 @@ export async function purchaseTicketsAction(
       where: {
         id: validatedInput.raffle_id,
         status: raffle_status.active,
+        end_at: {
+          gt: new Date(),
+        },
       },
     });
 

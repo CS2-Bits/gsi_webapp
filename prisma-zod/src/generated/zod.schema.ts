@@ -70,7 +70,7 @@ export type trade_offer_status = z.infer<typeof trade_offer_status_schema>;
 export const transaction_type_schema = z.enum(["Deposit", "DepositSteamItem", "Reward", "Gift", "RaffleTicket", "Predict", "ExchangeSteamItem", "Refund"]);
 export type transaction_type = z.infer<typeof transaction_type_schema>;
 
-export const user_status_schema = z.enum(["Active", "Inative", "Deleted", "Banned"]);
+export const user_status_schema = z.enum(["Active", "Inactive", "Deleted", "Banned"]);
 export type user_status = z.infer<typeof user_status_schema>;
 
 // ———————— Model Schemas ————————
@@ -209,6 +209,7 @@ export const steam_bot_inventory_items_schema = z.object({
   steam_item_id: z.coerce.string(),
   steam_bot_id: z.coerce.string(),
   tradable: z.coerce.boolean(),
+  marketable: z.coerce.boolean(),
   available: z.coerce.boolean(),
   last_sync: z.preprocess((val: unknown) => val instanceof Date ? val : (typeof val === 'string' || typeof val === 'number' ? new Date(val) : undefined), z.date()),
 });
@@ -317,7 +318,7 @@ export const user_balances_schema = z.object({
 export type user_balances = z.infer<typeof user_balances_schema>;
 
 export const user_inventory_items_schema = z.object({
-  steam_item_id: z.coerce.string(),
+  steam_bot_inventory_item_id: z.coerce.string(),
   user_id: z.coerce.string(),
   expires_in: z.preprocess((val: unknown) => val instanceof Date ? val : (typeof val === 'string' || typeof val === 'number' ? new Date(val) : undefined), z.date()),
   in_trade: z.coerce.boolean(),

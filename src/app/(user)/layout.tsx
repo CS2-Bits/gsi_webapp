@@ -1,6 +1,6 @@
 // app/layout.tsx
 
-import "./globals.css";
+import "../globals.css";
 import type { Metadata } from "next";
 import { SessionWrapper } from "@/components/providers/session-wrapper";
 import { ThemeProvider } from "@/components/theme/theme-provider";

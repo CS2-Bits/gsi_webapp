@@ -42,7 +42,11 @@ export async function getUserInventoryAction(): Promise<
         user_id: user.id,
       },
       include: {
-        steam_items: true,
+        steam_bot_inventory_items: {
+          include: {
+            steam_items: true,
+          },
+        },
       },
     });
 
@@ -66,13 +70,16 @@ export async function getUserInventoryAction(): Promise<
       }
     };
     const available_value = available_items.reduce((sum, item) => {
-      return sum + getCs2BitsValue(item.steam_items).toNumber();
+      return (
+        sum +
+        getCs2BitsValue(item.steam_bot_inventory_items.steam_items).toNumber()
+      );
     }, 0);
 
-    const getItemTradeOffer = async (item: user_inventory_items) => {
+    const getItemTradeOffer = async (item: steam_items) => {
       const trade_offer_item = await prisma.trade_offer_items.findFirst({
         where: {
-          steam_item_id: item.steam_item_id,
+          steam_item_id: item.asset_id,
         },
         include: {
           trade_offers: true,
@@ -90,10 +97,16 @@ export async function getUserInventoryAction(): Promise<
     const mappedItemsAsync = inventory_items.map(async (item) => ({
       inventoty_item: {
         item: user_inventory_items_schema.parse(item),
-        trade_offer: item.in_trade ? await getItemTradeOffer(item) : null,
+        trade_offer: item.in_trade
+          ? await getItemTradeOffer(item.steam_bot_inventory_items.steam_items)
+          : null,
       },
-      cs2bits_value: getCs2BitsValue(item.steam_items).toNumber(),
-      steam_item: steam_items_schema.parse(item.steam_items),
+      cs2bits_value: getCs2BitsValue(
+        item.steam_bot_inventory_items.steam_items
+      ).toNumber(),
+      steam_item: steam_items_schema.parse(
+        item.steam_bot_inventory_items.steam_items
+      ),
     }));
 
     const mappedItems = await Promise.all(mappedItemsAsync);

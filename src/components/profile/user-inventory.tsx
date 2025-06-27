@@ -35,7 +35,7 @@ import type {
   trade_offers,
   user_inventory_items,
 } from "@prisma-zod/generated/zod.schema";
-import { formatCurrency } from "@/lib/utils";
+import { formatPoints } from "@/lib/utils";
 import { GamingCountdown } from "../ui/gaming-countdown";
 
 export default function UserInventory() {
@@ -62,8 +62,8 @@ export default function UserInventory() {
 
   // Withdraw item mutation
   const withdrawMutation = useMutation({
-    mutationFn: async (steamItemId: string) => {
-      return await withdrawItemAction(steamItemId);
+    mutationFn: async (data: { steam_bot_inventory_item_id: string }) => {
+      return await withdrawItemAction(data.steam_bot_inventory_item_id);
     },
     onSuccess: (data) => {
       if (data.success) {
@@ -330,7 +330,7 @@ export default function UserInventory() {
 
       return (
         <Card
-          key={`${item.user_id}-${item.steam_item_id}`}
+          key={`${item.user_id}-${item.steam_bot_inventory_item_id}`}
           className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] max-h-[320px] ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
             borderColor: getBorderColor(steamItem.item_type),
@@ -455,7 +455,12 @@ export default function UserInventory() {
                     variant="outline"
                     className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
                     disabled={isDisabled || withdrawMutation.isPending}
-                    onClick={() => withdrawMutation.mutate(item.steam_item_id)}
+                    onClick={() =>
+                      withdrawMutation.mutate({
+                        steam_bot_inventory_item_id:
+                          item.steam_bot_inventory_item_id,
+                      })
+                    }
                   >
                     <FaSteam className="h-10 w-10" />
                     {t("inventory.actions.withdraw")}
@@ -467,7 +472,7 @@ export default function UserInventory() {
                     className="w-full text-sm h-auto min-h-[2.5rem] py-2 transition-all duration-200 hover:scale-105 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                     disabled={isDisabled || exchangeItemMutation.isPending}
                     onClick={() =>
-                      exchangeItemMutation.mutate(item.steam_item_id)
+                      exchangeItemMutation.mutate(steamItem.asset_id)
                     }
                   >
                     <div className="flex flex-col items-center gap-0.5 w-full">
@@ -478,7 +483,7 @@ export default function UserInventory() {
                         </span>
                       </div>
                       <span className="text-sm font-semibold break-words text-center leading-tight">
-                        {formatCurrency(cs2bits_value)}
+                        {formatPoints(cs2bits_value)}
                       </span>
                     </div>
                   </Button>
@@ -630,7 +635,7 @@ export default function UserInventory() {
                     {t("inventory.totalValue")}
                   </span>
                   <Coins className="h-5 w-5" />
-                  {formatCurrency(inventoryResponse.data.total_cs2bits_value)}
+                  {formatPoints(inventoryResponse.data.total_cs2bits_value)}
                 </div> */}
               </div>
 
@@ -650,9 +655,7 @@ export default function UserInventory() {
                       </span>
                     </div>
                     <span className="text-sm font-semibold break-words text-center">
-                      {formatCurrency(
-                        inventoryResponse.data.total_cs2bits_value
-                      )}
+                      {formatPoints(inventoryResponse.data.total_cs2bits_value)}
                     </span>
                   </div>
                 </Button>

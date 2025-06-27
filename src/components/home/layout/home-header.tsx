@@ -86,12 +86,7 @@ export default function HomeHeader() {
             <HomeUserHeader />
           ) : (
             <Button
-              onClick={() =>
-                signIn("steam", {
-                  callbackUrl: window.location.href,
-                  redirect: true,
-                })
-              }
+              onClick={async () => await signIn("steam")}
               className="gaming-button text-foreground flex items-center gap-2 font-semibold"
               aria-label={`${t("login")} Steam`}
             >

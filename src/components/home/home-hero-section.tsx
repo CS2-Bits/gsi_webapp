@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
-import { useMobile } from "@/hooks/use-mobile";
 import CS2BitsIcon from "../icons/CS2Bits-icon";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 function HomeHeroSection() {
   const { t } = useTranslation();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   return (
     <section className="container mx-auto px-4 py-6 md:py-20">

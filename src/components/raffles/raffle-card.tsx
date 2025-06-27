@@ -34,6 +34,7 @@ export function RaffleCard({
   const { t } = useTranslation();
   const [quantity, setQuantity] = useState(1);
   const [expandedHeight, setExpandedHeight] = useState(0);
+  const [isEnded, setIsEnded] = useState(false);
   const expandedContentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
@@ -96,11 +97,21 @@ export function RaffleCard({
     }
   };
 
+  useEffect(() => {
+    // If raffe ended, disable buy button
+    const setEnded = () => {
+      setIsEnded(raffle.end_at < new Date());
+    };
+    setEnded();
+    const interval = setInterval(setEnded, 1000 * 60);
+    return () => clearInterval(interval);
+  }, [raffle.end_at]);
+
   // Determine the exterior color class based on the skin's exterior/rarity
 
   return (
     <Card
-      className={`gaming-card gaming-card-interactive overflow-hidden h-full transition-all duration-300 border-2 ${
+      className={`gaming-card gaming-card-interactive overflow-hidden h-full transition-all max-w-[360px] duration-300 border-2 ${
         isExpanded ? "shadow-lg gaming-glow" : "hover:shadow-md"
       }`}
       style={{
@@ -170,14 +181,20 @@ export function RaffleCard({
                 {raffle.ticket_price} {t("common.points")}
               </span>
             </div>
-
-            <div className="flex items-center gap-1 text-base gaming-text-secondary">
-              <Clock className="h-3 w-3" />
-              <span>
-                {t("raffle.ends_on")}{" "}
-                {formatDistanceToNow(raffle.end_at, { locale: ptBR })}
-              </span>
-            </div>
+            {!isEnded ? (
+              <div className="flex items-center gap-1 text-base gaming-text-secondary">
+                <Clock className="h-3 w-3" />
+                <span>
+                  {t("raffle.ends_on")}{" "}
+                  {formatDistanceToNow(raffle.end_at, { locale: ptBR })}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 text-base gaming-text-secondary">
+                <Clock className="h-3 w-3" />
+                <span>{t("raffle.waiting_drawn")}</span>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
@@ -188,6 +205,7 @@ export function RaffleCard({
           className={`w-full transition-all duration-200 ${!isExpanded ? "gaming-button text-foreground font-semibold" : ""}`}
           onClick={handleToggle}
           size="sm"
+          disabled={isEnded}
           variant={isExpanded ? "outline" : "default"}
         >
           {isExpanded ? (
@@ -212,7 +230,7 @@ export function RaffleCard({
           opacity: isExpanded ? 1 : 0,
         }}
       >
-        <div ref={expandedContentRef} className="px-3 pb-3">
+        <div ref={expandedContentRef} className="px-2 pb-2">
           <Separator className="mb-3" />
 
           {/* Balance and Price Info */}
@@ -246,7 +264,7 @@ export function RaffleCard({
                 size="icon"
                 className="h-7 w-7 rounded-full transition-all duration-200 hover:scale-105 gaming-button"
                 onClick={decrementQuantity}
-                disabled={quantity <= 1}
+                disabled={quantity <= 1 || isEnded}
                 aria-label={t("purchase.decrease_quantity")}
               >
                 <Minus className="h-3 w-3" />
@@ -301,7 +319,7 @@ export function RaffleCard({
             <Button
               className="flex-1 text-sm py-2 gaming-button text-foreground transition-all duration-200 hover:shadow-md"
               onClick={handlePurchase}
-              disabled={!canPurchase || purchaseMutation.isPending}
+              disabled={!canPurchase || purchaseMutation.isPending || isEnded}
               aria-busy={purchaseMutation.isPending}
             >
               {purchaseMutation.isPending

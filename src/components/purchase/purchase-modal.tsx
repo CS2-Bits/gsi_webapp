@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import { getPointPackagesAction } from "@/actions/packages/get-point-packages-action";
 import { Loader2, ArrowRight, CheckCircle } from "lucide-react";
-import { formatCurrency, formatPrice } from "@/lib/utils";
+import { formatPoints, formatPrice } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -225,7 +225,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                         <TableCell className="font-medium">
                           <div className="flex flex-col">
                             <span className="gaming-text-primary font-bold">
-                              {formatCurrency(pkg.points_amount)}
+                              {formatPoints(pkg.points_amount)}
                             </span>
                             <span className="text-base gaming-text-secondary">
                               {pkg.points_amount} {t("purchase.points_label")}
@@ -293,7 +293,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                         {t("purchase.selected_package")}:
                       </span>
                       <span className="gaming-text-primary font-bold">
-                        {formatCurrency(selectedPackage.points_amount)}
+                        {formatPoints(selectedPackage.points_amount)}
                       </span>
                     </div>
 
@@ -301,7 +301,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                       <div className="flex justify-between mb-1 text-sm text-green-500">
                         <span>{t("purchase.package_bonus")}:</span>
                         <span>
-                          +{formatCurrency(selectedPackage.bonus_points)}
+                          +{formatPoints(selectedPackage.bonus_points)}
                         </span>
                       </div>
                     )}
@@ -357,7 +357,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                         {t("purchase.total_points")}:
                       </span>
                       <span className="gaming-text-primary font-bold">
-                        {formatCurrency(
+                        {formatPoints(
                           selectedPackage.points_amount +
                             selectedPackage.bonus_points
                         )}

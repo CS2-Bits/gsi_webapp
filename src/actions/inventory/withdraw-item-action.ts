@@ -9,7 +9,7 @@ import { ActionError } from "@/types/action-error";
 import { validateTradeLinkAction } from "../user/validate-user-trade-link-action";
 
 export async function withdrawItemAction(
-  item_id: string
+  steam_bot_inventory_item_id: string
 ): Promise<ActionResponse<boolean>> {
   try {
     const user = await getCurrentUser();
@@ -31,7 +31,7 @@ export async function withdrawItemAction(
     const user_inventory_item =
       await prisma.user_inventory_items.findUniqueOrThrow({
         where: {
-          steam_item_id: item_id,
+          steam_bot_inventory_item_id: steam_bot_inventory_item_id,
           user_id: user.id,
           in_trade: false,
           expires_in: {
@@ -39,7 +39,11 @@ export async function withdrawItemAction(
           },
         },
         include: {
-          steam_items: true,
+          steam_bot_inventory_items: {
+            include: {
+              steam_items: true,
+            },
+          },
         },
       });
 
@@ -48,7 +52,8 @@ export async function withdrawItemAction(
     await prisma.$transaction(async (tx) => {
       await tx.user_inventory_items.update({
         where: {
-          steam_item_id: user_inventory_item.steam_item_id,
+          steam_bot_inventory_item_id:
+            user_inventory_item.steam_bot_inventory_item_id,
           user_id: user.id,
         },
         data: {
@@ -59,7 +64,8 @@ export async function withdrawItemAction(
       const steam_bot_inventory_item =
         await tx.steam_bot_inventory_items.findFirstOrThrow({
           where: {
-            steam_item_id: user_inventory_item.steam_item_id,
+            steam_item_id:
+              user_inventory_item.steam_bot_inventory_items.steam_item_id,
             tradable: true,
           },
           select: {
@@ -76,7 +82,8 @@ export async function withdrawItemAction(
       await tx.trade_offer_items.create({
         data: {
           trade_offer_id: trade_offer.id,
-          steam_item_id: user_inventory_item.steam_item_id,
+          steam_item_id:
+            user_inventory_item.steam_bot_inventory_items.steam_item_id,
           trade_action: trade_action.send,
         },
       });

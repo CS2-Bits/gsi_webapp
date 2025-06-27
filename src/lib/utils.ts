@@ -21,7 +21,7 @@ export function formatTimeSince(date: Date) {
   }
 }
 
-export function formatCurrency(value: number) {
+export function formatPoints(value: number) {
   const formatted = new Intl.NumberFormat("en-US", {
     style: "decimal",
     minimumFractionDigits: 2,

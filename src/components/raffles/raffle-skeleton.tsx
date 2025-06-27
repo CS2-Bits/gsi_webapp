@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export function RaffleCardSkeleton() {
   return (
-    <Card className="gaming-card overflow-hidden h-full w-[260px]">
+    <Card className="gaming-card overflow-hidden h-full w-[360px]">
       <CardContent className="p-0 flex flex-col">
         <Skeleton className="gaming-skeleton h-32 w-full" />
         <div className="p-3">
