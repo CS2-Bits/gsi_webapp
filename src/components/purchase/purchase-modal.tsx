@@ -55,7 +55,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
     null
   );
   const [paymentMethod, setPaymentMethod] =
-    useState<payment_provider>("Stripe");
+    useState<payment_provider>("MercadoPago");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(
     null
@@ -185,7 +185,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
       }
       onClose();
       setSelectedPackage(null);
-      setPaymentMethod("Stripe");
+      setPaymentMethod("MercadoPago");
       setStripeClientSecret(null);
       setPaymentData(null);
       setShowStripeForm(false);

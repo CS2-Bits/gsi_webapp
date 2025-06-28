@@ -17,6 +17,7 @@ import { Copy } from "lucide-react";
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { formatPrice } from "@/lib/utils";
+import Image from "next/image";
 
 interface MercadoPagoPaymentFormProps {
   paymentData: CreatePaymentResponse;
@@ -100,9 +101,11 @@ export function MercadoPagoPaymentForm({
 
       <div className="flex flex-col items-center space-y-4">
         <div className="gaming-card p-4 rounded-lg shadow-lg">
-          <img
+          <Image
             src={`data:image/png;base64,${paymentData.QRCodeBase64}`}
             alt="QR Code for payment"
+            width={192}
+            height={192}
             className="w-48 h-48"
           />
         </div>

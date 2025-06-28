@@ -84,7 +84,9 @@ export async function POST(request: NextRequest) {
     try {
       if (result.success && result.data.type === "payment") {
         console.log("[MercadoPagoWebhook] Process Payload", result.data);
-        const response = await processMercadoPagoWebhookPayment(result.data.id);
+        const response = await processMercadoPagoWebhookPayment(
+          result.data.data.id
+        );
         console.log("[MercadoPagoWebhook] Response: ", response);
       } else {
         console.log("[MercadoPagoWebhook] Raw Payload", payload);

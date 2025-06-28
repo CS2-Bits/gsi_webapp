@@ -100,7 +100,7 @@ export async function processUserPaymentSuccessAction(
   }
 }
 
-async function processMercadoPagoPayment(paymentId: string) {
+export async function processMercadoPagoPayment(paymentId: string) {
   const mercadoPagoPayment = new Payment(mercadopagoClient);
   const mpPayment = await mercadoPagoPayment.get({ id: paymentId });
 
@@ -108,9 +108,17 @@ async function processMercadoPagoPayment(paymentId: string) {
     throw new Error(`External reference not found for payment: ${paymentId}`);
   }
 
-  const payment = await prisma.user_payments.findFirst({
-    where: { provider_transaction_id: mpPayment.id.toString() },
-  });
+  let payment: user_payments | null = null;
+
+  if (mpPayment.external_reference) {
+    payment = await prisma.user_payments.findUnique({
+      where: { id: mpPayment.external_reference },
+    });
+  } else {
+    payment = await prisma.user_payments.findFirst({
+      where: { provider_transaction_id: mpPayment.id.toString() },
+    });
+  }
 
   if (!payment) {
     throw new Error(`Payment id: ${mpPayment.id} not found`);
