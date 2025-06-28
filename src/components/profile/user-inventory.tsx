@@ -30,10 +30,11 @@ import { toast } from "sonner";
 import { getUserInventoryAction } from "@/actions/inventory/get-user-inventory-action";
 import { withdrawItemAction } from "@/actions/inventory/withdraw-item-action";
 import { exchangeItemsAction } from "@/actions/inventory/exchange-item-action";
-import type {
-  steam_items,
-  trade_offers,
-  user_inventory_items,
+import {
+  trade_offer_status_schema,
+  type steam_items,
+  type trade_offers,
+  type user_inventory_items,
 } from "@prisma-zod/generated/zod.schema";
 import { formatPoints } from "@/lib/utils";
 import { GamingCountdown } from "../ui/gaming-countdown";
@@ -412,6 +413,16 @@ export default function UserInventory() {
                           </div>
                           <GamingCountdown
                             targetDate={trade_offer.expires_in}
+                            onExpire={() => {
+                              if (
+                                trade_offer.status ===
+                                trade_offer_status_schema.enum.expired
+                              ) {
+                                queryClient.invalidateQueries({
+                                  queryKey: ["user-inventory"],
+                                });
+                              }
+                            }}
                           />
                         </div>
                       ) : (
@@ -494,7 +505,11 @@ export default function UserInventory() {
                     size="lg"
                     variant="outline"
                     className="w-full text-sm h-10 transition-all duration-200 hover:scale-105"
-                    disabled={!trade_offer?.trade_offer_id}
+                    disabled={
+                      !trade_offer?.trade_offer_id ||
+                      trade_offer.status !==
+                        trade_offer_status_schema.enum.pending
+                    }
                     onClick={() =>
                       window.open(
                         `https://steamcommunity.com/tradeoffer/${trade_offer?.trade_offer_id}`,
