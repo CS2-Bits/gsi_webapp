@@ -8,12 +8,25 @@ export const CreatePaymentSchema = z.object({
 
 export type CreatePayment = z.infer<typeof CreatePaymentSchema>;
 
-export const CreatePaymentResponseSchema = z.object({
-  url: z.string().optional(),
-  clientSecret: z.string().optional(),
-  provider: z.enum(["Stripe", "Coinbase", "MercadoPago"]),
-  paymentId: z.string(),
-});
+export const CreatePaymentResponseSchema = z.discriminatedUnion("provider", [
+  z.object({
+    provider: z.literal("Coinbase"),
+    paymentId: z.string(),
+    url: z.string(),
+  }),
+  z.object({
+    provider: z.literal("Stripe"),
+    paymentId: z.string(),
+    clientSecret: z.string(),
+  }),
+  z.object({
+    provider: z.literal("MercadoPago"),
+    paymentId: z.string(),
+    expiration_date: z.date(),
+    QRCode: z.string(),
+    QRCodeBase64: z.string(),
+  }),
+]);
 
 export type CreatePaymentResponse = z.infer<typeof CreatePaymentResponseSchema>;
 

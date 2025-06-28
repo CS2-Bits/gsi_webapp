@@ -123,6 +123,8 @@ async function processMercadoPagoPayment(paymentId: string) {
       newStatus = "Completed";
       break;
     case "cancelled":
+      newStatus = "Canceled";
+      break;
     case "rejected":
       newStatus = "Failed";
       break;
@@ -145,7 +147,7 @@ async function processMercadoPagoPayment(paymentId: string) {
     return payment.status;
   }
 
-  return newStatus === "Completed" ? "Processing" : newStatus;
+  return newStatus;
 }
 
 async function processStripePaymentSuccessAction(sessionID: string) {

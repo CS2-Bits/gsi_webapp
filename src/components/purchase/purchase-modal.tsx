@@ -35,6 +35,7 @@ import {
   users,
 } from "@prisma-zod/generated/zod.schema";
 import { MercadoPagoPaymentForm } from "./mercadopago-payment-form";
+import { CreatePaymentResponse } from "@/schemas/handle-payment.schema";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -59,12 +60,11 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(
     null
   );
-  const [paymentId, setPaymentId] = useState<string | null>(null);
+  const [paymentData, setPaymentData] = useState<CreatePaymentResponse | null>(
+    null
+  );
   const [showStripeForm, setShowStripeForm] = useState(false);
   const [showMercadoPagoForm, setShowMercadoPagoForm] = useState(false);
-  const [mercadoPagoPreferenceId, setMercadoPagoPreferenceId] = useState<
-    string | null
-  >(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -112,22 +112,18 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
       const result = await createPaymentAction(paymentData);
 
       if (result.success && result.data) {
-        if (result.data.provider === "Coinbase" && result.data.url) {
+        if (result.data.provider === "Coinbase") {
           window.location.href = result.data.url;
         }
 
-        if (result.data.provider === "Stripe" && result.data.clientSecret) {
+        if (result.data.provider === "Stripe") {
           setStripeClientSecret(result.data.clientSecret);
-          setPaymentId(result.data.paymentId);
+          setPaymentData(result.data);
           setShowStripeForm(true);
         }
 
-        if (
-          result.data.provider === "MercadoPago" &&
-          result.data.clientSecret
-        ) {
-          setMercadoPagoPreferenceId(result.data.clientSecret);
-          setPaymentId(result.data.paymentId);
+        if (result.data.provider === "MercadoPago") {
+          setPaymentData(result.data);
           setShowMercadoPagoForm(true);
         }
       } else {
@@ -150,7 +146,7 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
     setSelectedPackage(null);
     setPaymentMethod("Stripe");
     setStripeClientSecret(null);
-    setPaymentId(null);
+    setPaymentData(null);
     setShowStripeForm(false);
     qc.invalidateQueries({ queryKey: ["userBalance"] });
   };
@@ -158,29 +154,27 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
   const handleStripeCancel = () => {
     setShowStripeForm(false);
     setStripeClientSecret(null);
-    setPaymentId(null);
+    setPaymentData(null);
   };
 
   const handleMercadoPagoSuccess = () => {
     onClose();
     setSelectedPackage(null);
     setPaymentMethod("MercadoPago");
-    setMercadoPagoPreferenceId(null);
-    setPaymentId(null);
+    setPaymentData(null);
     setShowMercadoPagoForm(false);
     qc.invalidateQueries({ queryKey: ["userBalance"] });
   };
 
   const handleMercadoPagoCancel = () => {
     setShowMercadoPagoForm(false);
-    setMercadoPagoPreferenceId(null);
-    setPaymentId(null);
+    setPaymentData(null);
   };
 
   const onOpenChange = async (open: boolean) => {
     if (!open) {
-      if (paymentId) {
-        const result = await cancelUserPaymentAction(paymentId);
+      if (paymentData?.paymentId) {
+        const result = await cancelUserPaymentAction(paymentData.paymentId);
         if (result.success) {
           toast.success(t("payment.cancelled_description"));
         } else {
@@ -193,10 +187,9 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
       setSelectedPackage(null);
       setPaymentMethod("Stripe");
       setStripeClientSecret(null);
-      setPaymentId(null);
+      setPaymentData(null);
       setShowStripeForm(false);
       setShowMercadoPagoForm(false);
-      setMercadoPagoPreferenceId(null);
     }
   };
 
@@ -421,33 +414,36 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                   </div>
                 )}
 
-                {stripeClientSecret && user && selectedPackage && paymentId && (
-                  <div
-                    className="gaming-slide-up"
-                    style={{ animationDelay: "0.2s" }}
-                  >
-                    <Elements
-                      stripe={stripePromise}
-                      options={{
-                        clientSecret: stripeClientSecret,
-                        appearance: {
-                          theme: "night" as const,
-                          variables: {
-                            colorPrimary: "#f27405", // Gaming primary color
-                          },
-                        },
-                      }}
+                {stripeClientSecret &&
+                  user &&
+                  selectedPackage &&
+                  paymentData?.paymentId && (
+                    <div
+                      className="gaming-slide-up"
+                      style={{ animationDelay: "0.2s" }}
                     >
-                      <StripePaymentForm
-                        paymentId={paymentId}
-                        Pointpackage={selectedPackage}
-                        user={user}
-                        onSuccess={handleStripeSuccess}
-                        onCancel={handleStripeCancel}
-                      />
-                    </Elements>
-                  </div>
-                )}
+                      <Elements
+                        stripe={stripePromise}
+                        options={{
+                          clientSecret: stripeClientSecret,
+                          appearance: {
+                            theme: "night" as const,
+                            variables: {
+                              colorPrimary: "#f27405", // Gaming primary color
+                            },
+                          },
+                        }}
+                      >
+                        <StripePaymentForm
+                          paymentId={paymentData?.paymentId}
+                          Pointpackage={selectedPackage}
+                          user={user}
+                          onSuccess={handleStripeSuccess}
+                          onCancel={handleStripeCancel}
+                        />
+                      </Elements>
+                    </div>
+                  )}
               </>
             ) : showMercadoPagoForm ? (
               <>
@@ -487,24 +483,20 @@ export function PurchaseModal({ isOpen, user, onClose }: PurchaseModalProps) {
                   </div>
                 )}
 
-                {mercadoPagoPreferenceId &&
-                  user &&
-                  selectedPackage &&
-                  paymentId && (
-                    <div
-                      className="gaming-slide-up"
-                      style={{ animationDelay: "0.2s" }}
-                    >
-                      <MercadoPagoPaymentForm
-                        paymentId={paymentId}
-                        preferenceId={mercadoPagoPreferenceId}
-                        pointPackage={selectedPackage}
-                        user={user}
-                        onSuccess={handleMercadoPagoSuccess}
-                        onCancel={handleMercadoPagoCancel}
-                      />
-                    </div>
-                  )}
+                {user && selectedPackage && paymentData?.paymentId && (
+                  <div
+                    className="gaming-slide-up"
+                    style={{ animationDelay: "0.2s" }}
+                  >
+                    <MercadoPagoPaymentForm
+                      paymentData={paymentData}
+                      pointPackage={selectedPackage}
+                      user={user}
+                      onSuccess={handleMercadoPagoSuccess}
+                      onCancel={handleMercadoPagoCancel}
+                    />
+                  </div>
+                )}
               </>
             ) : null}
           </div>

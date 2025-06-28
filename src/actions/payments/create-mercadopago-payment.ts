@@ -25,13 +25,14 @@ export async function createMercadoPagoPayment(
     }
 
     const mercadoPagoPayment = new Payment(mercadopagoClient);
-
+    const expiration_date = new Date(Date.now() + 15 * 60 * 1000);
     const response = await mercadoPagoPayment.create({
       body: {
         transaction_amount: pointPackage.price.toNumber(),
         description: pointPackage.name,
-        date_of_expiration: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        date_of_expiration: expiration_date.toISOString(),
         payment_method_id: "pix",
+        external_reference: payment.id.toString(),
         payer: {
           email: user.email!,
         },
@@ -39,7 +40,11 @@ export async function createMercadoPagoPayment(
       requestOptions: { idempotencyKey: payment.id },
     });
 
-    if (!response.id) {
+    if (
+      !response.id ||
+      !response.point_of_interaction?.transaction_data?.qr_code ||
+      !response.point_of_interaction?.transaction_data?.qr_code_base64
+    ) {
       await updateUserPaymentStatus({
         paymentId: payment.id,
         paymentStatus: "Failed",
@@ -58,7 +63,10 @@ export async function createMercadoPagoPayment(
 
     return {
       provider: payment_provider.MercadoPago,
-      clientSecret: response.id.toString(),
+      QRCode: response.point_of_interaction.transaction_data.qr_code,
+      QRCodeBase64:
+        response.point_of_interaction.transaction_data.qr_code_base64,
+      expiration_date: expiration_date,
       paymentId: payment.id,
     };
   } catch (error) {
