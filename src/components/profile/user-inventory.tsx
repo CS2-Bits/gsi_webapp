@@ -332,7 +332,7 @@ export default function UserInventory() {
       return (
         <Card
           key={`${item.user_id}-${item.steam_bot_inventory_item_id}`}
-          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px] max-h-[320px] ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
+          className={`pt-0 pb-1 overflow-hidden transition-all duration-300 border-2 hover:shadow-xl hover:scale-[1.02] group min-h-[280px]  ${expirationStatus.pulseAnimation ? "animate-pulse" : ""}`}
           style={{
             borderColor: getBorderColor(steamItem.item_type),
             boxShadow: `0 0 20px ${getBorderColor(steamItem.item_type)}20`,
