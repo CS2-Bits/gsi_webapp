@@ -56,6 +56,16 @@ export function useSteamWebSocket() {
         qc.invalidateQueries({
           queryKey: ["user-inventory"],
         });
+      } else if (eventPayload.event_type === "invalid_trade_link") {
+        toast.error(t("error.invalid_trade_link"), {
+          description: eventPayload.data,
+        });
+        qc.invalidateQueries({
+          queryKey: ["user-trades"],
+        });
+        qc.invalidateQueries({
+          queryKey: ["user-inventory"],
+        });
       }
     });
   }, [wsToken, isLoading, qc, t]);

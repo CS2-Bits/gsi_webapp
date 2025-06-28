@@ -5,7 +5,6 @@ import { ActionResponse } from "@/types/action-response";
 import { prisma } from "@/lib/prisma";
 import { trade_action, trade_offer_status } from "@prisma/client";
 import tradeItem from "../stream/trade-item";
-import { ActionError } from "@/types/action-error";
 import { validateTradeLinkAction } from "../user/validate-user-trade-link-action";
 
 export async function withdrawItemAction(
@@ -49,7 +48,7 @@ export async function withdrawItemAction(
 
     const expires_in = new Date(Date.now() + 10 * 60 * 1000);
 
-    await prisma.$transaction(async (tx) => {
+    const trade_bot = await prisma.$transaction(async (tx) => {
       await tx.user_inventory_items.update({
         where: {
           steam_bot_inventory_item_id:
@@ -58,7 +57,6 @@ export async function withdrawItemAction(
         },
         data: {
           in_trade: true,
-          expires_in: expires_in,
         },
       });
       const steam_bot_inventory_item =
@@ -87,14 +85,12 @@ export async function withdrawItemAction(
           trade_action: trade_action.send,
         },
       });
-      const event = await tradeItem(
-        steam_bot_inventory_item.steam_bot_id,
-        trade_offer.id
-      );
-      if (!event) {
-        throw new ActionError("Failed to create trade offer in stream");
-      }
+      return {
+        steam_bot_id: steam_bot_inventory_item.steam_bot_id,
+        trade_id: trade_offer.id,
+      };
     });
+    await tradeItem(trade_bot.steam_bot_id, trade_bot.trade_id);
 
     return {
       success: true,

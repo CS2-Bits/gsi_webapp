@@ -54,7 +54,7 @@ export function GamingCountdown({
       >
         <div className="px-2 py-1 rounded-md bg-gradient-to-r from-red-500/20 via-red-600/20 to-red-500/20 border border-red-500/30 shadow-lg">
           <span className="gaming-text-primary text-xs font-bold uppercase tracking-wide">
-            {t("inventory.countdown.expired")}
+            {t("inventory.expiration.expired")}
           </span>
         </div>
       </div>

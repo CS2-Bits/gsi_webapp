@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { PurchaseModal } from "@/components/purchase/purchase-modal";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentUserAction } from "@/actions/user/get-current-user-action";
+import { CheckUserProfile } from "@/components/profile/check-user-profile";
 
 export default function HomeUserHeader() {
   const router = useRouter();
@@ -184,7 +185,7 @@ export default function HomeUserHeader() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
+      {isPurchaseModalOpen && userData && <CheckUserProfile />}
       {/* Purchase Modal */}
       {userData && (
         <PurchaseModal

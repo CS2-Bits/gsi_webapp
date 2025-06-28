@@ -10,6 +10,7 @@ export const EventPayloadSchema = z.object({
     "bet",
     "end",
     "trade",
+    "invalid_trade_link",
   ]),
   data: z.string(),
 });

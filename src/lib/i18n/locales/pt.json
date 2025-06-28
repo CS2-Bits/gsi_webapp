@@ -545,6 +545,7 @@
     "otp_not_found": "OTP não encontrado",
     "invalid_email": "Email inválido",
     "invalid_trade_link": "Link de troca inválido",
+    "invalid_trade_link_event": "Link de troca inválido, por favor, verifique se o link está correto nas informações do seu perfil",
     "error_sending_otp": "Erro ao enviar OTP",
     "error_confirming_otp": "Erro ao confirmar OTP",
     "email_already_confirmed": "E-mail já confirmado",

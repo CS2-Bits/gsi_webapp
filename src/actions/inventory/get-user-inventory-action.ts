@@ -9,7 +9,7 @@ import {
 } from "@prisma-zod/generated/zod.schema";
 import { getCurrentUser } from "../user/get-current-user";
 import { prisma } from "@/lib/prisma";
-import { currency, steam_items } from "@prisma/client";
+import { currency, steam_items, trade_offer_status } from "@prisma/client";
 import { getExchangeRate } from "../currency/get-exchange-rate";
 import { getCs2BitsUsdRate } from "../currency/get-cs2bits-usd-rate";
 import Decimal from "decimal.js";
@@ -80,6 +80,15 @@ export async function getUserInventoryAction(): Promise<
       const trade_offer_item = await prisma.trade_offer_items.findFirst({
         where: {
           steam_item_id: item.asset_id,
+          trade_offers: {
+            status: {
+              in: [
+                trade_offer_status.new,
+                trade_offer_status.pending,
+                trade_offer_status.accepted,
+              ],
+            },
+          },
         },
         include: {
           trade_offers: true,
