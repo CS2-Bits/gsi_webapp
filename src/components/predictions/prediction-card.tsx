@@ -124,8 +124,15 @@ export function PredictionCard({
         { message: t("predictions.enter_valid_amount") }
       )
       .refine(
-        (val) =>
-          Number(val) <= Number(prediction.prediction_templates.max_bet_amount),
+        (val) => Number(val) <= prediction.prediction_templates.max_bet_amount,
+        {
+          message: t("predictions.minimum_bet_description", {
+            amount: prediction.prediction_templates.min_bet_amount,
+          }),
+        }
+      )
+      .refine(
+        (val) => Number(val) >= prediction.prediction_templates.min_bet_amount,
         {
           message: t("predictions.minimum_bet_description", {
             amount: prediction.prediction_templates.min_bet_amount,
@@ -134,18 +141,7 @@ export function PredictionCard({
       )
       .refine(
         (val) =>
-          Number(val) >= Number(prediction.prediction_templates.min_bet_amount),
-        {
-          message: t("predictions.minimum_bet_description", {
-            amount: prediction.prediction_templates.min_bet_amount,
-          }),
-        }
-      )
-      .refine(
-        (val) =>
-          userBalance != null
-            ? Number(val) <= Number(userBalance.balance)
-            : false,
+          userBalance != null ? Number(val) <= userBalance.balance : false,
         {
           message: t("predictions.insufficient_balance"),
         }
@@ -340,9 +336,7 @@ export function PredictionCard({
                             {...field}
                             className="gaming-input flex-1"
                             disabled={!selectedOptionLabel || isSubmitting}
-                            min={Number(
-                              prediction.prediction_templates.min_bet_amount
-                            )}
+                            min={prediction.prediction_templates.min_bet_amount}
                           />
                         </FormControl>
                         <Button
@@ -374,7 +368,7 @@ export function PredictionCard({
                       }
                       className="flex-1 hover:scale-105 transition-transform"
                     >
-                      {Number(amount)}
+                      {amount}
                     </Button>
                   ))}
                   <Button
@@ -396,7 +390,7 @@ export function PredictionCard({
                 <div className="flex flex-col gap-1">
                   <p className="text-sm gaming-text-secondary">
                     {t("predictions.min_bet")}:{" "}
-                    {Number(prediction.prediction_templates.min_bet_amount)}
+                    {prediction.prediction_templates.min_bet_amount}
                   </p>
                 </div>
               </form>

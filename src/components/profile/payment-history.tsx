@@ -159,10 +159,8 @@ export function PaymentHistory() {
                     <div className="text-right">
                       <p className={`font-medium $gaming-text-primary`}>
                         {formatPoints(
-                          Number(
-                            data.point_packages.points_amount +
-                              data.point_packages.bonus_points
-                          )
+                          data.point_packages.points_amount +
+                            data.point_packages.bonus_points
                         )}
                       </p>
                     </div>

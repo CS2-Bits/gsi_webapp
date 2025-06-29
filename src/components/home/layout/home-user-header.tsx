@@ -60,7 +60,7 @@ export default function HomeUserHeader() {
             {!balanceResponse || isLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatPoints(Number(balanceResponse.balance))
+              formatPoints(balanceResponse.balance)
             )}
           </span>
         </div>
@@ -136,7 +136,7 @@ export default function HomeUserHeader() {
                 {!balanceResponse ? (
                   <Skeleton className="h-4 w-16" />
                 ) : (
-                  formatPoints(Number(balanceResponse.balance))
+                  formatPoints(balanceResponse.balance)
                 )}
               </span>
             </div>

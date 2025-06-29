@@ -49,7 +49,7 @@ export function formatPrice(price: number, currency: string) {
     currency: currency === "USDC" ? "USD" : currency,
     currencyDisplay: "symbol",
   })
-    .format(Number(price))
+    .format(price)
     .replace("$", currencyMap[currency] || "$");
 }
 

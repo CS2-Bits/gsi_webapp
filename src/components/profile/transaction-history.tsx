@@ -136,7 +136,7 @@ export function TransactionHistory() {
             point_package.points_amount + point_package.bonus_points;
           return t("transactions.descriptions.deposit", {
             provider: user_payment.provider,
-            amount: Number(totalAmount).toLocaleString("pt-BR", {
+            amount: totalAmount.toLocaleString("pt-BR", {
               style: "currency",
               currency: point_package.currency,
             }),
@@ -294,7 +294,7 @@ export function TransactionHistory() {
                         }`}
                       >
                         {formatAmount(
-                          Number(data.transaction.amount),
+                          data.transaction.amount,
                           data.transaction.type
                         )}
                       </p>

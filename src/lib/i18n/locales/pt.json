@@ -488,7 +488,7 @@
       "reward": "Recompesa",
       "predict": "Previsão",
       "deposit": "Compra de CS2Bits",
-      "depositsteamitem": "Troca de Item Steam",
+      "depositsteamitem": "Venda de Item Steam",
       "exchange": "Troca na loja",
       "raffleticket": "Bilhete de Sorteio",
       "refund": "Reembolso"
@@ -498,7 +498,7 @@
       "predictGeneric": "Cobrança de CS2Bits",
       "deposit": "Compra de CS2Bits",
       "raffleTicket": "Compra de bilhete de sorteio",
-      "depositSteamItem": "Troca de item Steam",
+      "depositSteamItem": "Venda de item Steam",
       "refund": "Reembolso de CS2Bits"
     },
     "filter": {

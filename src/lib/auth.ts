@@ -8,6 +8,7 @@ export function authOptions(
   req: Request | NextRequest | NextApiRequest | null
 ): NextAuthOptions {
   return {
+    debug: process.env.NODE_ENV === "development",
     providers: [
       Steam(req ?? new Request(process.env.NEXTAUTH_URL!), {
         clientSecret: process.env.STEAM_SECRET!,

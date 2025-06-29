@@ -248,7 +248,7 @@ export function RaffleCard({
                 {t("purchase.balance")}
               </span>
               <span className="gaming-text-primary font-medium">
-                {Number(currentBalance)} {t("common.points")}
+                {currentBalance} {t("common.points")}
               </span>
             </div>
           </div>
