@@ -75,13 +75,8 @@ export function PredictionCard({
 
   const { data: userBalance } = useQuery({
     queryKey: ["userBalance"],
-    queryFn: async () => {
-      const response = await getUserBalanceAction();
-      if (response.success && response.data) {
-        return response.data;
-      }
-      return null;
-    },
+    queryFn: getUserBalanceAction,
+    select: (response) => (response.data ? response.data : null),
     enabled: !!session,
     refetchOnWindowFocus: false,
   });
